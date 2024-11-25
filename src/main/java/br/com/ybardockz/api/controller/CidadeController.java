@@ -22,6 +22,7 @@ import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.Cidade;
 import br.com.ybardockz.domain.repository.CidadeRepository;
 import br.com.ybardockz.domain.service.CadastroCidadeService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cidade")
@@ -47,7 +48,7 @@ public class CidadeController {
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	private Cidade adicionar(@RequestBody Cidade cidade) {
+	private Cidade adicionar(@RequestBody @Valid Cidade cidade) {
 		try {
 			return service.salvar(cidade);
 		} catch (EntidadeNaoEncontradaException e) {
@@ -57,7 +58,7 @@ public class CidadeController {
 	}
 
 	@PutMapping(path = "/{id}")
-	private Cidade atualizar(@RequestBody Cidade cidade, @PathVariable Long id) {
+	private Cidade atualizar(@Valid @RequestBody Cidade cidade, @PathVariable Long id) {
 		try {
 			Cidade cidadeExistente = service.buscarOuFalhar(id);
 			BeanUtils.copyProperties(cidade, cidadeExistente, "id");
