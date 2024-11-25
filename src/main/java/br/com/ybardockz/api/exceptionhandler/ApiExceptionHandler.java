@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -34,6 +37,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro inesperado no sistema. Tente novamente e se o problema"
 			+ " persistir, entre em contato com o Admininstrador do sistema.";
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -44,11 +50,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		BindingResult bindResult = ex.getBindingResult();
 		
 		List<Problema.Field> fields = bindResult.getFieldErrors().stream()
-				.map(FieldError -> Problema.Field.builder()
+				.map(FieldError -> {
+					String message = messageSource.getMessage(FieldError, LocaleContextHolder.getLocale());
+					
+					return Problema.Field.builder()
 						.name(FieldError.getField())
-						.userMessage(FieldError.getDefaultMessage())
-						.build())
+						.userMessage(message)
+						.build();
+				})
 				.collect(Collectors.toList());
+			
 		
 		Problema problema = createProblemaBuilder(HttpStatus.valueOf(status.value()), problemType, detail)
 				.userMessage(detail)
