@@ -1,4 +1,4 @@
-package br.com.ybardockz;
+package br.com.ybardockz.core.validation;
 
 public interface Groups {
 	

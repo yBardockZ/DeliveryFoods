@@ -1,6 +1,6 @@
 package br.com.ybardockz.domain.model;
 
-import br.com.ybardockz.Groups;
+import br.com.ybardockz.core.validation.Groups;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
