@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.ybardockz.core.validation.Groups;
+import br.com.ybardockz.core.validation.Multiplo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -50,6 +51,7 @@ public class Restaurante {
 	
 	@NotNull
 	@PositiveOrZero
+	@Multiplo(numero = 5)
 	private BigDecimal taxaFrete;
 
 	@JsonIgnore
