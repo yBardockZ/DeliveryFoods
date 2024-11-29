@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,12 +50,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		BindingResult bindResult = ex.getBindingResult();
 		
-		List<Problema.Field> fields = bindResult.getFieldErrors().stream()
-				.map(FieldError -> {
-					String message = messageSource.getMessage(FieldError, LocaleContextHolder.getLocale());
+		List<Problema.Object> problemObjects = bindResult.getAllErrors().stream()
+				.map(objectError -> {
+					String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 					
-					return Problema.Field.builder()
-						.name(FieldError.getField())
+					String name = objectError.getObjectName();
+					
+					if (objectError instanceof FieldError) {
+						name = ((FieldError) objectError).getField();
+					}
+							
+					return Problema.Object.builder()
+						.name(name)
 						.userMessage(message)
 						.build();
 				})
@@ -63,7 +70,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		Problema problema = createProblemaBuilder(HttpStatus.valueOf(status.value()), problemType, detail)
 				.userMessage(detail)
-				.fields(fields)
+				.objects(problemObjects)
 				.build();
 		
 		

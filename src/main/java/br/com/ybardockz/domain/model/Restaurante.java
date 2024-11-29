@@ -11,7 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.ybardockz.core.validation.Groups;
-import br.com.ybardockz.core.validation.Multiplo;
+import br.com.ybardockz.core.validation.ValorZeroIncluiDescricao;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -31,13 +31,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.groups.ConvertGroup;
 import jakarta.validation.groups.Default;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
+@ValorZeroIncluiDescricao(descricaoField = "nome", 
+descricaoObrigatoria = "Frete Grátis", valorField = "taxaFrete")
 @Entity
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Restaurante {
 	
@@ -51,7 +51,7 @@ public class Restaurante {
 	
 	@NotNull
 	@PositiveOrZero
-	@Multiplo(numero = 5)
+	@Column(nullable = false)
 	private BigDecimal taxaFrete;
 
 	@JsonIgnore
@@ -85,16 +85,5 @@ public class Restaurante {
 	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
-	
-	public Restaurante() {
-		
-	}
-
-	public Restaurante(Long id, String nome, BigDecimal taxaFrete) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.taxaFrete = taxaFrete;
-	}
 	
 }
