@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.ybardockz.core.validation.ValidacaoException;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;
 import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
 import br.com.ybardockz.domain.exception.EntidadeNaoEncontradaException;
@@ -45,6 +48,9 @@ public class RestauranteController {
 	
 	@Autowired
 	private CadastroRestauranteService service;
+	
+	@Autowired
+	private SmartValidator validator;
 	
 	@GetMapping
 	public ResponseEntity<List<Restaurante>> listar() {
@@ -104,8 +110,18 @@ public class RestauranteController {
 		Restaurante restauranteAtual = service.buscarOuFalhar(id);
 		
 		merge(campos, restauranteAtual, request);
+		validate(restauranteAtual, "restaurante");
 		
 		return atualizar(restauranteAtual, id);
+		
+	}
+
+	private void validate(Restaurante restauranteAtual, String objectName) {
+		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restauranteAtual, objectName);
+		validator.validate(restauranteAtual, bindingResult);
+		if (bindingResult.hasErrors()) {
+			throw new ValidacaoException(bindingResult);
+		}
 		
 	}
 

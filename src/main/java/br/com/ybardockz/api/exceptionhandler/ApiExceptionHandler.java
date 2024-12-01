@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
 import br.com.ybardockz.api.exceptionhandler.enums.ProblemType;
+import br.com.ybardockz.core.validation.ValidacaoException;
 import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
 import br.com.ybardockz.domain.exception.EntidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
@@ -41,14 +42,33 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Autowired
 	private MessageSource messageSource;
 	
+	@ExceptionHandler(ValidacaoException.class)
+	public ResponseEntity<?> handleValidacaoException(ValidacaoException ex, WebRequest request) {
+		return handleValidationInternal(ex, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		return handleValidationInternal(ex, headers, status, request);
+	}
+	
+	private ResponseEntity<Object> handleValidationInternal(Exception ex, HttpHeaders headers,
+			HttpStatusCode status, WebRequest request) {
 		
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
 		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 		
-		BindingResult bindResult = ex.getBindingResult();
+		BindingResult bindResult = null;
+		
+		if (ex instanceof MethodArgumentNotValidException) {
+			bindResult = ((MethodArgumentNotValidException) ex).getBindingResult();
+		}
+		else if (ex instanceof ValidacaoException) {
+			bindResult = ((ValidacaoException) ex).getBindingResult();
+		}
+	
 		
 		List<Problema.Object> problemObjects = bindResult.getAllErrors().stream()
 				.map(objectError -> {
@@ -76,6 +96,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return handleExceptionInternal(ex, problema, headers, status, request);
 	}
+
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleInternalError(Exception ex, WebRequest request) {
