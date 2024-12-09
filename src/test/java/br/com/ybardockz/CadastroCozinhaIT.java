@@ -57,7 +57,7 @@ public class CadastroCozinhaIT {
 	}
 	
 	@Test
-	public void deveRetornarCorpoEStatusCorreto_QuandoConsultarCozinhaExistente() {
+	public void deveRetornarCorpoEStatusCorretos_QuandoConsultarCozinhaExistente() {
 		given()
 		.accept(ContentType.JSON)
 		.pathParam("cozinhaId", cozinhaAmericana.getId())
@@ -94,7 +94,7 @@ public class CadastroCozinhaIT {
 	}
 	
 	@Test
-	public void deveConterQuantidadeCorretaDeCozinhas_QuandoConsultarCozinhas() {
+	public void deveConterQuantidadeCorretaDeCozinhas_QuandoListarCozinhas() {
 		given()
 		.accept(ContentType.JSON)
 		.when()
