@@ -1,6 +1,7 @@
 package br.com.ybardockz;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -42,6 +43,31 @@ public class CadastroCozinhaIT {
 	}
 	
 	@Test
+	public void deveRetornarCorpoEStatusCorreto_QuandoConsultarCozinhaExistente() {
+		given()
+		.accept(ContentType.JSON)
+		.pathParam("cozinhaId", 2)
+		.when()
+			.get("/{cozinhaId}")
+		.then()
+			.statusCode(200)
+			.body("nome", equalTo("Americana"));
+	}
+	
+
+	@Test
+	public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
+		given()
+		.accept(ContentType.JSON)
+		.pathParam("cozinhaId", 100)
+		.when()
+			.get("/{cozinhaId}")
+		.then()
+			.statusCode(404);
+
+	}
+	
+	@Test
 	public void deveRetornar200_QuandoConsultarCozinhas() {
 		given()
 		.accept(ContentType.JSON)
@@ -61,7 +87,7 @@ public class CadastroCozinhaIT {
 			.get()
 		.then()
 			.body("", hasSize(2))
-			.body("nome", hasItems("Tailandesa", "Indiana"));
+			.body("nome", hasItems("Tailandesa", "Americana"));
 		
 		
 	}
