@@ -9,6 +9,7 @@ import br.com.ybardockz.domain.exception.RestauranteNaoEncontradoException;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.repository.RestauranteRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CadastroRestauranteService {
@@ -19,6 +20,7 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CadastroCozinhaService cozinhaService;
 	
+	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
 		Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
