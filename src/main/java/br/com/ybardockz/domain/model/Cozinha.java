@@ -2,8 +2,6 @@ package br.com.ybardockz.domain.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import br.com.ybardockz.core.validation.Groups;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +29,6 @@ public class Cozinha {
 	@Column(nullable = false)
 	private String nome;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante> restaurantes;
 	
