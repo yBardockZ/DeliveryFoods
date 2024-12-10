@@ -8,9 +8,6 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import br.com.ybardockz.core.validation.Groups;
 import br.com.ybardockz.core.validation.ValorZeroIncluiDescricao;
 import jakarta.persistence.CascadeType;
@@ -55,14 +52,12 @@ public class Restaurante {
 	@Column(nullable = false)
 	private BigDecimal taxaFrete;
 
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "restaurante_pagamento",
 	joinColumns = @JoinColumn(name = "restaurante_id"),
 	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasDePagamento = new ArrayList<>();
 	
-	@JsonIgnoreProperties(value = "nome", allowGetters = true)
 	@Valid
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@NotNull
@@ -70,21 +65,17 @@ public class Restaurante {
 	@JoinColumn(nullable = false)
 	private Cozinha cozinha;
 	
-	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 	
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false)
 	private LocalDateTime dataCadastro;
 	
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false)
 	private LocalDateTime dataAtualizacao;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 	
