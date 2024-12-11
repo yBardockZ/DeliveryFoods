@@ -1,6 +1,6 @@
 package br.com.ybardockz.api.model.mixin;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +23,11 @@ public class RestauranteMixin {
 	@JsonIgnore
 	private Endereco endereco;
 	
-	@JsonIgnore
-	private LocalDateTime dataCadastro;
+	//@JsonIgnore
+	private Instant dataCadastro;
 	
-	@JsonIgnore
-	private LocalDateTime dataAtualizacao;
+	//@JsonIgnore
+	private Instant dataAtualizacao;
 	
 	@JsonIgnore
 	private List<Produto> produtos = new ArrayList<>();
