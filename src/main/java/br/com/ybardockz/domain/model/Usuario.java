@@ -1,6 +1,6 @@
 package br.com.ybardockz.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,7 +36,7 @@ public class Usuario {
 	private String senha;
 	
 	@CreationTimestamp
-	private LocalDateTime dataCadastro;
+	private Instant dataCadastro;
 	
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo",

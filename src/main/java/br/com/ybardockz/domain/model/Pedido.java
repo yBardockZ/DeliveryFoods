@@ -1,7 +1,7 @@
 package br.com.ybardockz.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,13 +34,13 @@ public class Pedido {
 	private BigDecimal  valorTotal;
 	
 	@CreationTimestamp
-	private LocalDateTime dataCriacao; 
+	private Instant dataCriacao; 
 	
-	private LocalDateTime dataConfirmacao;
+	private Instant dataConfirmacao;
 	
-	private LocalDateTime dataCancelamento;
+	private Instant dataCancelamento;
 	
-	private LocalDateTime dataEntrega;
+	private Instant dataEntrega;
 	
 	@ManyToOne
 	private Restaurante restaurante;
