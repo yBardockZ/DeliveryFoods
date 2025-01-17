@@ -1,23 +1,14 @@
 package br.com.ybardockz.api.controller;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.flywaydb.core.internal.util.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,20 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import br.com.ybardockz.api.model.domain.CozinhaModel;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
-import br.com.ybardockz.core.validation.ValidacaoException;
+import br.com.ybardockz.api.model.input.RestauranteInput;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;
-import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
-import br.com.ybardockz.domain.exception.EntidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
+import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.repository.RestauranteRepository;
 import br.com.ybardockz.domain.service.CadastroRestauranteService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -51,9 +37,6 @@ public class RestauranteController {
 	
 	@Autowired
 	private CadastroRestauranteService service;
-	
-	@Autowired
-	private SmartValidator validator;
 	
 	@GetMapping
 	public ResponseEntity<List<RestauranteModel>> listar() {
@@ -75,10 +58,12 @@ public class RestauranteController {
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public RestauranteModel adicionar(@RequestBody @Valid Restaurante restaurante) {
+	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
+			Restaurante restaurante = toDomainObject(restauranteInput);
+			
 			return toModel(service.salvar(restaurante));
-		} catch (EntidadeNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 		
@@ -128,6 +113,19 @@ public class RestauranteController {
 		
 		return restaurantesModel;
 		
+	}
+	
+	private Restaurante toDomainObject(RestauranteInput restauranteInput) {
+		Restaurante restaurante = new Restaurante();
+		restaurante.setNome(restauranteInput.getNome());
+		restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
+		
+		Cozinha cozinha = new Cozinha();
+		cozinha.setId(restauranteInput.getCozinha().getId());
+		
+		restaurante.setCozinha(cozinha);
+		
+		return restaurante;
 	}
 
 }
