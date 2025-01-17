@@ -8,8 +8,6 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import br.com.ybardockz.core.validation.Groups;
-import br.com.ybardockz.core.validation.ValorZeroIncluiDescricao;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -23,17 +21,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.groups.ConvertGroup;
-import jakarta.validation.groups.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@ValorZeroIncluiDescricao(descricaoField = "nome", 
-descricaoObrigatoria = "Frete Grátis", valorField = "taxaFrete")
+//@ValorZeroIncluiDescricao(descricaoField = "nome", 
+//descricaoObrigatoria = "Frete Grátis", valorField = "taxaFrete")
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -44,11 +36,11 @@ public class Restaurante {
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@NotBlank
+	//@NotBlank
 	private String nome;
 	
-	@NotNull
-	@PositiveOrZero
+	//@NotNull
+	//@PositiveOrZero
 	@Column(nullable = false)
 	private BigDecimal taxaFrete;
 
@@ -58,9 +50,9 @@ public class Restaurante {
 	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasDePagamento = new ArrayList<>();
 	
-	@Valid
-	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-	@NotNull
+	//@Valid
+	//@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private Cozinha cozinha;
