@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.RestauranteInputDisassembler;
 import br.com.ybardockz.api.RestauranteModelAssembler;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
-import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.repository.RestauranteRepository;
 import br.com.ybardockz.domain.service.CadastroRestauranteService;
@@ -39,6 +39,9 @@ public class RestauranteController {
 	
 	@Autowired
 	private RestauranteModelAssembler restauranteModelAssembler;
+	
+	@Autowired
+	private RestauranteInputDisassembler restauranteInputDisassembler;
 	
 	@GetMapping
 	public ResponseEntity<List<RestauranteModel>> listar() {
@@ -62,7 +65,7 @@ public class RestauranteController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
-			Restaurante restaurante = toDomainObject(restauranteInput);
+			Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 			
 			return restauranteModelAssembler.toModel(service.salvar(restaurante));
 		} catch (CozinhaNaoEncontradaException e) {
@@ -72,13 +75,15 @@ public class RestauranteController {
 	}
 	
 	@PutMapping(path = "/{id}")
-	public RestauranteModel atualizar(@RequestBody @Valid Restaurante restaurante, @PathVariable Long id) {
+	public RestauranteModel atualizar(@RequestBody @Valid RestauranteInput restauranteInput, @PathVariable Long id) {
 		try {
-			Restaurante restauranteExistente = service.buscarOuFalhar(id);
+			Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 			
-			BeanUtils.copyProperties(restaurante, restauranteExistente, "id", "formasDePagamento", "endereco",
+			Restaurante restauranteAtual = service.buscarOuFalhar(id);
+			
+			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasDePagamento", "endereco",
 						"dataCadastro");
-			return restauranteModelAssembler.toModel(service.salvar(restauranteExistente));
+			return restauranteModelAssembler.toModel(service.salvar(restauranteAtual));
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
@@ -89,21 +94,6 @@ public class RestauranteController {
 	@DeleteMapping(path = "/{id}")
 	public void remover(@PathVariable Long id) {
 		service.remover(id);
-	}
-	
-	
-	
-	private Restaurante toDomainObject(RestauranteInput restauranteInput) {
-		Restaurante restaurante = new Restaurante();
-		restaurante.setNome(restauranteInput.getNome());
-		restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
-		
-		Cozinha cozinha = new Cozinha();
-		cozinha.setId(restauranteInput.getCozinha().getId());
-		
-		restaurante.setCozinha(cozinha);
-		
-		return restaurante;
 	}
 
 }
