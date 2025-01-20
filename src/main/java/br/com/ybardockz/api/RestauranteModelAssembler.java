@@ -3,26 +3,21 @@ package br.com.ybardockz.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.ybardockz.api.model.domain.CozinhaModel;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.domain.model.Restaurante;
 
 @Component
 public class RestauranteModelAssembler {
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	public RestauranteModel toModel(Restaurante restaurante) {
-		RestauranteModel restauranteModel = new RestauranteModel();
-		restauranteModel.setId(restaurante.getId());
-		restauranteModel.setNome(restaurante.getNome());
-		restauranteModel.setTaxaFrete(restaurante.getTaxaFrete());
-		
-		CozinhaModel cozinhaModel = new CozinhaModel();
-		cozinhaModel.setId(restaurante.getCozinha().getId());
-		cozinhaModel.setNome(restaurante.getCozinha().getNome());
-		
-		restauranteModel.setCozinha(cozinhaModel);
+		RestauranteModel restauranteModel = modelMapper.map(restaurante, RestauranteModel.class);
 		
 		return restauranteModel;
 	}
