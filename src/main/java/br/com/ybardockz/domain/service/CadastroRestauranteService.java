@@ -29,11 +29,13 @@ public class CadastroRestauranteService {
 		return restauranteRepository.save(restaurante);
 	}
 	
+	@Transactional
 	public void remover(Long id) {
 		try {
 			buscarOuFalhar(id);
 			
 			restauranteRepository.deleteById(id);
+			restauranteRepository.flush();
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException("Restaurante de código: " + id + 
 					" não pode ser removida pois está em uso.");

@@ -8,6 +8,7 @@ import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
 import br.com.ybardockz.domain.exception.EstadoNaoEncontradoException;
 import br.com.ybardockz.domain.model.Estado;
 import br.com.ybardockz.domain.repository.EstadoRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CadastroEstadoService {
@@ -15,16 +16,19 @@ public class CadastroEstadoService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 	
+	@Transactional
 	public Estado salvar(Estado estado) {
 		return estadoRepository.save(estado);
 		
 	}
 	
+	@Transactional
 	public void remover(Long id) {
 		try {
 			buscarOuFalhar(id);
 			
 			estadoRepository.deleteById(id);
+			estadoRepository.flush();
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException("Estado de código: " + id + 
 					" não pode ser removida pois está em uso.");
