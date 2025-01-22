@@ -2,7 +2,6 @@ package br.com.ybardockz.api.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,12 +76,10 @@ public class RestauranteController {
 	@PutMapping(path = "/{id}")
 	public RestauranteModel atualizar(@RequestBody @Valid RestauranteInput restauranteInput, @PathVariable Long id) {
 		try {
-			Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
-			
 			Restaurante restauranteAtual = service.buscarOuFalhar(id);
 			
-			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasDePagamento", "endereco",
-						"dataCadastro");
+			restauranteInputDisassembler.copyToDomain(restauranteInput, restauranteAtual);
+			
 			return restauranteModelAssembler.toModel(service.salvar(restauranteAtual));
 		} catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);

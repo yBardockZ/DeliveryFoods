@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.ybardockz.api.model.input.RestauranteInput;
+import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.model.Restaurante;
 
 @Component
@@ -15,6 +16,15 @@ public class RestauranteInputDisassembler {
 	
 	public Restaurante toDomainObject(RestauranteInput restauranteInput) {
 		Restaurante restaurante = modelMapper.map(restauranteInput, Restaurante.class);
+		
+		return restaurante;
+	}
+	
+	public Restaurante copyToDomain(RestauranteInput restauranteInput, Restaurante restaurante) {
+		// Para evitar org.hibernate.HibernateException
+		restaurante.setCozinha(new Cozinha());
+		
+		modelMapper.map(restauranteInput, restaurante);
 		
 		return restaurante;
 	}

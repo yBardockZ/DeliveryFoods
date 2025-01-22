@@ -17,9 +17,7 @@ public class RestauranteModelAssembler {
 	private ModelMapper modelMapper;
 	
 	public RestauranteModel toModel(Restaurante restaurante) {
-		RestauranteModel restauranteModel = modelMapper.map(restaurante, RestauranteModel.class);
-		
-		return restauranteModel;
+		return modelMapper.map(restaurante, RestauranteModel.class);
 	}
 	
 	public List<RestauranteModel> toCollectionModel(List<Restaurante> restaurantes) {
