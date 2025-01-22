@@ -1,4 +1,4 @@
-package br.com.ybardockz.api;
+package br.com.ybardockz.api.model.assembler;
 
 import java.util.ArrayList;
 import java.util.List;

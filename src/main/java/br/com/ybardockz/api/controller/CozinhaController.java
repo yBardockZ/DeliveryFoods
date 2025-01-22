@@ -3,7 +3,6 @@ package br.com.ybardockz.api.controller;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +17,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.ybardockz.api.model.assembler.CozinhaInputDisassembler;
+import br.com.ybardockz.api.model.assembler.CozinhaModelAssembler;
+import br.com.ybardockz.api.model.domain.CozinhaModel;
+import br.com.ybardockz.api.model.input.CozinhaInput;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.repository.CozinhaRepository;
 import br.com.ybardockz.domain.service.CadastroCozinhaService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cozinha")
@@ -32,37 +36,44 @@ public class CozinhaController {
 	@Autowired
 	private CadastroCozinhaService service;
 	
+	@Autowired
+	private CozinhaModelAssembler cozinhaModelAssembler;
+	
+	@Autowired
+	private CozinhaInputDisassembler cozinhaInputDisassembler;
+	
 	@GetMapping
-	private ResponseEntity<List<Cozinha>> listar() {
-		List<Cozinha> cozinhas = repository.findAll();
+	private List<CozinhaModel> listar() {
+		List<CozinhaModel> cozinhas = cozinhaModelAssembler.toCollectionModel(repository.findAll());
 		
-		return ResponseEntity.ok().body(cozinhas);
+		return cozinhas;
 	}
 	
 	@GetMapping(path = "/{id}")
-	private Cozinha buscar(@PathVariable Long id) {
-		return service.buscarOuFalhar(id);
+	private CozinhaModel buscar(@PathVariable Long id) {
+		return cozinhaModelAssembler.toModel(service.buscarOuFalhar(id));
 		
 	}
 	
 	@PostMapping
-	private ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
-		Cozinha cozinhaSalva = service.salvar(cozinha);
+	private ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+		Cozinha cozinhaSalva = service.salvar(cozinhaInputDisassembler.toDomainObject(cozinhaInput));
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(cozinhaSalva.getId())
 				.toUri();
 		
-		return ResponseEntity.created(uri).body(cozinhaSalva);
+		return ResponseEntity.created(uri).body(cozinhaModelAssembler.toModel(cozinhaSalva));
 	}
 	
 	@PutMapping(path = "/{id}")
-	private Cozinha atualizar(@RequestBody Cozinha cozinha, @PathVariable Long id) {
+	private CozinhaModel atualizar(@RequestBody @Valid CozinhaInput cozinhaInput, 
+			@PathVariable Long id) {
 		Cozinha cozinhaAtual = service.buscarOuFalhar(id);
 		
-		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+		cozinhaInputDisassembler.copyToDomain(cozinhaInput, cozinhaAtual);
 		
-		return service.salvar(cozinhaAtual);
+		return cozinhaModelAssembler.toModel(service.salvar(cozinhaAtual));
 
 	}
 	

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ybardockz.api.RestauranteInputDisassembler;
-import br.com.ybardockz.api.RestauranteModelAssembler;
+import br.com.ybardockz.api.model.assembler.RestauranteInputDisassembler;
+import br.com.ybardockz.api.model.assembler.RestauranteModelAssembler;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;

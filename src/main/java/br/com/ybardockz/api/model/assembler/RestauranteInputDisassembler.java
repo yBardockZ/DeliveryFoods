@@ -1,4 +1,4 @@
-package br.com.ybardockz.api;
+package br.com.ybardockz.api.model.assembler;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,11 @@ public class RestauranteInputDisassembler {
 		return restaurante;
 	}
 	
-	public Restaurante copyToDomain(RestauranteInput restauranteInput, Restaurante restaurante) {
+	public void copyToDomain(RestauranteInput restauranteInput, Restaurante restaurante) {
 		// Para evitar org.hibernate.HibernateException
 		restaurante.setCozinha(new Cozinha());
 		
 		modelMapper.map(restauranteInput, restaurante);
-		
-		return restaurante;
 	}
 
 }
