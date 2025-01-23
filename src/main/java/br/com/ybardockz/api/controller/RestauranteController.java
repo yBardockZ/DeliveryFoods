@@ -88,6 +88,19 @@ public class RestauranteController {
 		
 	}
 	
+	@PutMapping(path = "/{id}/ativar")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void ativar(@PathVariable Long id) {
+		service.ativar(id);
+	}
+	
+	@DeleteMapping(path = "/{id}/inativar")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inativar(@PathVariable Long id) {
+		service.inativar(id);
+		
+	}
+	
 	@DeleteMapping(path = "/{id}")
 	public void remover(@PathVariable Long id) {
 		service.remover(id);

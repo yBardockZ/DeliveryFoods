@@ -1,0 +1,9 @@
+ALTER TABLE restaurante 
+ADD COLUMN ativo TINYINT DEFAULT 0;
+
+UPDATE restaurante 
+SET ativo = 0 
+WHERE ativo IS NULL;
+
+ALTER TABLE restaurante 
+MODIFY COLUMN ativo TINYINT NOT NULL DEFAULT 0;
