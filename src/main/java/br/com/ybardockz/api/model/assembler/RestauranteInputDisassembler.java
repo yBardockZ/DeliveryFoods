@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.ybardockz.api.model.input.RestauranteInput;
+import br.com.ybardockz.domain.model.Cidade;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.model.Restaurante;
 
@@ -21,8 +22,12 @@ public class RestauranteInputDisassembler {
 	}
 	
 	public void copyToDomain(RestauranteInput restauranteInput, Restaurante restaurante) {
-		// Para evitar org.hibernate.HibernateException
+		// Para evitar: org.springframework.orm.jpa.JpaSystemException
 		restaurante.setCozinha(new Cozinha());
+		if (restaurante.getEndereco() != null ) {
+			restaurante.getEndereco().setCidade(new Cidade());
+		}
+		
 		
 		modelMapper.map(restauranteInput, restaurante);
 	}

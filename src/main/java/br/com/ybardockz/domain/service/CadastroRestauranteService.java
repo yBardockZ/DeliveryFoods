@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
 import br.com.ybardockz.domain.exception.RestauranteNaoEncontradoException;
+import br.com.ybardockz.domain.model.Cidade;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.repository.RestauranteRepository;
@@ -20,12 +21,19 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CadastroCozinhaService cozinhaService;
 	
+	@Autowired
+	private CadastroCidadeService cidadeService;
+	
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
+		
 		Long cozinhaId = restaurante.getCozinha().getId();
+		
 		Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
+		Cidade cidade = cidadeService.buscarOuFalhar(restaurante.getEndereco().getCidade().getId());
 	
 		restaurante.setCozinha(cozinha);
+		restaurante.getEndereco().setCidade(cidade);
 		return restauranteRepository.save(restaurante);
 	}
 	

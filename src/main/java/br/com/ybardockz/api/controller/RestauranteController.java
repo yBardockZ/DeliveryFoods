@@ -19,6 +19,7 @@ import br.com.ybardockz.api.model.assembler.RestauranteInputDisassembler;
 import br.com.ybardockz.api.model.assembler.RestauranteModelAssembler;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
+import br.com.ybardockz.domain.exception.CidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.Restaurante;
@@ -67,7 +68,7 @@ public class RestauranteController {
 			Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 			
 			return restauranteModelAssembler.toModel(service.salvar(restaurante));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 		
@@ -81,7 +82,7 @@ public class RestauranteController {
 			restauranteInputDisassembler.copyToDomain(restauranteInput, restauranteAtual);
 			
 			return restauranteModelAssembler.toModel(service.salvar(restauranteAtual));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 			
