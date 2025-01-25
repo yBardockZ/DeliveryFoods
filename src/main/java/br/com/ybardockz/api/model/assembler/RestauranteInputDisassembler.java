@@ -24,6 +24,7 @@ public class RestauranteInputDisassembler {
 	public void copyToDomain(RestauranteInput restauranteInput, Restaurante restaurante) {
 		// Para evitar: org.springframework.orm.jpa.JpaSystemException
 		restaurante.setCozinha(new Cozinha());
+		
 		if (restaurante.getEndereco() != null ) {
 			restaurante.getEndereco().setCidade(new Cidade());
 		}
