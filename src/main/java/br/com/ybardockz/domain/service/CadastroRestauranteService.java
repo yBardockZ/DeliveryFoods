@@ -8,6 +8,7 @@ import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
 import br.com.ybardockz.domain.exception.RestauranteNaoEncontradoException;
 import br.com.ybardockz.domain.model.Cidade;
 import br.com.ybardockz.domain.model.Cozinha;
+import br.com.ybardockz.domain.model.FormaPagamento;
 import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.repository.RestauranteRepository;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,9 @@ public class CadastroRestauranteService {
 	
 	@Autowired
 	private CadastroCidadeService cidadeService;
+	
+	@Autowired
+	private CadastroFormaPagamentoService formaPagamentoService;
 	
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
@@ -48,6 +52,24 @@ public class CadastroRestauranteService {
 			throw new EntidadeEmUsoException("Restaurante de código: " + id + 
 					" não pode ser removido pois está em uso.");
 		}
+		
+	}
+	
+	@Transactional
+	public void dessasociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+		
+		restaurante.removerFormaPagamento(formaPagamento);
+		
+	}
+	
+	@Transactional
+	public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+		
+		restaurante.adicionarFormaPagamento(formaPagamento);
 		
 	}
 	

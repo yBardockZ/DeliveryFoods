@@ -1,5 +1,6 @@
 package br.com.ybardockz.api.model.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class FormaPagamentoModelAssembler {
 		return modelMapper.map(formaPagamento, FormaPagamentoModel.class);
 	}
 	
-	public List<FormaPagamentoModel> toCollectionModel(List<FormaPagamento> formasDePagamento) {
+	public List<FormaPagamentoModel> toCollectionModel(Collection<FormaPagamento> formasDePagamento) {
 		List<FormaPagamentoModel> formasDePagamentoModel = formasDePagamento.stream()
 				.map((formaDePagamento) -> toModel(formaDePagamento))
 				.collect(Collectors.toList());
