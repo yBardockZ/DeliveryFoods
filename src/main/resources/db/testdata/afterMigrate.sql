@@ -73,3 +73,9 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Esp
 
 
 insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador');
+
+INSERT INTO usuario (nome, senha, email, data_cadastro)
+VALUES ('João da Silva', '123', 'joao.ger@algafood.com', utc_timestamp()),
+('Maria Joaquina', '123', 'maria.vnd@algafood.com', utc_timestamp()),
+('José Souza', '123', 'jose.aux@algafood.com', utc_timestamp()),
+('Sebastião Martinz', '123', 'sebastiao.cad@algafood.com', utc_timestamp());

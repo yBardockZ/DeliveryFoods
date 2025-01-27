@@ -43,5 +43,13 @@ public class Usuario {
 	joinColumns = @JoinColumn(name = "usuario_id"),
 	inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private List<Grupo> grupos;
+	
+	public void atualizarSenha(String senhaNova) {
+		this.senha = senhaNova;
+	}
+	
+	public boolean senhaCoincideCom(String senhaAtual) {
+		return this.senha.equals(senhaAtual);
+	}
 
 }

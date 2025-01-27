@@ -46,7 +46,7 @@ public class CadastroRestauranteService {
 			restauranteRepository.flush();
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException("Restaurante de código: " + id + 
-					" não pode ser removida pois está em uso.");
+					" não pode ser removido pois está em uso.");
 		}
 		
 	}
