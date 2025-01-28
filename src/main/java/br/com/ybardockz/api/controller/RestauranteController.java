@@ -50,9 +50,9 @@ public class RestauranteController {
 		return ResponseEntity.ok(restaurantes);
 	}
 	
-	@GetMapping(path = "/{id}")
-	public RestauranteModel buscarPorId(@PathVariable Long id) {
-		Restaurante restaurante = service.buscarOuFalhar(id);
+	@GetMapping(path = "/{restauranteId}")
+	public RestauranteModel buscarPorId(@PathVariable Long restauranteId) {
+		Restaurante restaurante = service.buscarOuFalhar(restauranteId);
 		
 		RestauranteModel restauranteModel = restauranteModelAssembler.toModel(restaurante);
 		
@@ -74,10 +74,11 @@ public class RestauranteController {
 		
 	}
 	
-	@PutMapping(path = "/{id}")
-	public RestauranteModel atualizar(@RequestBody @Valid RestauranteInput restauranteInput, @PathVariable Long id) {
+	@PutMapping(path = "/{restauranteId}")
+	public RestauranteModel atualizar(@RequestBody @Valid RestauranteInput restauranteInput,
+			@PathVariable Long restauranteId) {
 		try {
-			Restaurante restauranteAtual = service.buscarOuFalhar(id);
+			Restaurante restauranteAtual = service.buscarOuFalhar(restauranteId);
 			
 			restauranteInputDisassembler.copyToDomain(restauranteInput, restauranteAtual);
 			
@@ -89,22 +90,34 @@ public class RestauranteController {
 		
 	}
 	
-	@PutMapping(path = "/{id}/ativar")
+	@PutMapping(path = "/{restauranteId}/ativar")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void ativar(@PathVariable Long id) {
-		service.ativar(id);
+	public void ativar(@PathVariable Long restauranteId) {
+		service.ativar(restauranteId);
 	}
 	
-	@DeleteMapping(path = "/{id}/inativar")
+	@DeleteMapping(path = "/{restauranteId}/inativar")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void inativar(@PathVariable Long id) {
-		service.inativar(id);
+	public void inativar(@PathVariable Long restauranteId) {
+		service.inativar(restauranteId);
 		
 	}
+
+	@PutMapping("/{restauranteId}/abrir")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void abrir(@PathVariable Long restauranteId) {
+		service.abrir(restauranteId);
+	}
 	
-	@DeleteMapping(path = "/{id}")
-	public void remover(@PathVariable Long id) {
-		service.remover(id);
+	@PutMapping("/{restauranteId}/fechar")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void fechar(@PathVariable Long restauranteId) {
+		service.fechar(restauranteId);
+	}
+	
+	@DeleteMapping(path = "/{restauranteId}")
+	public void remover(@PathVariable Long restauranteId) {
+		service.remover(restauranteId);
 	}
 
 }
