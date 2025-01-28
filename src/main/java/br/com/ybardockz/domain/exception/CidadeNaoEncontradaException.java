@@ -9,7 +9,7 @@ public class CidadeNaoEncontradaException extends EntidadeNaoEncontradaException
 	}
 	
 	public CidadeNaoEncontradaException(Long id) {
-		this("Cidade de código : " + id + " não existe.");
+		this("Cidade de código : " + id + " não foi encontrada.");
 	}
 
 }

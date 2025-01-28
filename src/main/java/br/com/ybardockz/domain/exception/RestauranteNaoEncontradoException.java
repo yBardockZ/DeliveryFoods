@@ -9,7 +9,7 @@ public class RestauranteNaoEncontradoException extends EntidadeNaoEncontradaExce
 	}
 
 	public RestauranteNaoEncontradoException(Long id) {
-		this("O restaurante de id: " + id + " não existe.");
+		this("O restaurante de id: " + id + " não foi encontrado.");
 	}
 
 }

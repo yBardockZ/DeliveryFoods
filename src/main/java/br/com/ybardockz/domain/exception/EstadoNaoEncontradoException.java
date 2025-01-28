@@ -7,7 +7,7 @@ public class EstadoNaoEncontradoException extends EntidadeNaoEncontradaException
 	}
 	
 	public EstadoNaoEncontradoException(Long id) {
-		this("O estado de id: " + id + " não existe.");
+		this("O estado de id: " + id + " não foi encontrado.");
 	}
 
 	private static final long serialVersionUID = 1L;
