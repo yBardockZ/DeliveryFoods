@@ -81,3 +81,6 @@ VALUES ('João da Silva', '123', 'joao.ger@algafood.com', utc_timestamp()),
 ('Maria Joaquina', '123', 'maria.vnd@algafood.com', utc_timestamp()),
 ('José Souza', '123', 'jose.aux@algafood.com', utc_timestamp()),
 ('Sebastião Martinz', '123', 'sebastiao.cad@algafood.com', utc_timestamp());
+
+INSERT INTO usuario_grupo (grupo_id, usuario_id)
+VALUES (1, 2), (1, 1), (2, 2), (3, 1), (4, 4);

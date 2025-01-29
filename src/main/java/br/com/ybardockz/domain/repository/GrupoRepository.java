@@ -1,5 +1,6 @@
 package br.com.ybardockz.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +21,11 @@ public interface GrupoRepository extends JpaRepository<Grupo, Long> {
 			+ "AND p.id = :permissaoId")
 	Optional<Permissao> findByGrupoIdAndPermissaoId(@Param("grupoId") Long grupoId, 
 			@Param("permissaoId") Long permissaoId);
+	
+	/*@Query("SELECT g FROM Usuario u JOIN u.grupos g WHERE u.id = :usuarioId")
+	List<Grupo> findGrupoByUsuario(Long usuarioId);*/
+	
+	@Query("SELECT g FROM Usuario u JOIN u.grupos g WHERE u.id = :usuarioId")
+	List<Grupo> findGrupoByUsuario(@Param("usuarioId") Long usuarioId);
 	
 }

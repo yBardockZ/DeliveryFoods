@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.exception.UsuarioNaoEncontradoException;
+import br.com.ybardockz.domain.model.Grupo;
 import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -16,6 +17,9 @@ public class CadastroUsuarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private CadastroGrupoService grupoService;
 	
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
@@ -49,5 +53,21 @@ public class CadastroUsuarioService {
 		salvar(usuarioAtual);
 		
 	}
-
+	
+	@Transactional
+	public void associarGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+		
+		usuario.adicionarGrupo(grupo);
+	}
+	
+	@Transactional
+	public void disassociarGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+		
+		usuario.removerGrupo(grupo);
+		
+	}
 }

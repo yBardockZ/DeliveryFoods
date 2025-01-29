@@ -51,5 +51,13 @@ public class Usuario {
 	public boolean senhaCoincideCom(String senhaAtual) {
 		return this.senha.equals(senhaAtual);
 	}
+	
+	public void adicionarGrupo(Grupo grupo) {
+		this.grupos.add(grupo);
+	}
+	
+	public void removerGrupo(Grupo grupo) {
+		this.grupos.remove(grupo);
+	}
 
 }
