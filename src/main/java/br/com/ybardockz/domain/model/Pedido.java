@@ -7,8 +7,11 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 
 import br.com.ybardockz.domain.model.enums.StatusPedido;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -57,6 +60,8 @@ public class Pedido {
 	@OneToMany(mappedBy = "pedido")
 	private List<ItemPedido> itens;
 	
+	@Column(name = "status_pedido")
+	@Enumerated(EnumType.STRING)
 	private StatusPedido status;
 	
 }
