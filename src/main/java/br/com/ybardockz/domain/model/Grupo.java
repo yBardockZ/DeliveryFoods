@@ -1,7 +1,7 @@
 package br.com.ybardockz.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +31,14 @@ public class Grupo {
 	@JoinTable(name = "grupo_permissao",
 	joinColumns = @JoinColumn(name = "grupo_id"), 
 	inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-	private List<Permissao> permissoes = new ArrayList<>();
+	private Set<Permissao> permissoes = new HashSet<>();
 	
-
+	public void associarPermissao(Permissao permissao) {
+		permissoes.add(permissao);
+	}
+	
+	public void disassociarPermissao(Permissao permissao) {
+		permissoes.remove(permissao);
+	}
+	
 }

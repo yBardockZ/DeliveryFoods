@@ -74,6 +74,8 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Esp
 
 insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador');
 
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
+
 INSERT INTO usuario (nome, senha, email, data_cadastro)
 VALUES ('João da Silva', '123', 'joao.ger@algafood.com', utc_timestamp()),
 ('Maria Joaquina', '123', 'maria.vnd@algafood.com', utc_timestamp()),
