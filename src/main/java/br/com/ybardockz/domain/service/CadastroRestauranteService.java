@@ -1,10 +1,13 @@
 package br.com.ybardockz.domain.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
+import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.exception.RestauranteNaoEncontradoException;
 import br.com.ybardockz.domain.model.Cidade;
 import br.com.ybardockz.domain.model.Cozinha;
@@ -90,6 +93,25 @@ public class CadastroRestauranteService {
 		Restaurante restaurante = buscarOuFalhar(restauranteId);
 		
 		restaurante.inativar();
+	}
+	
+	@Transactional
+	public void ativar(List<Long> restauranteIds) {
+		try {
+			restauranteIds.forEach(this::ativar);
+		} catch (RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+	}
+	
+	@Transactional
+	public void inativar(List<Long> restauranteIds) {
+		try {
+			restauranteIds.forEach(this::inativar);
+		} catch (RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+	
 	}
 	
 	@Transactional
