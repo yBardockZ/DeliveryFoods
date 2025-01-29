@@ -1,5 +1,6 @@
 package br.com.ybardockz.api.model.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,8 +21,8 @@ public class UsuarioModelAssembler {
 		return modelMapper.map(usuario, UsuarioModel.class);
 	}
 	
-	public List<UsuarioModel> toCollectionModel(List<Usuario> usuarios) {
-		List<UsuarioModel> usuariosModels = usuarios.stream()
+	public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuarios) {
+		List<UsuarioModel> usuariosModels = usuarios.stream() 
 				.map((usuarioDomain) -> toModel(usuarioDomain))
 				.collect(Collectors.toList());
 		

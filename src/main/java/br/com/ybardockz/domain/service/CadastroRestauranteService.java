@@ -10,6 +10,7 @@ import br.com.ybardockz.domain.model.Cidade;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.model.FormaPagamento;
 import br.com.ybardockz.domain.model.Restaurante;
+import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.repository.RestauranteRepository;
 import jakarta.transaction.Transactional;
 
@@ -27,6 +28,9 @@ public class CadastroRestauranteService {
 	
 	@Autowired
 	private CadastroFormaPagamentoService formaPagamentoService;
+	
+	@Autowired
+	private CadastroUsuarioService usuarioService;
 	
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
@@ -102,6 +106,22 @@ public class CadastroRestauranteService {
 		restaurante.fechar();
 	}
 	
+	@Transactional
+	public void associarUsuario(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+		
+		restaurante.adicionarUsuario(usuario);
+	}
+	
+	@Transactional
+	public void disassociarUsuario(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+		
+		restaurante.removerUsuario(usuario);
+	}
+
 	public Restaurante buscarOuFalhar(Long id) {
 		return restauranteRepository.findById(id).orElseThrow
 				(() -> new RestauranteNaoEncontradoException(id));
