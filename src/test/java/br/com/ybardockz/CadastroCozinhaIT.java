@@ -24,7 +24,7 @@ import io.restassured.http.ContentType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class CadastroCozinhaIT {
+class CadastroCozinhaIT {
 	
 	@LocalServerPort
 	private int port;
@@ -42,9 +42,9 @@ public class CadastroCozinhaIT {
 	private Cozinha cozinhaAmericana;
 	
 	private String cozinhaJsonCorreto;
-	
-	@BeforeEach
-	public void setUp() {
+
+    @BeforeEach
+    void setUp() {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		RestAssured.basePath = "/cozinha";
@@ -55,9 +55,9 @@ public class CadastroCozinhaIT {
 		
 		prepararDados();
 	}
-	
-	@Test
-	public void deveRetornarCorpoEStatusCorretos_QuandoConsultarCozinhaExistente() {
+
+    @Test
+    void deveRetornarCorpoEStatusCorretos_QuandoConsultarCozinhaExistente() {
 		given()
 		.accept(ContentType.JSON)
 		.pathParam("cozinhaId", cozinhaAmericana.getId())
@@ -67,10 +67,10 @@ public class CadastroCozinhaIT {
 			.statusCode(200)
 			.body("nome", equalTo(cozinhaAmericana.getNome()));
 	}
-	
 
-	@Test
-	public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
+
+    @Test
+    void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
 		given()
 		.accept(ContentType.JSON)
 		.pathParam("cozinhaId", cozinhaIdInexistente)
@@ -80,9 +80,9 @@ public class CadastroCozinhaIT {
 			.statusCode(HttpStatus.NOT_FOUND.value());
 
 	}
-	
-	@Test
-	public void deveRetornar200_QuandoConsultarCozinhas() {
+
+    @Test
+    void deveRetornar200_QuandoConsultarCozinhas() {
 		given()
 		.accept(ContentType.JSON)
 		.when()
@@ -92,9 +92,9 @@ public class CadastroCozinhaIT {
 		
 		
 	}
-	
-	@Test
-	public void deveConterQuantidadeCorretaDeCozinhas_QuandoListarCozinhas() {
+
+    @Test
+    void deveConterQuantidadeCorretaDeCozinhas_QuandoListarCozinhas() {
 		given()
 		.accept(ContentType.JSON)
 		.when()
@@ -104,9 +104,9 @@ public class CadastroCozinhaIT {
 		
 		
 	}
-	
-	@Test
-	public void deveRetornarStatus201_QuandoCadastrarCozinha() {
+
+    @Test
+    void deveRetornarStatus201_QuandoCadastrarCozinha() {
 		given()
 		.body(cozinhaJsonCorreto)
 		.contentType(ContentType.JSON)

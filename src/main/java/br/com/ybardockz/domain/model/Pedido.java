@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 
 import br.com.ybardockz.domain.model.enums.StatusPedido;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -58,11 +59,25 @@ public class Pedido {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private FormaPagamento formaPagamento;
 	
-	@OneToMany(mappedBy = "pedido")
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private List<ItemPedido> itens;
 	
 	@Column(name = "status_pedido")
 	@Enumerated(EnumType.STRING)
 	private StatusPedido status;
+	
+	public void calculoValorTotal() {
+		this.getItens().forEach((item) -> item.calcularPrecoTotal());
+		
+		BigDecimal subTotal = BigDecimal.ZERO;
+		
+		for (ItemPedido item : itens) {
+			subTotal = subTotal.add(item.getPrecoTotal());
+		}
+		
+		this.setSubTotal(subTotal);
+		this.setValorTotal(this.subTotal.add(this.taxaFrete));
+		
+	}
 	
 }

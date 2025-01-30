@@ -28,7 +28,7 @@ import io.restassured.response.Response;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class CadastroRestauranteIT {
+class CadastroRestauranteIT {
 	
 	private static final Long RESTAURANTE_ID_INEXISTENTE = 100L;
 	
@@ -59,9 +59,9 @@ public class CadastroRestauranteIT {
 	private int numeroDeRestaurantes;
 	
 	private Restaurante restauranteTeste;
-	
-	@BeforeEach
-	public void setUp() {
+
+    @BeforeEach
+    void setUp() {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.basePath = "/restaurante";
 		RestAssured.port = port;
@@ -83,8 +83,8 @@ public class CadastroRestauranteIT {
 		
 	}
 
-	@Test
-	public void deveRetornarCorpoEStatusCorretos_QuandoConsultarRestauranteExistente() {
+    @Test
+    void deveRetornarCorpoEStatusCorretos_QuandoConsultarRestauranteExistente() {
 		Response response = given()
 		.accept(ContentType.JSON)
 		.pathParam("restauranteId", restauranteTeste.getId())
@@ -101,9 +101,9 @@ public class CadastroRestauranteIT {
 		
 		
 	}
-	
-	@Test
-	public void deveRetornarStatus201_QuandoCadastrarRestauranteCorreto() {
+
+    @Test
+    void deveRetornarStatus201_QuandoCadastrarRestauranteCorreto() {
 		given()
 		.body(jsonRestauranteCorreto)
 		.contentType(ContentType.JSON)
@@ -114,9 +114,9 @@ public class CadastroRestauranteIT {
 			.statusCode(HttpStatus.CREATED.value());
 		
 	}
-	
-	@Test
-	public void deveRetornarStatus404_QuandoConsultarRestauranteInexistente() {
+
+    @Test
+    void deveRetornarStatus404_QuandoConsultarRestauranteInexistente() {
 		given()
 		.accept(ContentType.JSON)
 		.pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
@@ -126,10 +126,10 @@ public class CadastroRestauranteIT {
 			.statusCode(HttpStatus.NOT_FOUND.value());
 			
 	}
-	
-	
-	@Test
-	public void deveRetornarNumeroCorretoDeRestaurantes_QuandoListarRestaurantes() {
+
+
+    @Test
+    void deveRetornarNumeroCorretoDeRestaurantes_QuandoListarRestaurantes() {
 		given()
 		.accept(ContentType.JSON)
 		.when()
@@ -138,9 +138,9 @@ public class CadastroRestauranteIT {
 			.body("", hasSize(numeroDeRestaurantes));
 		
 	}
-	
-	@Test
-	public void deveRetornarStatus400_QuandoCadastrarRestauranteComCozinhaInexistente() {
+
+    @Test
+    void deveRetornarStatus400_QuandoCadastrarRestauranteComCozinhaInexistente() {
 		given()
 		.accept(ContentType.JSON)
 		.contentType(ContentType.JSON)
@@ -153,9 +153,9 @@ public class CadastroRestauranteIT {
 			
 			
 	}
-	
-	@Test
-	public void deveRetornaStatus400_QuandoCadastrarRestauranteSemTaxaFrete() {
+
+    @Test
+    void deveRetornaStatus400_QuandoCadastrarRestauranteSemTaxaFrete() {
 		given()
 		.accept(ContentType.JSON)
 		.contentType(ContentType.JSON)
@@ -166,9 +166,9 @@ public class CadastroRestauranteIT {
 			.statusCode(HttpStatus.BAD_REQUEST.value())
 			.body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
 	}
-	
-	@Test
-	public void deveRetornarStatus400_QuandoCadastrarRestauranteSemCozinha() {
+
+    @Test
+    void deveRetornarStatus400_QuandoCadastrarRestauranteSemCozinha() {
 		given()
 		.accept(ContentType.JSON)
 		.contentType(ContentType.JSON)
