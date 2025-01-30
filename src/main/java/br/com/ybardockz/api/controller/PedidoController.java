@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ybardockz.api.model.assembler.PedidoModelAssembler;
+import br.com.ybardockz.api.model.assembler.PedidoResumoModelAssembler;
 import br.com.ybardockz.api.model.domain.PedidoModel;
+import br.com.ybardockz.api.model.domain.PedidoResumoModel;
 import br.com.ybardockz.domain.model.Pedido;
 import br.com.ybardockz.domain.repository.PedidoRepository;
 import br.com.ybardockz.domain.service.CadastroPedidoService;
@@ -27,11 +29,14 @@ public class PedidoController {
 	@Autowired
 	private PedidoModelAssembler pedidoModelAssembler;
 	
+	@Autowired
+	private PedidoResumoModelAssembler pedidoResumoModelAssembler;
+	
 	@GetMapping
-	public List<PedidoModel> listar() {
+	public List<PedidoResumoModel> listar() {
 		List<Pedido> pedidos = pedidoRepository.findAll();
 		
-		return pedidoModelAssembler.toCollectionModel(pedidos);
+		return pedidoResumoModelAssembler.toCollectionModel(pedidos);
 	}
 	
 	@GetMapping("/{pedidoId}")
