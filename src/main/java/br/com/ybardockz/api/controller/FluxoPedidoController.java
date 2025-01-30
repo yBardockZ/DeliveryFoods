@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ybardockz.domain.service.AlteracaoStatusPedidoService;
 
 @RestController
-@RequestMapping("/pedido/{pedidoId}")
+@RequestMapping("/pedido/{pedidoCodigo}")
 public class FluxoPedidoController {
 	
 	@Autowired
@@ -19,20 +19,20 @@ public class FluxoPedidoController {
 	
 	@PutMapping("/confirmar")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmar(@PathVariable Long pedidoId) {
-		alteracaoStatusPedidoService.confirmar(pedidoId);
+	public void confirmar(@PathVariable String pedidoCodigo) {
+		alteracaoStatusPedidoService.confirmar(pedidoCodigo);
 	}
 	
 	@PutMapping("/confirmar-entrega")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmarEntrega(@PathVariable Long pedidoId) {
-		alteracaoStatusPedidoService.confirmarEntrega(pedidoId);
+	public void confirmarEntrega(@PathVariable String pedidoCodigo) {
+		alteracaoStatusPedidoService.confirmarEntrega(pedidoCodigo);
 	}
 	
 	@PutMapping("/cancelar")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancelar(@PathVariable Long pedidoId) {
-		alteracaoStatusPedidoService.cancelar(pedidoId);
+	public void cancelar(@PathVariable String pedidoCodigo) {
+		alteracaoStatusPedidoService.cancelar(pedidoCodigo);
 	}
 
 

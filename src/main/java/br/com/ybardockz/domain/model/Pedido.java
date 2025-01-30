@@ -3,6 +3,7 @@ package br.com.ybardockz.domain.model;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,6 +21,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +34,8 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
+	
+	private String codigo;
 	
 	private BigDecimal subTotal;
 	
@@ -100,11 +104,16 @@ public class Pedido {
 		if (this.status.podeAlterarPara(status)) {
 			this.status = status;
 		} else {
-			throw new NegocioException("O status do pedido de código: " + this.id + 
+			throw new NegocioException("O status do pedido de código: " + this.codigo + 
 					" Não pode ser alterado de '" + this.status.getDescricao() + "'" +
 					" para '" + status.getDescricao() + "'.");
 		}
 		
+	}
+	
+	@PrePersist
+	private void gerarCodigo() {
+		this.setCodigo(UUID.randomUUID().toString());
 	}
 	
 }
