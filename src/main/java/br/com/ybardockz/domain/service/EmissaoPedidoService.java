@@ -17,7 +17,7 @@ import br.com.ybardockz.domain.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class EmitirPedidoService {
+public class EmissaoPedidoService {
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;

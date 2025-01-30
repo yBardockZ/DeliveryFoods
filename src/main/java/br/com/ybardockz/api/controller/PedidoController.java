@@ -23,7 +23,7 @@ import br.com.ybardockz.domain.exception.ProdutoNaoEncontradoException;
 import br.com.ybardockz.domain.model.Pedido;
 import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.repository.PedidoRepository;
-import br.com.ybardockz.domain.service.EmitirPedidoService;
+import br.com.ybardockz.domain.service.EmissaoPedidoService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -34,7 +34,7 @@ public class PedidoController {
 	private PedidoRepository pedidoRepository;
 	
 	@Autowired
-	private EmitirPedidoService pedidoService;
+	private EmissaoPedidoService pedidoService;
 	
 	@Autowired
 	private PedidoModelAssembler pedidoModelAssembler;

@@ -3,7 +3,7 @@ package br.com.ybardockz.domain.model.enums;
 public enum StatusPedido {
 	
 	CRIADO("criado"),
-	AGUARDANDO_PAGAMENTO("aguardando_pagamento"),
+	CONFIRMADO("confirmado"),
 	ENTREGUE("entregue"),
 	CANCELADO("cancelado");
 
