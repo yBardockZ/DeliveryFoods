@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.enums.StatusPedido;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -64,7 +65,7 @@ public class Pedido {
 	
 	@Column(name = "status_pedido")
 	@Enumerated(EnumType.STRING)
-	private StatusPedido status;
+	private StatusPedido status = StatusPedido.CRIADO;
 	
 	public void calculoValorTotal() {
 		this.getItens().forEach((item) -> item.calcularPrecoTotal());
@@ -77,6 +78,32 @@ public class Pedido {
 		
 		this.setSubTotal(subTotal);
 		this.setValorTotal(this.subTotal.add(this.taxaFrete));
+		
+	}
+	
+	public void confirmar() {
+		setStatus(StatusPedido.CONFIRMADO); 
+		this.dataConfirmacao = Instant.now();
+	}
+	
+	public void confirmarEntrega() {
+		setStatus(StatusPedido.ENTREGUE);
+		this.dataEntrega = Instant.now();
+	}
+	
+	public void cancelar() {
+		setStatus(StatusPedido.CANCELADO);
+		this.dataCancelamento = Instant.now();
+	}
+	
+	private void setStatus(StatusPedido status) {
+		if (this.status.podeAlterarPara(status)) {
+			this.status = status;
+		} else {
+			throw new NegocioException("O status do pedido de código: " + this.id + 
+					" Não pode ser alterado de '" + this.status.getDescricao() + "'" +
+					" para '" + status.getDescricao() + "'.");
+		}
 		
 	}
 	

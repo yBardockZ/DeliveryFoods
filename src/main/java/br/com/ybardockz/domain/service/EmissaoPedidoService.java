@@ -12,7 +12,6 @@ import br.com.ybardockz.domain.model.Pedido;
 import br.com.ybardockz.domain.model.Produto;
 import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.model.Usuario;
-import br.com.ybardockz.domain.model.enums.StatusPedido;
 import br.com.ybardockz.domain.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
 
@@ -75,8 +74,6 @@ public class EmissaoPedidoService {
 			throw new NegocioException("Forma de pagamento: " + formaPagamento.getDescricao() +
 					" não é aceita no restaurante.");
 		}
-		
-		pedido.setStatus(StatusPedido.CRIADO);
 	}
 	
 	public void validarItems(Pedido pedido) {
