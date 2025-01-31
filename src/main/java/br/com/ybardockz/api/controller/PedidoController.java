@@ -23,7 +23,9 @@ import br.com.ybardockz.domain.exception.ProdutoNaoEncontradoException;
 import br.com.ybardockz.domain.model.Pedido;
 import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.repository.PedidoRepository;
+import br.com.ybardockz.domain.repository.filter.PedidoFilter;
 import br.com.ybardockz.domain.service.EmissaoPedidoService;
+import br.com.ybardockz.infraestructure.repository.spec.PedidoSpecs;
 import jakarta.validation.Valid;
 
 @RestController
@@ -46,8 +48,8 @@ public class PedidoController {
 	private PedidoInputDisassembler pedidoInputDisassembler;
 	
 	@GetMapping
-	public List<PedidoResumoModel> listar() {
-		List<Pedido> pedidos = pedidoRepository.findAll();
+	public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+		List<Pedido> pedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
 		return pedidoResumoModelAssembler.toCollectionModel(pedidos);
 	}
 	
