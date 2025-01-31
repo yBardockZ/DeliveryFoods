@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import br.com.ybardockz.api.model.assembler.RestauranteInputDisassembler;
 import br.com.ybardockz.api.model.assembler.RestauranteModelAssembler;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
+import br.com.ybardockz.api.model.view.RestauranteView;
 import br.com.ybardockz.domain.exception.CidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
@@ -43,12 +46,41 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteInputDisassembler restauranteInputDisassembler;
 	
+	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
 	public ResponseEntity<List<RestauranteModel>> listar() {
-		List<RestauranteModel> restaurantes = restauranteModelAssembler.toCollectionModel(repository.findAll());
+		List<Restaurante> restaurantes = repository.findAll();
 		
-		return ResponseEntity.ok(restaurantes);
+		return ResponseEntity.ok(restauranteModelAssembler.toCollectionModel(restaurantes));
 	}
+	
+	@JsonView(RestauranteView.ApenasNome.class)
+	@GetMapping(params = "projecao=apenas-nome")
+	public ResponseEntity<List<RestauranteModel>> listarApenasNome() {
+		return listar();
+	}
+	
+	/*@GetMapping
+	public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {
+		List<Restaurante> restaurantes = repository.findAll();
+		
+		List<RestauranteModel> restaurantesModel = 
+				restauranteModelAssembler.toCollectionModel(restaurantes);
+		
+		MappingJacksonValue jacksonWrapper = new MappingJacksonValue(restaurantesModel);
+		
+		jacksonWrapper.setSerializationView(RestauranteView.Resumo.class);
+		
+		if ("apenas-nome".equals(projecao)) {
+			jacksonWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+		} else if ("completo".equals(projecao)) {
+			jacksonWrapper.setSerializationView(null);
+		}
+		
+		return jacksonWrapper;
+
+	}*/
+	
 	
 	@GetMapping(path = "/{restauranteId}")
 	public RestauranteModel buscarPorId(@PathVariable Long restauranteId) {
