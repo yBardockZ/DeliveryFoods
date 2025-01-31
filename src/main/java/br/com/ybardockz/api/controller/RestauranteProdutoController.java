@@ -1,5 +1,6 @@
 package br.com.ybardockz.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ybardockz.api.model.assembler.ProdutoInputDisassembler;
@@ -16,7 +18,7 @@ import br.com.ybardockz.api.model.assembler.ProdutoModelAssembler;
 import br.com.ybardockz.api.model.domain.ProdutoModel;
 import br.com.ybardockz.api.model.input.ProdutoInput;
 import br.com.ybardockz.domain.model.Produto;
-import br.com.ybardockz.domain.model.Restaurante;
+import br.com.ybardockz.domain.repository.ProdutoRepository;
 import br.com.ybardockz.domain.service.CadastroProdutoService;
 import br.com.ybardockz.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
@@ -29,6 +31,9 @@ public class RestauranteProdutoController {
 	private CadastroRestauranteService restauranteService;
 	
 	@Autowired
+	private ProdutoRepository produtoRepository;
+	
+	@Autowired
 	private CadastroProdutoService produtoService;
 	
 	@Autowired
@@ -38,10 +43,21 @@ public class RestauranteProdutoController {
 	private ProdutoInputDisassembler produtoInputDisassembler;
 	
 	@GetMapping
-	public List<ProdutoModel> listar(@PathVariable Long restauranteId) {
-		Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
+	public List<ProdutoModel> listar(@PathVariable Long restauranteId,
+			@RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
+		restauranteService.buscarOuFalhar(restauranteId);
 		
-		return produtoModelAssembler.toCollectionModel(restaurante.getProdutos());
+		List<Produto> produtos = new ArrayList<>();
+		
+		if (incluirInativos) {
+			produtos = produtoRepository.findProdutosByRestauranteId(restauranteId);
+		}
+		else {
+			produtos = produtoRepository.findProdutosAtivosByRestauranteId(restauranteId);
+		}
+		
+		return produtoModelAssembler
+				.toCollectionModel(produtos);
 	}
 	
 	@GetMapping("/{produtoId}")
