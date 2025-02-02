@@ -12,6 +12,6 @@ public class PedidoFilter {
 	private Long clienteId;
 	private Long restauranteId;
 	private Instant dataCriacaoInicio;
-	private Instant dataCriacaoFim;
+	private Instant dataCriacaoFinal;
 
 }
