@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import br.com.ybardockz.domain.filter.PedidoFilter;
 import br.com.ybardockz.domain.model.Pedido;
-import br.com.ybardockz.domain.repository.filter.PedidoFilter;
 import jakarta.persistence.criteria.Predicate;
 
 public class PedidoSpecs {
