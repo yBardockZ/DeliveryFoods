@@ -92,6 +92,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleInternalError(Exception ex, WebRequest request) {
 		
+		ex.printStackTrace();
+		
 		ProblemType problemType = ProblemType.ERRO_INTERNO;
 		String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 		

@@ -1,6 +1,7 @@
 package br.com.ybardockz.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import br.com.ybardockz.api.model.assembler.PedidoResumoModelAssembler;
 import br.com.ybardockz.api.model.domain.PedidoModel;
 import br.com.ybardockz.api.model.domain.PedidoResumoModel;
 import br.com.ybardockz.api.model.input.PedidoInput;
+import br.com.ybardockz.core.data.PageableTranslator;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.exception.ProdutoNaoEncontradoException;
 import br.com.ybardockz.domain.model.Pedido;
@@ -52,6 +54,8 @@ public class PedidoController {
 	
 	@GetMapping
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
+		pageable = traduzirPageable(pageable);
+		
 		Page<Pedido> pedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
 		
 		List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler
@@ -85,6 +89,21 @@ public class PedidoController {
 		} catch (ProdutoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
+	}
+	
+	private Pageable traduzirPageable(Pageable apiPageable) {
+		Map<String, String> campos = Map.of(
+				"codigo", "codigo",
+				"valoTotal", "valorTotal",
+				"subTotal", "subTotal",
+				"taxaFrete", "taxaFrete",
+				"dataCriacao", "dataCriacao",
+				"status", "status",
+				"restaurante.nome", "restaurante.nome",
+				"nomeCliente", "cliente.nome"
+				);
+		
+		return PageableTranslator.translatePage(apiPageable, campos);
 	}
 
 }
