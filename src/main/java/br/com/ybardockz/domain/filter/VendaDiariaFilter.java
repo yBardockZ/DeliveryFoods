@@ -1,6 +1,6 @@
 package br.com.ybardockz.domain.filter;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 public class VendaDiariaFilter {
 	
-	private Instant dataInicio;
-	private Instant dataFim;
+	private LocalDate dataInicio;
+	private	LocalDate dataFim;
 	private Long restauranteId;
 
 }
