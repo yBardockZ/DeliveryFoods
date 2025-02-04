@@ -1,7 +1,7 @@
 package br.com.ybardockz.infraestructure.service.query;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -31,13 +31,13 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 		var predicates = new ArrayList<Predicate>();
 		
 		var convertTimeZoneFunction = builder.function
-				("convert_tz", LocalDate.class,
+				("convert_tz", Date.class,
 						root.get("dataCriacao"),
 						builder.literal("+00:00"),
 						builder.literal(timeOffSet));
 		
 		var dateFunctionDataCriacao = builder.function
-				("date", LocalDate.class, convertTimeZoneFunction);
+				("date", Date.class, convertTimeZoneFunction);
 		
 		var selection = builder.construct(VendaDiaria.class,
 				dateFunctionDataCriacao, 

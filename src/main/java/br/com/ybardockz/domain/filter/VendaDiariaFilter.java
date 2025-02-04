@@ -1,6 +1,9 @@
 package br.com.ybardockz.domain.filter;
 
-import java.time.LocalDate;
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +12,12 @@ import lombok.Setter;
 @Setter
 public class VendaDiariaFilter {
 	
-	private LocalDate dataInicio;
-	private	LocalDate dataFim;
+	@DateTimeFormat(iso = ISO.DATE_TIME)
+	private Date dataInicio;
+	
+	@DateTimeFormat(iso = ISO.DATE_TIME)
+	private	Date dataFim;
+	
 	private Long restauranteId;
 
 }
