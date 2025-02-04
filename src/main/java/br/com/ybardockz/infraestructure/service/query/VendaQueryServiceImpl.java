@@ -1,4 +1,4 @@
-package br.com.ybardockz.infraestructure.service;
+package br.com.ybardockz.infraestructure.service.query;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
