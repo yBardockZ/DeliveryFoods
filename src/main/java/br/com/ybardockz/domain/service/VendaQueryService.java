@@ -10,6 +10,7 @@ import br.com.ybardockz.domain.model.dto.VendaDiaria;
 @Service
 public interface VendaQueryService {
 	
-	List<VendaDiaria> listarVendasDiarias(VendaDiariaFilter filter);
+	List<VendaDiaria> listarVendasDiarias(VendaDiariaFilter filter,
+			String offSetTime);
 
 }
