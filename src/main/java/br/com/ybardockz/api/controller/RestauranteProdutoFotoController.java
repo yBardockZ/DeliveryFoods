@@ -1,8 +1,6 @@
 package br.com.ybardockz.api.controller;
 
-import java.nio.file.Path;
-import java.util.UUID;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,35 +8,44 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.model.assembler.FotoProdutoModelAssembler;
+import br.com.ybardockz.api.model.domain.FotoProdutoModel;
 import br.com.ybardockz.api.model.input.FotoProdutoInput;
-import br.com.ybardockz.domain.exception.NegocioException;
+import br.com.ybardockz.domain.model.FotoProduto;
+import br.com.ybardockz.domain.model.Produto;
+import br.com.ybardockz.domain.service.CadastroProdutoService;
+import br.com.ybardockz.domain.service.CatalogoFotoProdutoService;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/restaurante/{restauranteId}/produto/{produtoId}/foto")
 public class RestauranteProdutoFotoController {
 	
+	@Autowired
+	private CatalogoFotoProdutoService fotoProdutoService;
+	
+	@Autowired
+	private CadastroProdutoService produtoService;
+	
+	@Autowired
+	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
+	
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void uploadFoto(@PathVariable Long restauranteId,
-			@PathVariable Long produtoId, @Valid @ModelAttribute FotoProdutoInput arquivo) {
+	public FotoProdutoModel uploadFoto(@PathVariable Long restauranteId,
+			@PathVariable Long produtoId, @Valid @ModelAttribute FotoProdutoInput fotoInput) {
+		Produto produto = produtoService.buscarProdutoDoRestaurante(restauranteId, produtoId); 
 		
-		if (arquivo.getArquivo() == null) {
-			throw new NegocioException("O arquivo não pode ser nulo.");
-		}
+		FotoProduto foto = new FotoProduto();
+		foto.setProduto(produto);
+		foto.setContentType(fotoInput.getArquivo().getContentType());
+		foto.setDescricao(fotoInput.getDescricao());
+		foto.setTamanho(fotoInput.getArquivo().getSize());
+		foto.setNomeArquivo(fotoInput.getArquivo().getOriginalFilename());
 		
-		String nomeArquivo = UUID.randomUUID() + "_" + arquivo.getArquivo().getOriginalFilename();
-		var arquivoFoto = Path.of("/Users/Thalles/Desktop/catalogo", nomeArquivo);
+		foto = fotoProdutoService.salvar(foto);
+		FotoProdutoModel fotoModel = fotoProdutoModelAssembler.toModel(foto);
 		
-		System.out.println(arquivo.getDescricao());
-		System.out.println(arquivoFoto);
-		System.out.println(arquivo.getArquivo().getContentType());
-		
-		try {
-			arquivo.getArquivo().transferTo(arquivoFoto);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		return fotoModel;
 			
 	}
 	
