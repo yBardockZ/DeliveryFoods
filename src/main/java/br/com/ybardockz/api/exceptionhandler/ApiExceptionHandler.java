@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -41,6 +42,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@ExceptionHandler(MultipartException.class)
+	public ResponseEntity<?> handleMultipartException(MultipartException ex, 
+			WebRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String detail = "Campos: 'arquivo' e 'descricao' são obrigatórios.";
+		
+		Problema problema = createProblemaBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
+		
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
 	
 	@ExceptionHandler(ValidacaoException.class)
 	public ResponseEntity<?> handleValidacaoException(ValidacaoException ex, WebRequest request) {

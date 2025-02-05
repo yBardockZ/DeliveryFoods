@@ -2,6 +2,9 @@ package br.com.ybardockz.api.model.input;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.ybardockz.core.validation.FileSize;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +12,11 @@ import lombok.Setter;
 @Setter
 public class FotoProdutoInput {
 	
-	private MultipartFile file;
+	@NotNull
+	@FileSize(max = "500KB")
+	private MultipartFile arquivo;
+	
+	@NotBlank
 	private String descricao;
 
 }
