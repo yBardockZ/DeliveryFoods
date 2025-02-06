@@ -5,5 +5,6 @@ import br.com.ybardockz.domain.model.FotoProduto;
 public interface ProdutoRepositoryQueries {
 	
 	FotoProduto salvar(FotoProduto foto);
+	void deleteFoto(FotoProduto foto);
 
 }
