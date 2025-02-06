@@ -1,9 +1,13 @@
 package br.com.ybardockz.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ybardockz.api.model.assembler.FotoProdutoModelAssembler;
 import br.com.ybardockz.api.model.domain.FotoProdutoModel;
 import br.com.ybardockz.api.model.input.FotoProdutoInput;
+import br.com.ybardockz.domain.exception.EntidadeNaoEncontradaException;
 import br.com.ybardockz.domain.model.FotoProduto;
 import br.com.ybardockz.domain.model.Produto;
 import br.com.ybardockz.domain.service.CadastroProdutoService;
 import br.com.ybardockz.domain.service.CatalogoFotoProdutoService;
+import br.com.ybardockz.domain.service.FotoStorageService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,6 +35,9 @@ public class RestauranteProdutoFotoController {
 	
 	@Autowired
 	private CadastroProdutoService produtoService;	
+	
+	@Autowired
+	private FotoStorageService fotoStorageService;
 	
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
@@ -52,14 +61,34 @@ public class RestauranteProdutoFotoController {
 			
 	}
 	
-	@GetMapping
-	public FotoProdutoModel recuperarFoto(@PathVariable Long restauranteId,
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public FotoProdutoModel buscar(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId) {
 		FotoProduto fotoProduto = fotoProdutoService.recuperarFotoDoProduto
 				(restauranteId, produtoId);
 		
 		return fotoProdutoModelAssembler.toModel(fotoProduto);
 		
+	}
+	
+	@GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+	public ResponseEntity<InputStreamResource> sevirFoto(@PathVariable Long restauranteId,
+			@PathVariable Long produtoId) {
+		try {
+			FotoProduto fotoProduto = fotoProdutoService.recuperarFotoDoProduto
+					(restauranteId, produtoId);
+			
+			InputStream arquivo = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+			
+			return ResponseEntity.ok()
+					.contentType(MediaType.valueOf(fotoProduto.getContentType()))
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""
+					+ fotoProduto.getNomeArquivo() + "\"")
+					.body(new InputStreamResource(arquivo));
+		} catch (EntidadeNaoEncontradaException e) {
+			System.out.println(e.getMessage());
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 }
