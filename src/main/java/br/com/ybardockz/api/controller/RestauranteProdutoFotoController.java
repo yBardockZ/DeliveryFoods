@@ -2,16 +2,19 @@ package br.com.ybardockz.api.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -71,17 +74,22 @@ public class RestauranteProdutoFotoController {
 		
 	}
 	
-	@GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+	@GetMapping
 	public ResponseEntity<InputStreamResource> sevirFoto(@PathVariable Long restauranteId,
-			@PathVariable Long produtoId) {
+			@PathVariable Long produtoId, @RequestHeader("accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		try {
 			FotoProduto fotoProduto = fotoProdutoService.recuperarFotoDoProduto
 					(restauranteId, produtoId);
+				
+			MediaType fotoMediaType = MediaType.parseMediaType(fotoProduto.getContentType());
+			List<MediaType> mediasType = MediaType.parseMediaTypes(acceptHeader);
+			
+			verificarCompatibilidadeArquivo(fotoMediaType, mediasType);
 			
 			InputStream arquivo = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
 			
 			return ResponseEntity.ok()
-					.contentType(MediaType.valueOf(fotoProduto.getContentType()))
+					.contentType(MediaType.IMAGE_JPEG)
 					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""
 					+ fotoProduto.getNomeArquivo() + "\"")
 					.body(new InputStreamResource(arquivo));
@@ -89,6 +97,16 @@ public class RestauranteProdutoFotoController {
 			System.out.println(e.getMessage());
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	private void verificarCompatibilidadeArquivo(MediaType fotoMediaType, List<MediaType> mediasType) throws HttpMediaTypeNotAcceptableException {
+		boolean compativel = mediasType.stream()
+				.anyMatch((mediaTypeHeader) -> mediaTypeHeader.isCompatibleWith(fotoMediaType));
+		
+		if (!compativel) {
+			throw new HttpMediaTypeNotAcceptableException(mediasType);
+		}
+		
 	}
 	
 }
