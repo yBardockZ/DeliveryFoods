@@ -1,6 +1,10 @@
 package br.com.ybardockz.infraestructure.service.storage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -39,6 +43,22 @@ public class LocalFotoStorageService implements FotoStorageService {
 			throw new StorageException("Não foi possivel excluir o arquivo", e);
 		}
 		
+	}
+	
+	@Override
+	public InputStream recuperar(String nomeArquivo) {
+		Path arquivoPath = getArquivoPath(nomeArquivo);
+		File file = arquivoPath.toFile();
+		
+		if (!file.exists()) {
+			return null;
+		}
+		
+		try {
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			throw new StorageException("Não foi possivel recuperar o arquivo", e);
+		}
 	}
 	
 	private Path getArquivoPath(String nomeArquivo) {
