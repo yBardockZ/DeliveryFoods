@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ybardockz.domain.exception.FotoProdutoNaoEncontradaException;
 import br.com.ybardockz.domain.model.FotoProduto;
 import br.com.ybardockz.domain.repository.ProdutoRepository;
 import br.com.ybardockz.domain.service.FotoStorageService.NovaFoto;
@@ -46,6 +47,14 @@ public class CatalogoFotoProdutoService {
 		fotoStorageService.substituir(novaFoto, nomeArquivoExistente);
 		
 		return foto;
+	}
+	
+	public FotoProduto recuperarFotoDoProduto(Long restauranteId, Long produtoId) {
+		FotoProduto fotoProduto = produtoRepository.findFotoById
+				(restauranteId, produtoId).orElseThrow(() -> new FotoProdutoNaoEncontradaException(
+						"A foto do produto de código: " + produtoId + " Não pode ser encontrada"));
+		
+		return fotoProduto;
 	}
 	
 }
