@@ -10,6 +10,16 @@ public interface FotoStorageService {
 
 	void armazenar (NovaFoto foto);
 	
+	void remover (String nomeArquivo);
+	
+	default void substituir(NovaFoto novaFoto, String nomeFotoAntiga) {
+		armazenar(novaFoto);
+		
+		if (nomeFotoAntiga != null) {
+			remover(nomeFotoAntiga);
+		}
+	}
+	
 	default String gerarNome(String nomeOriginal) {
 		return UUID.randomUUID().toString() + "_" + nomeOriginal;
 	}
