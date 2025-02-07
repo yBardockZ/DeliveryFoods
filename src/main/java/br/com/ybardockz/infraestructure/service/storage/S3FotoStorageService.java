@@ -12,6 +12,7 @@ import br.com.ybardockz.core.storage.StorageProperties;
 import br.com.ybardockz.domain.service.FotoStorageService;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
@@ -54,8 +55,16 @@ public class S3FotoStorageService implements FotoStorageService {
 
 	@Override
 	public void remover(String nomeArquivo) {
-		// TODO Auto-generated method stub
-
+		try {
+			DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+					.bucket(storageProperties.getS3().getBucket())
+					.key(getCaminho(nomeArquivo))
+					.build();
+			
+			s3Client.deleteObject(deleteRequest);
+		} catch (RuntimeException e) {
+			throw new StorageException("Não foi possivel deletar arquivo na AmazonS3", e);
+		}
 	}
 
 	private String getCaminho(String nomeArquivo) {
