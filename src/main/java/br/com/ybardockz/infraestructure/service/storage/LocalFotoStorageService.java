@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -46,16 +45,20 @@ public class LocalFotoStorageService implements FotoStorageService {
 	}
 	
 	@Override
-	public InputStream recuperar(String nomeArquivo) {
-		Path arquivoPath = getArquivoPath(nomeArquivo);
-		File file = arquivoPath.toFile();
-		
-		if (!file.exists()) {
-			return null;
-		}
-		
+	public FotoRecuperada recuperar(String nomeArquivo) {
 		try {
-			return new FileInputStream(file);
+			Path arquivoPath = getArquivoPath(nomeArquivo);
+			File file = arquivoPath.toFile();
+		
+			if (!file.exists()) {
+				return null;
+			}
+		
+			FotoRecuperada fotoRecuperada = FotoRecuperada.builder()
+					.inputStream(new FileInputStream(file))
+					.build();
+			
+			return fotoRecuperada;
 		} catch (FileNotFoundException e) {
 			throw new StorageException("Não foi possivel recuperar o arquivo", e);
 		}

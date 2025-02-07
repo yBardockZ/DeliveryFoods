@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,21 +16,51 @@ import br.com.ybardockz.domain.service.FotoStorageService;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
 @Service
 public class S3FotoStorageService implements FotoStorageService {
 
 	@Autowired
 	private S3Client s3Client;
-
+	
+	@Autowired
+	private S3Presigner s3Presigner;
+	
 	@Autowired
 	private StorageProperties storageProperties;
+	
+	
 
 	@Override
-	public InputStream recuperar(String nomeArquivo) {
-		// TODO Auto-generated method stub
-		return null;
+	public FotoRecuperada recuperar(String nomeArquivo) {
+		try {
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+					.bucket(storageProperties.getS3()
+							.getBucket())
+					.key(getCaminho(nomeArquivo))
+					.build();
+			
+			GetObjectPresignRequest getObjectPresigner =
+					GetObjectPresignRequest.builder()
+					.signatureDuration(Duration.of(10L, ChronoUnit.MINUTES))
+					.getObjectRequest(getObjectRequest)
+					.build();
+			
+			URL url = s3Presigner.presignGetObject(getObjectPresigner).url();
+			
+			FotoRecuperada fotoRecuperada = FotoRecuperada.builder()
+					.url(url.toString())
+					.build();
+			
+			return fotoRecuperada;
+		} catch (Exception e) {
+			throw new StorageException("Não foi possivel recuperar foto da AmazonS3", e);
+		}
+		
 	}
 
 	@Override

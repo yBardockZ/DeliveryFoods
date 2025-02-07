@@ -1,7 +1,6 @@
 package br.com.ybardockz.api.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import br.com.ybardockz.domain.model.Produto;
 import br.com.ybardockz.domain.service.CadastroProdutoService;
 import br.com.ybardockz.domain.service.CatalogoFotoProdutoService;
 import br.com.ybardockz.domain.service.FotoStorageService;
+import br.com.ybardockz.domain.service.FotoStorageService.FotoRecuperada;
 import jakarta.validation.Valid;
 
 @RestController
@@ -78,7 +78,7 @@ public class RestauranteProdutoFotoController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<InputStreamResource> sevirFoto(@PathVariable Long restauranteId,
+	public ResponseEntity<?> sevirFoto(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId, @RequestHeader("accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		try {
 			FotoProduto fotoProduto = fotoProdutoService.recuperarFotoDoProduto
@@ -89,13 +89,24 @@ public class RestauranteProdutoFotoController {
 			
 			verificarCompatibilidadeArquivo(fotoMediaType, mediasType);
 			
-			InputStream arquivo = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+			FotoRecuperada fotoRecuperada = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
 			
-			return ResponseEntity.ok()
-					.contentType(fotoMediaType)
-					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""
-					+ fotoProduto.getNomeArquivo() + "\"")
-					.body(new InputStreamResource(arquivo));
+			if (fotoRecuperada.temUrl()) {
+				return ResponseEntity
+						.status(HttpStatus.FOUND)
+						.header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
+						.build();
+			} else {
+				
+				return ResponseEntity
+						.ok()
+						.contentType(fotoMediaType)
+						.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""
+						+ fotoProduto.getNomeArquivo() + "\"")
+						.body(new InputStreamResource(fotoRecuperada.getInputStream()));
+				
+			} 
+			
 		} catch (EntidadeNaoEncontradaException e) {
 			System.out.println(e.getMessage());
 			return ResponseEntity.notFound().build();
