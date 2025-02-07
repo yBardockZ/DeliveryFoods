@@ -31,6 +31,7 @@ public interface FotoStorageService {
 	public class NovaFoto {
 		
 		private String nomeArquivo;
+		private String contentType;
 		private InputStream inputStream;
 		
 	}
