@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.ybardockz.core.storage.StorageProperties.TipoStorage;
+import br.com.ybardockz.domain.service.FotoStorageService;
+import br.com.ybardockz.infraestructure.service.storage.LocalFotoStorageService;
+import br.com.ybardockz.infraestructure.service.storage.S3FotoStorageService;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -11,7 +15,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Configuration
-public class S3ClienteConfig {
+public class StorageConfig {
 	
 	@Autowired
 	private StorageProperties storageProperties;
@@ -46,6 +50,16 @@ public class S3ClienteConfig {
     			.build();
     	
     	return s3Presigner;
+    }
+    
+    @Bean
+    FotoStorageService fotoStorageService() {
+    	if (storageProperties.getTipoStorage() == TipoStorage.S3) {
+    		return new S3FotoStorageService();
+    	}
+    	else {
+    		return new LocalFotoStorageService();
+    	}
     }
 	
 }

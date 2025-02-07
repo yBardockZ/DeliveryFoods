@@ -13,7 +13,6 @@ import org.springframework.util.FileCopyUtils;
 import br.com.ybardockz.core.storage.StorageProperties;
 import br.com.ybardockz.domain.service.FotoStorageService;
 
-//@Service
 public class LocalFotoStorageService implements FotoStorageService {
 
 	@Autowired

@@ -9,7 +9,6 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import br.com.ybardockz.core.storage.StorageProperties;
 import br.com.ybardockz.domain.service.FotoStorageService;
@@ -21,7 +20,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
-@Service
+
 public class S3FotoStorageService implements FotoStorageService {
 
 	@Autowired
