@@ -8,6 +8,7 @@ public class FakeEnvioEmailService extends SmtpEnvioEmailService {
 	@Override
 	public void enviar(Mensagem mensagem) {
 		log.info("Simulação de envio de e-mails: ");
+		log.info("Enviando e-mail para: " + mensagem.getDestinatario());
 		log.info(processarTemplate(mensagem));
 		
 	}

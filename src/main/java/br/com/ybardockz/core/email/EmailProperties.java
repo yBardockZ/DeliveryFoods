@@ -18,11 +18,14 @@ public class EmailProperties {
 	@NotNull
 	private String remetente;
 	
+	private String sandboxDestinatario;
+	
 	private Impl impl = Impl.FAKE;
 	
 	public enum Impl {
 		SMTP,
-		FAKE
+		FAKE,
+		SANDBOX
 		
 	}
 
