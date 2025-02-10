@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
+import br.com.ybardockz.domain.event.PedidoConfirmadoEvent;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.enums.StatusPedido;
 import jakarta.persistence.CascadeType;
@@ -27,8 +29,8 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Pedido {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Pedido extends AbstractAggregateRoot<Pedido> {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,6 +90,8 @@ public class Pedido {
 	public void confirmar() {
 		setStatus(StatusPedido.CONFIRMADO); 
 		this.dataConfirmacao = Instant.now();
+		
+		registerEvent(new PedidoConfirmadoEvent(this));
 	}
 	
 	public void confirmarEntrega() {

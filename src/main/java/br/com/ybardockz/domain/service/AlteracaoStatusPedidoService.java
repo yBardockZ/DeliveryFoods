@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ybardockz.domain.model.Pedido;
-import br.com.ybardockz.domain.service.EnvioEmailService.Mensagem;
+import br.com.ybardockz.domain.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -14,21 +14,14 @@ public class AlteracaoStatusPedidoService {
 	private EmissaoPedidoService pedidoService;
 	
 	@Autowired
-	private EnvioEmailService envioEmail;
+	private PedidoRepository pedidoRepository;
 	
 	@Transactional
 	public void confirmar(String pedidoCodigo) {
 		Pedido pedido = pedidoService.buscarOuFalhar(pedidoCodigo);
-		
 		pedido.confirmar();
 		
-		envioEmail.enviar(Mensagem.builder()
-				.assunto(pedido.getRestaurante().getNome() + " - Pedido Confirmado")
-				.corpo("pedido-confirmado.html")
-				.variavel("pedido", pedido)
-				.destinatario(pedido.getCliente().getEmail())
-				.build()
-				);
+		pedidoRepository.save(pedido);
 	}
 	
 	@Transactional
