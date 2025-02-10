@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+import br.com.ybardockz.domain.event.PedidoCanceladoEvent;
 import br.com.ybardockz.domain.event.PedidoConfirmadoEvent;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.enums.StatusPedido;
@@ -102,6 +103,8 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
 	public void cancelar() {
 		setStatus(StatusPedido.CANCELADO);
 		this.dataCancelamento = Instant.now();
+		
+		registerEvent(new PedidoCanceladoEvent(this));
 	}
 	
 	private void setStatus(StatusPedido status) {
