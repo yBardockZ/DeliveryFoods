@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import br.com.ybardockz.domain.repository.RestauranteRepository;
 import br.com.ybardockz.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/restaurante")
 public class RestauranteController {
@@ -49,9 +51,10 @@ public class RestauranteController {
 	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
 	public ResponseEntity<List<RestauranteModel>> listar() {
-		List<Restaurante> restaurantes = repository.findAll();
+		List<RestauranteModel> restaurantesModel = restauranteModelAssembler
+				.toCollectionModel(repository.findAll());
 		
-		return ResponseEntity.ok(restauranteModelAssembler.toCollectionModel(restaurantes));
+		return ResponseEntity.ok(restaurantesModel);
 	}
 	
 	@JsonView(RestauranteView.ApenasNome.class)
