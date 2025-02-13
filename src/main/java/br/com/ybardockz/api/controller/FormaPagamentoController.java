@@ -1,5 +1,6 @@
 package br.com.ybardockz.api.controller;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import br.com.ybardockz.api.model.assembler.FormaPagamentoInputDisassembler;
 import br.com.ybardockz.api.model.assembler.FormaPagamentoModelAssembler;
@@ -43,12 +46,27 @@ public class FormaPagamentoController {
 	private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 	
 	@GetMapping
-	public ResponseEntity<List<FormaPagamentoModel>> listar() {
+	public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		
+		String etag = "0";
+		
+		Instant dataUltimaAtualizacao = repository.consultarDataAtualizada();
+		
+		if (dataUltimaAtualizacao != null) {
+			etag = String.valueOf(dataUltimaAtualizacao.toEpochMilli());
+		} 
+		
+		if (request.checkNotModified(etag)) {
+			return null;
+		}
+		
 		List<FormaPagamentoModel> formasDePagamentoModel = 
 				formaPagamentoModelAssembler.toCollectionModel(repository.findAll());
 		
 		return ResponseEntity.ok()
-				.cacheControl(CacheControl.maxAge(10L, TimeUnit.SECONDS))
+				.cacheControl(CacheControl.maxAge(10L, TimeUnit.SECONDS).cachePublic())
+				.eTag(etag)
 				.body(formasDePagamentoModel);
 	}
 	

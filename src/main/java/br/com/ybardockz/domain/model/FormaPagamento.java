@@ -1,5 +1,9 @@
 package br.com.ybardockz.domain.model;
 
+import java.time.Instant;
+
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,5 +22,8 @@ public class FormaPagamento {
 	private Long id;
 	
 	private String descricao;
+	
+	@UpdateTimestamp
+	private Instant dataAtualizacao;
 	
 }
