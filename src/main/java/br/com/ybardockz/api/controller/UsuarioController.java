@@ -22,8 +22,12 @@ import br.com.ybardockz.api.model.input.UsuarioInput;
 import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.repository.UsuarioRepository;
 import br.com.ybardockz.domain.service.CadastroUsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+
+@Tag(name = "Usuários", description = "Gerencia os usuários")
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -40,6 +44,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioInputDisassembler usuarioInputDisassembler;
 	
+	@Operation(summary = "Lista os usuários")
 	@GetMapping
 	public List<UsuarioModel> listar() {
 		List<Usuario> usuarios = repository.findAll();
@@ -47,6 +52,7 @@ public class UsuarioController {
 		return usuarioModelAssembler.toCollectionModel(usuarios);
 	}
 	
+	@Operation(summary = "Busca um usuário")
 	@GetMapping("/{usuarioId}")
 	public UsuarioModel buscarPorId(@PathVariable Long usuarioId) {
 		Usuario usuario = service.buscarOuFalhar(usuarioId);
@@ -54,6 +60,7 @@ public class UsuarioController {
 		return usuarioModelAssembler.toModel(usuario);
 	}
 	
+	@Operation(summary = "Registra um usuário")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioComSenhaInput) {
@@ -63,6 +70,7 @@ public class UsuarioController {
 		return usuarioModelAssembler.toModel(usuarioDomain);
 	}
 	
+	@Operation(summary = "Atualiza um usuário")
 	@PutMapping("/{usuarioId}")
 	public UsuarioModel atualizar(@RequestBody @Valid UsuarioInput usuarioInput,
 			@PathVariable Long usuarioId) {
@@ -74,6 +82,7 @@ public class UsuarioController {
 		
 	}
 	
+	@Operation(summary = "Troca senha de um usuário")
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void trocarSenha(@PathVariable Long usuarioId, 
