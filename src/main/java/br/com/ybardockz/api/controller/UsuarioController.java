@@ -3,6 +3,7 @@ package br.com.ybardockz.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.repository.UsuarioRepository;
 import br.com.ybardockz.domain.service.CadastroUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -54,7 +56,8 @@ public class UsuarioController {
 	
 	@Operation(summary = "Busca um usuário")
 	@GetMapping("/{usuarioId}")
-	public UsuarioModel buscarPorId(@PathVariable Long usuarioId) {
+	public UsuarioModel buscarPorId(@Parameter(description = "ID do usuário", required = true)
+		@PathVariable Long usuarioId) {
 		Usuario usuario = service.buscarOuFalhar(usuarioId);
 		
 		return usuarioModelAssembler.toModel(usuario);
@@ -63,7 +66,9 @@ public class UsuarioController {
 	@Operation(summary = "Registra um usuário")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioComSenhaInput) {
+	public UsuarioModel adicionar(
+			@Parameter(description = "Representação de uma nova cidade", required = true)
+			@RequestBody @Valid UsuarioComSenhaInput usuarioComSenhaInput) {
 		Usuario usuarioDomain = usuarioInputDisassembler.usuarioComSenhatoDomainObject(usuarioComSenhaInput);
 		usuarioDomain = service.salvar(usuarioDomain);
 		
@@ -72,7 +77,9 @@ public class UsuarioController {
 	
 	@Operation(summary = "Atualiza um usuário")
 	@PutMapping("/{usuarioId}")
-	public UsuarioModel atualizar(@RequestBody @Valid UsuarioInput usuarioInput,
+	public UsuarioModel atualizar(
+			@RequestBody @Valid UsuarioInput usuarioInput,
+			@Parameter(description = "ID do usuário", required = true)
 			@PathVariable Long usuarioId) {
 		Usuario usuarioDomain = service.buscarOuFalhar(usuarioId);
 		usuarioInputDisassembler.copyToDomain(usuarioInput, usuarioDomain);
@@ -85,7 +92,9 @@ public class UsuarioController {
 	@Operation(summary = "Troca senha de um usuário")
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void trocarSenha(@PathVariable Long usuarioId, 
+	public void trocarSenha(
+			@Parameter(description = "ID do usuário", required = true)
+			@PathVariable Long usuarioId, 
 			@RequestBody @Valid SenhaInput senhas) {
 		service.trocarSenha(usuarioId, senhas.getSenhaAtual(), senhas.getSenhaNova());
 		
