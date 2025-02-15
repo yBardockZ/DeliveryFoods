@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,17 +26,15 @@ import br.com.ybardockz.api.model.assembler.CozinhaInputDisassembler;
 import br.com.ybardockz.api.model.assembler.CozinhaModelAssembler;
 import br.com.ybardockz.api.model.domain.CozinhaModel;
 import br.com.ybardockz.api.model.input.CozinhaInput;
+import br.com.ybardockz.api.openapi.controller.CozinhaControllerOpenApi;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.repository.CozinhaRepository;
 import br.com.ybardockz.domain.service.CadastroCozinhaService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/cozinha")
-public class CozinhaController {
+@RequestMapping(path = "/cozinha", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CozinhaController implements CozinhaControllerOpenApi {
 	
 	@Autowired
 	private CozinhaRepository repository;
@@ -48,29 +47,9 @@ public class CozinhaController {
 	
 	@Autowired
 	private CozinhaInputDisassembler cozinhaInputDisassembler;
-	
-	@Parameters({
-        @Parameter(
-            name = "page",
-            description = "Número da página (começa em 0)",
-            in = ParameterIn.QUERY,
-            example = "0"
-        ),
-        @Parameter(
-            name = "size",
-            description = "Quantidade de itens por página",
-            in = ParameterIn.QUERY,
-            example = "10"
-        ),
-        @Parameter(
-            name = "sort",
-            description = "Critérios de ordenação (ex: 'nome,asc')",
-            in = ParameterIn.QUERY,
-            example = "nome,asc"
-        )
-    })
+
 	@GetMapping
-	private Page<CozinhaModel> listar(@PageableDefault(size = 10) @Parameter(hidden = true) Pageable pageable) {
+	public Page<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Cozinha> cozinhasPage = repository.findAll(pageable);
 		
 		List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
@@ -82,13 +61,13 @@ public class CozinhaController {
 	}
 	
 	@GetMapping(path = "/{id}")
-	private CozinhaModel buscar(@PathVariable Long id) {
+	public CozinhaModel buscar(@PathVariable Long id) {
 		return cozinhaModelAssembler.toModel(service.buscarOuFalhar(id));
 		
 	}
 	
 	@PostMapping
-	private ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+	public ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 		Cozinha cozinhaSalva = service.salvar(cozinhaInputDisassembler.toDomainObject(cozinhaInput));
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -99,7 +78,7 @@ public class CozinhaController {
 	}
 	
 	@PutMapping(path = "/{id}")
-	private CozinhaModel atualizar(@RequestBody @Valid CozinhaInput cozinhaInput, 
+	public CozinhaModel atualizar(@RequestBody @Valid CozinhaInput cozinhaInput, 
 			@PathVariable Long id) {
 		Cozinha cozinhaAtual = service.buscarOuFalhar(id);
 		
@@ -111,7 +90,7 @@ public class CozinhaController {
 	
 	@DeleteMapping(path = "/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	private void remover(@PathVariable Long id) {
+	public void remover(@PathVariable Long id) {
 		service.remover(id);
 	}
 	

@@ -1,4 +1,4 @@
-package br.com.ybardockz.api.controller.openapi;
+package br.com.ybardockz.api.openapi.controller;
 
 import java.util.List;
 

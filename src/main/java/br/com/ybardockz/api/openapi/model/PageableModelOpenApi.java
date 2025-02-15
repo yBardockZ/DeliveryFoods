@@ -1,4 +1,4 @@
-package br.com.ybardockz.core.openapi.model;
+package br.com.ybardockz.api.openapi.model;
 
 import java.util.List;
 

@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ybardockz.api.controller.openapi.UsuarioControllerOpenApi;
 import br.com.ybardockz.api.model.assembler.UsuarioInputDisassembler;
 import br.com.ybardockz.api.model.assembler.UsuarioModelAssembler;
 import br.com.ybardockz.api.model.domain.UsuarioModel;
 import br.com.ybardockz.api.model.input.SenhaInput;
 import br.com.ybardockz.api.model.input.UsuarioComSenhaInput;
 import br.com.ybardockz.api.model.input.UsuarioInput;
+import br.com.ybardockz.api.openapi.controller.UsuarioControllerOpenApi;
 import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.repository.UsuarioRepository;
 import br.com.ybardockz.domain.service.CadastroUsuarioService;

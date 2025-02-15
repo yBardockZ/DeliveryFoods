@@ -179,6 +179,8 @@ public class SpringDocConfig {
 		return openApi -> {
 			
 			openApi.getComponents().getSchemas().remove("Pageable");
+			openApi.getComponents().getSchemas().remove("PageableObject");
+			openApi.getComponents().getSchemas().remove("SortObject");
 			
 			openApi.getComponents().addSchemas("Pageable", new Schema<>()
 	                .type("object")
