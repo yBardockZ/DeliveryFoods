@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.controller.openapi.GrupoControllerOpenApi;
 import br.com.ybardockz.api.model.assembler.GrupoInputDisassembler;
 import br.com.ybardockz.api.model.assembler.GrupoModelAssembler;
 import br.com.ybardockz.api.model.domain.GrupoModel;
@@ -25,7 +26,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/grupo")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 	
 	@Autowired
 	private GrupoRepository grupoRepository;
