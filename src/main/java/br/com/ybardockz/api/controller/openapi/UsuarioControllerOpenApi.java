@@ -24,20 +24,17 @@ public interface UsuarioControllerOpenApi {
 	@Operation(summary = "Busca um usuário")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "400", description = "Id inválido.",
-					content = @Content(mediaType = "application/json",
-							schema = @Schema(implementation = Problema.class))),
+					content = @Content(schema = @Schema(implementation = Problema.class))),
 			
 			@ApiResponse(responseCode = "404", description = "Usuário não encontrado", 
-			content = @Content(mediaType = "application/json",
-					schema = @Schema(implementation = Problema.class)))
+			content = @Content(schema = @Schema(implementation = Problema.class)))
 		})
 	public UsuarioModel buscarPorId(@Parameter(description = "ID do usuário", required = true)
 		Long usuarioId);
 	
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Usuário cadastrado",
-					content = @Content(mediaType = "application/json"
-							,schema = @Schema(implementation = UsuarioModel.class)))
+					content = @Content(schema = @Schema(implementation = UsuarioModel.class)))
 	})
 	@Operation(summary = "Registra um usuário")
 	public UsuarioModel adicionar(UsuarioComSenhaInput usuarioComSenhaInput);
@@ -45,8 +42,7 @@ public interface UsuarioControllerOpenApi {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Usuário atualizado"),
 			
-			@ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-			content = @Content(mediaType = "application/json"))
+			@ApiResponse(responseCode = "404", description = "Usuário não encontrado")
 	})
 	@Operation(summary = "Atualiza um usuário")
 	public UsuarioModel atualizar(UsuarioInput usuarioInput,
@@ -55,8 +51,7 @@ public interface UsuarioControllerOpenApi {
 	
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-			content = @Content(mediaType = "application/json", 
-					schema = @Schema(implementation = Problema.class)))
+			content = @Content(schema = @Schema(implementation = Problema.class)))
 	})
 	@Operation(summary = "Troca senha de um usuário")
 	public void trocarSenha(

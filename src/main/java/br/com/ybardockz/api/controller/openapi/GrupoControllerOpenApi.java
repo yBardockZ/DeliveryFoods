@@ -23,12 +23,10 @@ public interface GrupoControllerOpenApi {
 	@Operation(summary = "Busca um grupo")
 	@ApiResponses({
 		@ApiResponse(responseCode = "404", description = "Grupo não encontrado",
-				content = @Content(mediaType = "application/json",
-						schema = @Schema(implementation = Problema.class))),
+				content = @Content(schema = @Schema(implementation = Problema.class))),
 		
 		@ApiResponse(responseCode = "400", description = "ID inválido",
-		content = @Content(mediaType = "application/json",
-				schema = @Schema(implementation = Problema.class)))
+		content = @Content(schema = @Schema(implementation = Problema.class)))
 	})
 	public GrupoModel buscarPorId(@Parameter(required = true, example = "1") 
 		Long grupoId);
@@ -36,20 +34,17 @@ public interface GrupoControllerOpenApi {
 	@Operation(summary = "Cadastra um grupo")
 	@ApiResponses({
 		@ApiResponse(responseCode = "201", description = "Grupo cadastrado",
-				content = @Content(mediaType = "application/json",
-						schema = @Schema(implementation = GrupoModel.class)))
+				content = @Content(schema = @Schema(implementation = GrupoModel.class)))
 	})
 	public GrupoModel adicionar(GrupoInput grupoInput);
 	
 	@Operation(summary = "Atualiza um grupo")
 	@ApiResponses({
 		@ApiResponse(responseCode = "404", description = "Grupo não encontrado",
-				content = @Content(mediaType = "application/json",
-						schema = @Schema(implementation = Problema.class))),
+				content = @Content(schema = @Schema(implementation = Problema.class))),
 		
 		@ApiResponse(responseCode = "200", description = "GrupoAtualizado",
-		content = @Content(mediaType = "application/json",
-				schema = @Schema(implementation = Grupo.class)))
+		content = @Content(schema = @Schema(implementation = Grupo.class)))
 	})
 	public GrupoModel atualizar(@Parameter(required = true, example = "1") Long grupoId, GrupoInput grupoInput);
 	
@@ -57,8 +52,7 @@ public interface GrupoControllerOpenApi {
 		@ApiResponse(responseCode = "204", description = "Grupo excluido"),
 		
 		@ApiResponse(responseCode = "404", description = "Grupo não encontrado",
-		content = @Content(mediaType = "application/json",
-				schema = @Schema(implementation = Grupo.class)))
+		content = @Content(schema = @Schema(implementation = Grupo.class)))
 	})
 	@Operation(summary = "Deleta um grupo")
 	public void deletar(@Parameter(required = true, example = "1") Long grupoId);

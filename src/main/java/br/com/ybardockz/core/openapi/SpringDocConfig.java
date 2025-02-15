@@ -1,5 +1,7 @@
 package br.com.ybardockz.core.openapi;
 
+import java.util.List;
+
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +27,7 @@ public class SpringDocConfig {
 				.packagesToScan("br.com.ybardockz.api")
 				.pathsToExclude("/teste/**")
 				.addOpenApiCustomizer(adicionarSchemasCustomizados())
+				.addOpenApiCustomizer(substituirPageablePorModeloPersonalizado())
 				.addOpenApiCustomizer(globalGetResponse())
 				.addOpenApiCustomizer(globalPostResponse())
 				.addOpenApiCustomizer(globalPutResponse())
@@ -148,7 +151,8 @@ public class SpringDocConfig {
 	            .description("Representação de um campo com erro");
 
 	        // Criando a lista de objetosProblema dentro de Problema
-	        Schema<Problema.Object> listaObjetosProblemaSchema = new Schema<>()
+	        @SuppressWarnings("unchecked")
+			Schema<Problema.Object> listaObjetosProblemaSchema = new Schema<>()
 	            .type("array")
 	            .items(new Schema<>().$ref("#/components/schemas/ObjetoProblema"));
 
@@ -167,5 +171,24 @@ public class SpringDocConfig {
 	        openApi.getComponents().addSchemas("Problema", problemaSchema);
 	        openApi.getComponents().addSchemas("ObjetoProblema", objetoProblemaSchema);
 	    };
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Bean
+	OpenApiCustomizer substituirPageablePorModeloPersonalizado() {
+		return openApi -> {
+			
+			openApi.getComponents().getSchemas().remove("Pageable");
+			
+			openApi.getComponents().addSchemas("Pageable", new Schema<>()
+	                .type("object")
+	                .addProperty("page", new Schema<>().type("integer").example(0))
+	                .addProperty("size", new Schema<>().type("integer").example(10))
+	                .addProperty("sort", new Schema<>()
+	                    .type("array")
+	                    .items(new Schema<>().type("string"))
+	                    .example(List.of("nome,asc"))));
+		};
+		
 	}
 }

@@ -28,6 +28,9 @@ import br.com.ybardockz.api.model.input.CozinhaInput;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.repository.CozinhaRepository;
 import br.com.ybardockz.domain.service.CadastroCozinhaService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
 
 @RestController
@@ -46,8 +49,28 @@ public class CozinhaController {
 	@Autowired
 	private CozinhaInputDisassembler cozinhaInputDisassembler;
 	
+	@Parameters({
+        @Parameter(
+            name = "page",
+            description = "Número da página (começa em 0)",
+            in = ParameterIn.QUERY,
+            example = "0"
+        ),
+        @Parameter(
+            name = "size",
+            description = "Quantidade de itens por página",
+            in = ParameterIn.QUERY,
+            example = "10"
+        ),
+        @Parameter(
+            name = "sort",
+            description = "Critérios de ordenação (ex: 'nome,asc')",
+            in = ParameterIn.QUERY,
+            example = "nome,asc"
+        )
+    })
 	@GetMapping
-	private Page<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+	private Page<CozinhaModel> listar(@PageableDefault(size = 10) @Parameter(hidden = true) Pageable pageable) {
 		Page<Cozinha> cozinhasPage = repository.findAll(pageable);
 		
 		List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
