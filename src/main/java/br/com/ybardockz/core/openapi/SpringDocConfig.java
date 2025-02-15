@@ -58,7 +58,6 @@ public class SpringDocConfig {
 											.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
 					responses.addApiResponse("406", new ApiResponse()
 							.description("Recurso não possui formata" + "ção que poderia ser aceita pelo consumidor"));
-					responses.addApiResponse("200", new ApiResponse().description("Consulta realizada com sucesso"));
 				}
 			});	
 	}
@@ -70,13 +69,22 @@ public class SpringDocConfig {
 				ApiResponses responses = pathItem.getPost().getResponses();
 
 				responses.addApiResponse("400", new ApiResponse()
-						.description("Dados da requisição inválidos"));
+						.description("Dados da requisição inválidos")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
+				
 				responses.addApiResponse("406", new ApiResponse()
 						.description("Recurso não possui formatação que poderia ser aceita pelo consumidor"));
+				
 				responses.addApiResponse("500", new ApiResponse()
-						.description("Erro interno do servidor"));
+						.description("Erro interno do servidor")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
+				
 				responses.addApiResponse("415", new ApiResponse()
-						.description("Requisição recusada porque o corpo está em um formato não suportado"));
+						.description("Requisição recusada porque o corpo está em um formato não suportado")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
 			
 			}
 
@@ -90,13 +98,22 @@ public class SpringDocConfig {
 				ApiResponses responses = pathItem.getPut().getResponses();
 
 				responses.addApiResponse("400", new ApiResponse()
-						.description("Dados da requisição inválidos"));
+						.description("Dados da requisição inválidos")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
+				
 				responses.addApiResponse("406", new ApiResponse()
 						.description("Recurso não possui formatação que poderia ser aceita pelo consumidor"));
+				
 				responses.addApiResponse("500", new ApiResponse()
-						.description("Erro interno do servidor"));
+						.description("Erro interno do servidor")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
+				
 				responses.addApiResponse("415", new ApiResponse()
-						.description("Requisição recusada porque o " + "corpo está em um formato não suportado"));
+						.description("Requisição recusada porque o " + "corpo está em um formato não suportado")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
 			
 			}
 
@@ -109,8 +126,13 @@ public class SpringDocConfig {
 			if (pathItem.getDelete() != null) {
 				ApiResponses responses = pathItem.getDelete().getResponses();
 				
-				responses.addApiResponse("400", new ApiResponse().description("Requisição inválida"));
-				responses.addApiResponse("500", new ApiResponse().description("Erro interno do servidor"));
+				responses.addApiResponse("400", new ApiResponse().description("Requisição inválida")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
+				
+				responses.addApiResponse("500", new ApiResponse().description("Erro interno do servidor")
+						.content(new Content().addMediaType("application/json", new MediaType()
+								.schema(new Schema<>().$ref("#/components/schemas/Problema")))));
 			}
 		});
 	}
