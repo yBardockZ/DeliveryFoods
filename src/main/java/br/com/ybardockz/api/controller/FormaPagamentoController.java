@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,14 +25,16 @@ import br.com.ybardockz.api.model.assembler.FormaPagamentoInputDisassembler;
 import br.com.ybardockz.api.model.assembler.FormaPagamentoModelAssembler;
 import br.com.ybardockz.api.model.domain.FormaPagamentoModel;
 import br.com.ybardockz.api.model.input.FormaPagamentoInput;
+import br.com.ybardockz.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import br.com.ybardockz.domain.model.FormaPagamento;
 import br.com.ybardockz.domain.repository.FormaPagamentoRepository;
 import br.com.ybardockz.domain.service.CadastroFormaPagamentoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/forma-pagamento")
-public class FormaPagamentoController {
+@RequestMapping(path = "forma-pagamento", 
+produces = MediaType.APPLICATION_JSON_VALUE)
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 	
 	@Autowired
 	private FormaPagamentoRepository repository;
