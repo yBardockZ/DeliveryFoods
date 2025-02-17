@@ -9,11 +9,13 @@ import org.springframework.context.annotation.Configuration;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 
@@ -32,6 +34,7 @@ public class SpringDocConfig {
 				.addOpenApiCustomizer(globalPostResponse())
 				.addOpenApiCustomizer(globalPutResponse())
 				.addOpenApiCustomizer(globalDeleteResponse())
+				.addOpenApiCustomizer(adicionarParametrosGlobais())
 				.build();
 	}
 
@@ -46,6 +49,8 @@ public class SpringDocConfig {
 								.email("thalles_leopoldino@outlook.com")
 								.name("Thalles")
 								.url("www.ybardockz.com")));
+				
+				
 	}
 
 	@Bean
@@ -191,6 +196,33 @@ public class SpringDocConfig {
 	                    .items(new Schema<>().type("string"))
 	                    .example(List.of("nome,asc"))));
 		};
+		
+	}
+	
+	@Bean
+	OpenApiCustomizer adicionarParametrosGlobais() {
+		return openApi -> {
+			openApi.getPaths().forEach((path, pathItem) -> {
+				addHeaderParam(pathItem.getGet());
+				addHeaderParam(pathItem.getPost());
+				addHeaderParam(pathItem.getPut());
+			});
+		};
+	}
+
+
+	private void addHeaderParam(Operation operation) {
+		if (operation != null) {
+			
+			Parameter parameter = new Parameter()
+					.in("header")
+					.name("campos")
+					.description("Campos a serem retornados na representação separados por vírgula")
+					.required(false);
+			
+			operation.addParametersItem(parameter);
+			
+		}
 		
 	}
 }
