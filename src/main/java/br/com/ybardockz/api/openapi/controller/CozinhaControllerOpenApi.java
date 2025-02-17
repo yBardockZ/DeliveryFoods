@@ -82,9 +82,8 @@ public interface CozinhaControllerOpenApi {
 	CozinhaModel atualizar(@Parameter(required = true) CozinhaInput cozinhaInput, Long id);
 	
 	@ApiResponses({
-		@ApiResponse(responseCode = "201",
-					description = "Cozinha Removida",
-					content = @Content(schema = @Schema(implementation = Problema.class))),
+		@ApiResponse(responseCode = "204",
+					description = "Cozinha Removida"),
 		
 		@ApiResponse(responseCode = "404",
 		description = "Cozinha não encontrada",

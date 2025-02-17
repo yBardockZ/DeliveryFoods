@@ -2,6 +2,7 @@ package br.com.ybardockz.api.model.domain;
 
 import java.math.BigDecimal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +10,25 @@ import lombok.Setter;
 @Setter
 public class ItemPedidoModel {
 
+	@Schema(example = "1")
 	private Long id;
+	
+	@Schema(example = "2")
 	private Integer quantidade;
+	
+	@Schema(example = "13.3")
 	private BigDecimal precoUnitario;
+	
+	@Schema(example = "26.6")
 	private BigDecimal precoTotal;
+	
+	@Schema(example = "Ao ponto, porfavor.")
 	private String observacao;
+	
+	@Schema(example = "1")
 	private String produtoId;
+	
+	@Schema(example = "Picanha Steak")
 	private String produtoNome;
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import br.com.ybardockz.api.model.assembler.PedidoResumoModelAssembler;
 import br.com.ybardockz.api.model.domain.PedidoModel;
 import br.com.ybardockz.api.model.domain.PedidoResumoModel;
 import br.com.ybardockz.api.model.input.PedidoInput;
+import br.com.ybardockz.api.openapi.controller.PedidoControllerOpenApi;
 import br.com.ybardockz.core.data.PageableTranslator;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.exception.ProdutoNaoEncontradoException;
@@ -34,8 +36,9 @@ import br.com.ybardockz.infraestructure.repository.spec.PedidoSpecs;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/pedido")
-public class PedidoController {
+@RequestMapping(path = "/pedido",
+		produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;

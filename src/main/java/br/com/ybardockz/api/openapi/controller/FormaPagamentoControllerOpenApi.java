@@ -68,7 +68,9 @@ public interface FormaPagamentoControllerOpenApi {
 				content = @Content(schema = @Schema(implementation = Problema.class))),
 		
 		@ApiResponse(responseCode = "400", description = "ID inválido",
-				content = @Content(schema = @Schema(implementation = Problema.class)))
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Forma de pagamento removida")
 				
 	})
 	@Operation(summary = "Remove uma forma de pagamento")
