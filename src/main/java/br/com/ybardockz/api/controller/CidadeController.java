@@ -19,6 +19,7 @@ import br.com.ybardockz.api.model.assembler.CidadeInputDisassembler;
 import br.com.ybardockz.api.model.assembler.CidadeModelAssembler;
 import br.com.ybardockz.api.model.domain.CidadeModel;
 import br.com.ybardockz.api.model.input.CidadeInput;
+import br.com.ybardockz.api.openapi.controller.CidadeControllerOpenApi;
 import br.com.ybardockz.domain.exception.EstadoNaoEncontradoException;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.Cidade;
@@ -28,7 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cidade")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
 	private CidadeRepository repository;
@@ -43,20 +44,20 @@ public class CidadeController {
 	private CidadeInputDisassembler cidadeInputDisassembler;
 
 	@GetMapping
-	private ResponseEntity<List<CidadeModel>> listar() {
+	public ResponseEntity<List<CidadeModel>> listar() {
 		List<Cidade> cidades = repository.findAll();
 
 		return ResponseEntity.ok(cidadeModelAssembler.toCollectionModel(cidades));
 	}
 
 	@GetMapping(path = "/{id}")
-	private CidadeModel buscarPorId(@PathVariable Long id) {
+	public CidadeModel buscarPorId(@PathVariable Long id) {
 		return cidadeModelAssembler.toModel(service.buscarOuFalhar(id));
 	}
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	private CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
+	public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidadeDomain = cidadeInputDisassembler.toDomainObject(cidadeInput);
 			return cidadeModelAssembler.toModel(service.salvar(cidadeDomain));
@@ -67,13 +68,13 @@ public class CidadeController {
 	}
 
 	@PutMapping(path = "/{id}")
-	private Cidade atualizar(@RequestBody @Valid CidadeInput cidadeInput, @PathVariable Long id) {
+	public CidadeModel atualizar(@RequestBody @Valid CidadeInput cidadeInput, @PathVariable Long id) {
 		try {
 			Cidade cidadeExistente = service.buscarOuFalhar(id);
 			
 			cidadeInputDisassembler.copyToDomain(cidadeInput, cidadeExistente);
 
-			return service.salvar(cidadeExistente);
+			return cidadeModelAssembler.toModel(service.salvar(cidadeExistente));
 
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
