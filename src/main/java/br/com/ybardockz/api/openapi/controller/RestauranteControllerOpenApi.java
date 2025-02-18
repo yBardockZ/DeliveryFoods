@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
+import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
 import br.com.ybardockz.api.openapi.model.RestauranteBasicoModelOpenApi;
@@ -15,7 +16,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "Restaurantes", description = "Gerencia os restaurantes")
 public interface RestauranteControllerOpenApi {
 	
 	@Parameters({
@@ -40,24 +43,121 @@ public interface RestauranteControllerOpenApi {
 	
 	ResponseEntity<List<RestauranteModel>> listarApenasNome();
 	
-	public RestauranteModel buscarPorId(Long restauranteId);
+	@Operation(summary = "Busca um restaurante")
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "400", description = "ID inválido",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+		content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
+		
+	})
+	public RestauranteModel buscarPorId(@Parameter(required = true) Long restauranteId);
 	
-	RestauranteModel adicionar(RestauranteInput restauranteInput);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "201", description = "Restaurante cadastrado",
+				content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
+		
+	})
+	@Operation(summary = "Cadastra um restaurante")
+	RestauranteModel adicionar(@Parameter(required = true) RestauranteInput restauranteInput);
 	
-	RestauranteModel atualizar(RestauranteInput restauranteInput, Long restauranteId);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "200", description = "Restaurante Atualizado",
+		content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
+		
+	})
+	@Operation(summary = "Atualiza um restaurante")
+	RestauranteModel atualizar(@Parameter(required = true) RestauranteInput restauranteInput, 
+			@Parameter(required = true) Long restauranteId);
 	
-	void ativar(Long restauranteId);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Restaurante ativado")
+		
+	})
+	@Operation(summary = "Ativa um restaurante")
+	void ativar(@Parameter(required = true) Long restauranteId);
 	
-	void ativarMultiplos(List<Long> restauranteIds);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurantes não encontrados",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Restaurantes ativados")
+		
+	})
+	@Operation(summary = "Ativa multitplos restaurante")
+	void ativarMultiplos(@Parameter(required = true) List<Long> restauranteIds);
 	
-	void desativarMultiplos(List<Long> restauranteIds);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurantes não encontrados",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Restaurantes desativados")
+		
+	})
+	@Operation(summary = "Desativa multiplos restaurante")
+	void desativarMultiplos(@Parameter(required = true) List<Long> restauranteIds);
 	
-	void inativar(Long restauranteId);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Restaurante desativado")
+		
+	})
+	@Operation(summary = "Desativa um restaurante")
+	void inativar(@Parameter(required = true) Long restauranteId);
 
-	void abrir(Long restauranteId);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Restaurante aberto")
+		
+	})
+	@Operation(summary = "Abre um restaurante")
+	void abrir(@Parameter(required = true) Long restauranteId);
 
-	void fechar(Long restauranteId);	
-
-	void remover(Long restauranteId);
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Restaurante fechado")
+		
+	})
+	@Operation(summary = "Fecha um restaurante")
+		void fechar(@Parameter(required = true) Long restauranteId);	
+	
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
+				content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "400", description = "ID inválido",
+		content = @Content(schema = @Schema(implementation = Problema.class))),
+		
+		@ApiResponse(responseCode = "204", description = "Restaurante Removido")
+		
+	})
+		@Operation(summary = "Remove um restaurante")
+	void remover(@Parameter(required = true) Long restauranteId);
 
 }
