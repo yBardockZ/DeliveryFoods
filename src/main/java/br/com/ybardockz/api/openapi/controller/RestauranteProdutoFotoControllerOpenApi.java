@@ -3,6 +3,7 @@ package br.com.ybardockz.api.openapi.controller;
 import java.io.IOException;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +33,12 @@ public interface RestauranteProdutoFotoControllerOpenApi {
 		@ApiResponse(responseCode = "400", description = "ID de Restaurante ou produto inválido",
 		content = @Content(schema = @Schema(implementation = Problema.class)))
 		
+	})
+	@RequestBody(content = {
+			@Content(
+					mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+					schema = @Schema(implementation = FotoProdutoInput.class)
+					)
 	})
 	@Operation(summary = "Faz upload de uma foto para um produto")
 	FotoProdutoModel uploadFoto(@Parameter(required = true, example = "1") Long restauranteId,
@@ -69,7 +77,8 @@ public interface RestauranteProdutoFotoControllerOpenApi {
 		
 		@ApiResponse(responseCode = "204", description = "Foto excluida."),
 		
-		@ApiResponse(responseCode = "404", description = "Restaurante ou produto não encontrado"),
+		@ApiResponse(responseCode = "404", description = "Restaurante ou produto não encontrado",
+		content = @Content(schema = @Schema(implementation = Problema.class))),
 		
 		@ApiResponse(responseCode = "400", description = "ID de Restaurante ou produto inválido",
 		content = @Content(schema = @Schema(implementation = Problema.class)))

@@ -21,7 +21,7 @@ public class FotoProdutoInput {
 	@FileContentType(allowed = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE })
 	private MultipartFile arquivo;
 	
-	@Schema(description = "Foto picanha")
+	@Schema(example = "Foto picanha")
 	@NotBlank
 	private String descricao;
 
