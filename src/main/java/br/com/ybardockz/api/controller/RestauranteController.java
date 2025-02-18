@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +23,20 @@ import br.com.ybardockz.api.model.assembler.RestauranteModelAssembler;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
 import br.com.ybardockz.api.model.view.RestauranteView;
+import br.com.ybardockz.api.openapi.controller.RestauranteControllerOpenApi;
 import br.com.ybardockz.domain.exception.CidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.repository.RestauranteRepository;
 import br.com.ybardockz.domain.service.CadastroRestauranteService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/restaurante")
-public class RestauranteController {
+@RequestMapping(path = "/restaurante",
+		produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 	
 	@Autowired
 	private RestauranteRepository repository;
@@ -57,6 +61,7 @@ public class RestauranteController {
 	
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
+	@Operation(hidden = true)
 	public ResponseEntity<List<RestauranteModel>> listarApenasNome() {
 		return listar();
 	}
