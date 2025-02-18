@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ybardockz.api.model.assembler.FotoProdutoModelAssembler;
 import br.com.ybardockz.api.model.domain.FotoProdutoModel;
 import br.com.ybardockz.api.model.input.FotoProdutoInput;
+import br.com.ybardockz.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import br.com.ybardockz.domain.exception.EntidadeNaoEncontradaException;
 import br.com.ybardockz.domain.model.FotoProduto;
 import br.com.ybardockz.domain.model.Produto;
@@ -33,8 +34,9 @@ import br.com.ybardockz.domain.service.FotoStorageService.FotoRecuperada;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/restaurante/{restauranteId}/produto/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+@RequestMapping(path = "/restaurante/{restauranteId}/produto/{produtoId}/foto",
+		produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 	
 	@Autowired
 	private CatalogoFotoProdutoService fotoProdutoService;
@@ -67,7 +69,7 @@ public class RestauranteProdutoFotoController {
 			
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public FotoProdutoModel buscar(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId) {
 		FotoProduto fotoProduto = fotoProdutoService.recuperarFotoDoProduto
@@ -77,9 +79,9 @@ public class RestauranteProdutoFotoController {
 		
 	}
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> sevirFoto(@PathVariable Long restauranteId,
-			@PathVariable Long produtoId, @RequestHeader("accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
+			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		try {
 			FotoProduto fotoProduto = fotoProdutoService.recuperarFotoDoProduto
 					(restauranteId, produtoId);
