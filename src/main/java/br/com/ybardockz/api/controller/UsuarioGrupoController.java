@@ -23,7 +23,7 @@ import br.com.ybardockz.domain.service.CadastroUsuarioService;
 @RestController
 @RequestMapping(path = "/usuario/{usuarioId}/grupo",
 		produces = MediaType.APPLICATION_JSON_VALUE)
-public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi{
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	@Autowired
 	private GrupoRepository grupoRepository;
 	
