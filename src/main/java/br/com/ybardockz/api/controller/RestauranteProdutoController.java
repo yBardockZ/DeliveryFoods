@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import br.com.ybardockz.api.model.assembler.ProdutoInputDisassembler;
 import br.com.ybardockz.api.model.assembler.ProdutoModelAssembler;
 import br.com.ybardockz.api.model.domain.ProdutoModel;
 import br.com.ybardockz.api.model.input.ProdutoInput;
+import br.com.ybardockz.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import br.com.ybardockz.domain.model.Produto;
 import br.com.ybardockz.domain.repository.ProdutoRepository;
 import br.com.ybardockz.domain.service.CadastroProdutoService;
@@ -24,8 +26,9 @@ import br.com.ybardockz.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/restaurante/{restauranteId}/produto")
-public class RestauranteProdutoController {
+@RequestMapping(path = "/restaurante/{restauranteId}/produto",
+		produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 	
 	@Autowired
 	private CadastroRestauranteService restauranteService;
