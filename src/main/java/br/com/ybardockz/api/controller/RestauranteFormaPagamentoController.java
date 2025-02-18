@@ -39,7 +39,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void dessasociar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+	public void dissasociar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
 		restauranteService.dessasociarFormaPagamento(restauranteId, formaPagamentoId);
 	}
 	

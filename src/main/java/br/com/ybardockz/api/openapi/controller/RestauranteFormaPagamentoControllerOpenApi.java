@@ -34,8 +34,8 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
 		content = @Content(schema = @Schema(implementation = Problema.class)))
 		
 	})
-	@Operation(summary = "Dessasocia uma forma de pagamento de um restaurante")
-	public void dessasociar(@Parameter(required = true, example = "1") Long restauranteId, 
+	@Operation(summary = "Dissasocia uma forma de pagamento de um restaurante")
+	public void dissasociar(@Parameter(required = true, example = "1") Long restauranteId, 
 			@Parameter(required = true) Long formaPagamentoId);
 	
 	@ApiResponses({
