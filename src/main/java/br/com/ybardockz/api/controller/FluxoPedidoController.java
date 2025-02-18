@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.openapi.controller.FluxoPedidoControllerOpenApi;
 import br.com.ybardockz.domain.service.AlteracaoStatusPedidoService;
 
 @RestController
 @RequestMapping("/pedido/{pedidoCodigo}")
-public class FluxoPedidoController {
+public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 	
 	@Autowired
 	private AlteracaoStatusPedidoService alteracaoStatusPedidoService;
