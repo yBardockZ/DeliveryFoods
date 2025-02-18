@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,14 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ybardockz.api.model.assembler.GrupoModelAssembler;
 import br.com.ybardockz.api.model.domain.GrupoModel;
+import br.com.ybardockz.api.openapi.controller.UsuarioGrupoControllerOpenApi;
 import br.com.ybardockz.domain.model.Grupo;
 import br.com.ybardockz.domain.repository.GrupoRepository;
 import br.com.ybardockz.domain.service.CadastroUsuarioService;
 
 @RestController
-@RequestMapping("/usuario/{usuarioId}/grupo")
-public class UsuarioGrupoController {
-	
+@RequestMapping(path = "/usuario/{usuarioId}/grupo",
+		produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi{
 	@Autowired
 	private GrupoRepository grupoRepository;
 	
