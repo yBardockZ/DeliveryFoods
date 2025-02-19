@@ -1,11 +1,11 @@
 package br.com.ybardockz.api.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -60,15 +60,14 @@ public class CidadeController implements CidadeControllerOpenApi {
 	public CidadeModel buscarPorId(@PathVariable Long id) {
 		CidadeModel cidadeModel = cidadeModelAssembler.toModel(service.buscarOuFalhar(id));
 		
-		cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+		cidadeModel.add(linkTo(methodOn(CidadeController.class, buscarPorId(cidadeModel.getId())))
 				.slash(cidadeModel.getId()).withSelfRel());
 		
-		cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-				.withRel(IanaLinkRelations.COLLECTION));
+		cidadeModel.add(linkTo(methodOn(CidadeController.class, listar()))
+				.withRel("cidades"));
 		
-		cidadeModel.getEstado().add(
-				WebMvcLinkBuilder.linkTo(EstadoController.class).slash(cidadeModel.getEstado().getId())
-					.withSelfRel());
+		cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class, buscarPorId(
+				cidadeModel.getEstado().getId()))).withSelfRel());
 		
 		return cidadeModel;
 	}
