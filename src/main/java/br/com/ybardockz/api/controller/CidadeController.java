@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.ResourceUriHelper;
 import br.com.ybardockz.api.model.assembler.CidadeInputDisassembler;
 import br.com.ybardockz.api.model.assembler.CidadeModelAssembler;
 import br.com.ybardockz.api.model.domain.CidadeModel;
@@ -28,7 +30,8 @@ import br.com.ybardockz.domain.service.CadastroCidadeService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/cidade")
+@RequestMapping(path = "/cidade",
+	produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
@@ -60,7 +63,12 @@ public class CidadeController implements CidadeControllerOpenApi {
 	public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidadeDomain = cidadeInputDisassembler.toDomainObject(cidadeInput);
-			return cidadeModelAssembler.toModel(service.salvar(cidadeDomain));
+			CidadeModel cidadeModel =  cidadeModelAssembler.toModel(service.salvar(cidadeDomain));
+			
+			ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+			
+			return cidadeModel;
+			
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage());
 		}
