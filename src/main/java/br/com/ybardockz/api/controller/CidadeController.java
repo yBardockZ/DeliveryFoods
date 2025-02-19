@@ -6,9 +6,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,24 +50,37 @@ public class CidadeController implements CidadeControllerOpenApi {
 	private CidadeInputDisassembler cidadeInputDisassembler;
 
 	@GetMapping
-	public ResponseEntity<List<CidadeModel>> listar() {
-		List<Cidade> cidades = repository.findAll();
+	public CollectionModel<CidadeModel> listar() {
+		List<CidadeModel> cidadesModel = cidadeModelAssembler
+				.toCollectionModel(repository.findAll());
 
-		return ResponseEntity.ok(cidadeModelAssembler.toCollectionModel(cidades));
+		CollectionModel<CidadeModel> cidadesCollectionModel = CollectionModel.of(cidadesModel);
+		
+		cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
+		
+		cidadesCollectionModel.forEach(cidadeModel -> {
+			cidadeModel.add(linkTo(CidadeController.class).slash(cidadeModel.getId()).withSelfRel());
+			
+			cidadeModel.add(linkTo(CidadeController.class).withRel("cozinhas"));
+			
+			cidadeModel.getEstado().add(linkTo(EstadoController.class)
+					.slash(cidadeModel.getEstado().getId()).withSelfRel());
+			
+		});
+		
+		return cidadesCollectionModel;
 	}
 	
 	@GetMapping(path = "/{id}")
 	public CidadeModel buscarPorId(@PathVariable Long id) {
 		CidadeModel cidadeModel = cidadeModelAssembler.toModel(service.buscarOuFalhar(id));
 		
-		cidadeModel.add(linkTo(methodOn(CidadeController.class, buscarPorId(cidadeModel.getId())))
-				.slash(cidadeModel.getId()).withSelfRel());
+		cidadeModel.add(linkTo(CidadeController.class).slash(id).withSelfRel());
 		
-		cidadeModel.add(linkTo(methodOn(CidadeController.class, listar()))
-				.withRel("cidades"));
+		cidadeModel.add(linkTo(CidadeController.class).withRel("cozinhas"));
 		
-		cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class, buscarPorId(
-				cidadeModel.getEstado().getId()))).withSelfRel());
+		cidadeModel.getEstado().add(linkTo(EstadoController.class)
+				.slash(cidadeModel.getEstado().getId()).withSelfRel());
 		
 		return cidadeModel;
 	}

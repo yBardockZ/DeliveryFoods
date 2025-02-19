@@ -1,8 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.CollectionModel;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.CidadeModel;
@@ -24,7 +22,7 @@ public interface CidadeControllerOpenApi {
 		
 	})
 	@Operation(summary = "Lista as cidades")
-	ResponseEntity<List<CidadeModel>> listar();
+	CollectionModel<CidadeModel> listar();
 
 	@ApiResponses({
 		
