@@ -1,5 +1,8 @@
 package br.com.ybardockz.api.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +40,10 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 		Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 		Collection<Usuario> usuarios = restaurante.getUsuariosResponsaveis();
 		
-		return usuarioModelAssembler.toCollectionModel(usuarios);
+		return usuarioModelAssembler.toCollectionModel(usuarios)
+				.removeLinks()
+				.add(linkTo(methodOn(RestauranteUsuarioController.class).listar(restauranteId))
+						.withSelfRel());
 	}
 	
 	@PutMapping("/{usuarioId}")
