@@ -24,6 +24,7 @@ import br.com.ybardockz.api.model.domain.PedidoModel;
 import br.com.ybardockz.api.model.domain.PedidoResumoModel;
 import br.com.ybardockz.api.model.input.PedidoInput;
 import br.com.ybardockz.api.openapi.controller.PedidoControllerOpenApi;
+import br.com.ybardockz.core.data.PageWrapper;
 import br.com.ybardockz.core.data.PageableTranslator;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.exception.ProdutoNaoEncontradoException;
@@ -64,11 +65,12 @@ public class PedidoController implements PedidoControllerOpenApi {
 		
 		Page<Pedido> pedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
 		
+		pedidos = new PageWrapper<>(pedidos, pageable);
+		
 		PagedModel<PedidoResumoModel> pedidoPagedModel = pagedResourcesAssembler
 				.toModel(pedidos, pedidoResumoModelAssembler);
 		
 		return pedidoPagedModel;
-		
 	}
 	
 	@GetMapping("/{pedidoCodigo}")
