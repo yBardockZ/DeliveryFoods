@@ -1,7 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
@@ -19,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface EstadoControllerOpenApi {
 
 	@Operation(summary = "Lista os estados")
-	ResponseEntity<List<EstadoModel>> listar();
+	ResponseEntity<CollectionModel<EstadoModel>> listar();
 	
 	@ApiResponses({
 		
