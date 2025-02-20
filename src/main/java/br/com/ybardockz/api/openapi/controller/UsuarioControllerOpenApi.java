@@ -1,6 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.UsuarioModel;
@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface UsuarioControllerOpenApi {
 	
 	@Operation(summary = "Lista os usuários")
-	public List<UsuarioModel> listar();
+	public CollectionModel<UsuarioModel> listar();
 	
 	@Operation(summary = "Busca um usuário")
 	@ApiResponses(value = {

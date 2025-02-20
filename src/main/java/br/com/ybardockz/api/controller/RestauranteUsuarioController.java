@@ -1,9 +1,9 @@
 package br.com.ybardockz.api.controller;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +33,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 	private UsuarioModelAssembler usuarioModelAssembler;
 	
 	@GetMapping
-	public List<UsuarioModel> listar(@PathVariable Long restauranteId) {
+	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 		Collection<Usuario> usuarios = restaurante.getUsuariosResponsaveis();
 		
