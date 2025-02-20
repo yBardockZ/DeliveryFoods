@@ -1,7 +1,7 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.PedidoModel;
@@ -80,7 +80,7 @@ public interface PedidoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Pesquisa pedidos")
-	Page<PedidoResumoModel> pesquisar(@Parameter(hidden = true) PedidoFilter filtro, 
+	PagedModel<PedidoResumoModel> pesquisar(@Parameter(hidden = true) PedidoFilter filtro, 
 			@Parameter(hidden = true) Pageable pageable);
 	
 	@ApiResponses({

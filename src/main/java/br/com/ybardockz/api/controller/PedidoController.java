@@ -1,12 +1,12 @@
 package br.com.ybardockz.api.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,19 +55,20 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired 
 	private PedidoInputDisassembler pedidoInputDisassembler;
 	
+	@Autowired
+	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	
 	@GetMapping
-	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
+	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
 		pageable = traduzirPageable(pageable);
 		
 		Page<Pedido> pedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
 		
-		List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler
-				.toCollectionModel(pedidos.getContent());
+		PagedModel<PedidoResumoModel> pedidoPagedModel = pagedResourcesAssembler
+				.toModel(pedidos, pedidoResumoModelAssembler);
 		
-		Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(pedidosResumoModel, 
-				pageable, pedidos.getTotalElements());
-
-		return pedidosResumoModelPage;
+		return pedidoPagedModel;
+		
 	}
 	
 	@GetMapping("/{pedidoCodigo}")

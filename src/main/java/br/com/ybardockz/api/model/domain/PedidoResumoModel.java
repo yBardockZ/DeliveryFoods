@@ -3,14 +3,18 @@ package br.com.ybardockz.api.model.domain;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import br.com.ybardockz.domain.model.enums.StatusPedido;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation = "pedidos")
 @Getter
 @Setter
-public class PedidoResumoModel {
+public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
 	
 	@Schema(example = "1")
 	private String codigo;
@@ -32,10 +36,9 @@ public class PedidoResumoModel {
 	
 	@Schema(description = "Restaurante onde o pedido foi realizado")
 	private RestauranteResumoModel restaurante;
-	//private UsuarioModel cliente;
 	
-	@Schema(description = "Nome do cliente que realizou o pedido")
-	private String nomeCliente;
+	@Schema(description = "Informações do cliente que realizou o pedido")
+	private UsuarioModel cliente;
 	
 
 }

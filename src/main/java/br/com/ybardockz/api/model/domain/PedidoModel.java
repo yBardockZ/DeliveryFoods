@@ -4,14 +4,18 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import br.com.ybardockz.domain.model.enums.StatusPedido;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation = "pedidos")
 @Getter
 @Setter
-public class PedidoModel {
+public class PedidoModel extends RepresentationModel<PedidoModel> {
 	
 	@Schema(example = "1")
 	private String codigo;

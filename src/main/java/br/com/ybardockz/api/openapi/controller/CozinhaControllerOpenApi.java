@@ -1,7 +1,7 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
@@ -47,7 +47,7 @@ public interface CozinhaControllerOpenApi {
 					description = "Consulta realizada",
 					content = @Content(schema = @Schema(implementation = CozinhaModelOpenApi.class)))
 	})
-	Page<CozinhaModel> listar(@Parameter(hidden = true) Pageable pageable);
+	PagedModel<CozinhaModel> listar(@Parameter(hidden = true) Pageable pageable);
 	
 	@ApiResponses({
 		@ApiResponse(responseCode = "400",

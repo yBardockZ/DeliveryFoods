@@ -1,5 +1,8 @@
 package br.com.ybardockz.api.model.domain;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.com.ybardockz.api.model.view.RestauranteView;
@@ -7,9 +10,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation  = "cozinhas")
 @Getter
 @Setter
-public class CozinhaModel {
+public class CozinhaModel extends RepresentationModel<CozinhaModel> {
 	
 	@Schema(example = "1")
 	@JsonView(RestauranteView.Resumo.class)

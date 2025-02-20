@@ -2,6 +2,8 @@ package br.com.ybardockz.api.model.domain;
 
 import java.math.BigDecimal;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.com.ybardockz.api.model.view.RestauranteView;
@@ -10,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RestauranteModel {
+public class RestauranteModel extends RepresentationModel<RestauranteModel> {
 
 	@JsonView(value = {RestauranteView.Resumo.class, RestauranteView.ApenasNome.class})
 	private Long id;
