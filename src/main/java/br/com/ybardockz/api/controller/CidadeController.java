@@ -1,10 +1,5 @@
 package br.com.ybardockz.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -51,22 +46,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 	@GetMapping
 	public CollectionModel<CidadeModel> listar() {
-		List<CidadeModel> cidadesModel = cidadeModelAssembler
-				.toCollectionModel(repository.findAll());
-
-		CollectionModel<CidadeModel> cidadesCollectionModel = CollectionModel.of(cidadesModel);
-		
-		cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
-		
-		cidadesCollectionModel.forEach(cidadeModel -> {
-			cidadeModel.add(linkTo(CidadeController.class).slash(cidadeModel.getId()).withSelfRel());
-			
-			cidadeModel.add(linkTo(CidadeController.class).withRel("cozinhas"));
-			
-			cidadeModel.getEstado().add(linkTo(EstadoController.class)
-					.slash(cidadeModel.getEstado().getId()).withSelfRel());
-			
-		});
+		CollectionModel<CidadeModel> cidadesCollectionModel = cidadeModelAssembler.toCollectionModel(repository.findAll());
 		
 		return cidadesCollectionModel;
 	}
@@ -74,13 +54,6 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@GetMapping(path = "/{id}")
 	public CidadeModel buscarPorId(@PathVariable Long id) {
 		CidadeModel cidadeModel = cidadeModelAssembler.toModel(service.buscarOuFalhar(id));
-		
-		cidadeModel.add(linkTo(CidadeController.class).slash(id).withSelfRel());
-		
-		cidadeModel.add(linkTo(CidadeController.class).withRel("cozinhas"));
-		
-		cidadeModel.getEstado().add(linkTo(EstadoController.class)
-				.slash(cidadeModel.getEstado().getId()).withSelfRel());
 		
 		return cidadeModel;
 	}
