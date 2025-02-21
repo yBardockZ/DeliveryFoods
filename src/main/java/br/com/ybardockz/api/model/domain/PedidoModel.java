@@ -45,7 +45,7 @@ public class PedidoModel extends RepresentationModel<PedidoModel> {
 	private Instant dataEntrega;
 	
 	@Schema(description = "Restaurante onde o pedido foi realizado")
-	private RestauranteResumoModel restaurante;
+	private RestauranteApenasNomeModel restaurante;
 	
 	@Schema(description = "Informações do cliente que realizou o pedido")
 	private UsuarioModel cliente;

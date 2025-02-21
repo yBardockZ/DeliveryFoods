@@ -18,6 +18,7 @@ import br.com.ybardockz.api.controller.FluxoPedidoController;
 import br.com.ybardockz.api.controller.FormaPagamentoController;
 import br.com.ybardockz.api.controller.PedidoController;
 import br.com.ybardockz.api.controller.RestauranteController;
+import br.com.ybardockz.api.controller.RestauranteFormaPagamentoController;
 import br.com.ybardockz.api.controller.RestauranteProdutoController;
 import br.com.ybardockz.api.controller.RestauranteUsuarioController;
 import br.com.ybardockz.api.controller.UsuarioController;
@@ -74,6 +75,14 @@ public class AlgaLinks {
 		return linkToRestaurantes(restauranteId, IanaLinkRelations.SELF_VALUE);
 	}
 	
+	public Link linkToRestaurantes(String rel) {
+		return linkTo(RestauranteController.class).withRel(rel);
+	}
+	
+	public Link linkToRestaurantes() {
+		return linkToRestaurantes(IanaLinkRelations.SELF_VALUE);
+	}
+	
 	public Link linkToResponsaveis(Long restauranteId, String rel) {
 		return linkTo(methodOn(RestauranteUsuarioController.class).listar(restauranteId))
 				.withRel(rel);
@@ -116,6 +125,12 @@ public class AlgaLinks {
 	
 	public Link linkToFormasPagamento(Long formaPagamentoId) {
 		return linkToFormasPagamento(formaPagamentoId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToRestauranteFormaPagamento(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+				.listar(restauranteId))
+				.withRel(rel);
 	}
 	
 	public Link linkToCidades(Long cidadeId, String rel) {
@@ -166,6 +181,15 @@ public class AlgaLinks {
 	
 	public Link linkToCozinhas() {
 		return linkToCozinhas(IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToCozinhas(Long cozinhaId, String rel) {
+		return linkTo(methodOn(CozinhaController.class).buscar(cozinhaId))
+				.withRel(rel);
+	}
+	
+	public Link linkToCozinhas(Long cozinhaId) {
+		return linkToCozinhas(cozinhaId, IanaLinkRelations.SELF_VALUE);
 	}
 	
 }

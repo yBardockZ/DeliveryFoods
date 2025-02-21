@@ -3,6 +3,7 @@ package br.com.ybardockz.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
+import br.com.ybardockz.api.model.assembler.RestauranteApenasNomeModelAssembler;
+import br.com.ybardockz.api.model.assembler.RestauranteBasicoModelAssembler;
 import br.com.ybardockz.api.model.assembler.RestauranteInputDisassembler;
 import br.com.ybardockz.api.model.assembler.RestauranteModelAssembler;
+import br.com.ybardockz.api.model.domain.RestauranteApenasNomeModel;
+import br.com.ybardockz.api.model.domain.RestauranteBasicoModel;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
-import br.com.ybardockz.api.model.view.RestauranteView;
 import br.com.ybardockz.api.openapi.controller.RestauranteControllerOpenApi;
 import br.com.ybardockz.domain.exception.CidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.CozinhaNaoEncontradaException;
@@ -50,20 +52,29 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	@Autowired
 	private RestauranteInputDisassembler restauranteInputDisassembler;
 	
-	@JsonView(RestauranteView.Resumo.class)
+	@Autowired
+	private RestauranteApenasNomeModelAssembler restauranteApenasNomeAssembler;
+	
+	@Autowired
+	private RestauranteBasicoModelAssembler restauranteBasicoModelAssembler;
+	
+	//@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
-	public ResponseEntity<List<RestauranteModel>> listar() {
-		List<RestauranteModel> restaurantesModel = restauranteModelAssembler
+	public ResponseEntity<CollectionModel<RestauranteBasicoModel>> listar() {
+		CollectionModel<RestauranteBasicoModel> restaurantesModel = restauranteBasicoModelAssembler
 				.toCollectionModel(repository.findAll());
 		
 		return ResponseEntity.ok(restaurantesModel);
 	}
 	
-	@JsonView(RestauranteView.ApenasNome.class)
+	//@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
 	@Operation(hidden = true)
-	public ResponseEntity<List<RestauranteModel>> listarApenasNome() {
-		return listar();
+	public ResponseEntity<CollectionModel<RestauranteApenasNomeModel>> listarApenasNome() {
+		CollectionModel<RestauranteApenasNomeModel> restauranteModel = restauranteApenasNomeAssembler
+				.toCollectionModel(repository.findAll());
+		
+		return ResponseEntity.ok(restauranteModel);
 	}
 	
 	/*@GetMapping

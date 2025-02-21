@@ -2,9 +2,12 @@ package br.com.ybardockz.api.openapi.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
+import br.com.ybardockz.api.model.domain.RestauranteApenasNomeModel;
+import br.com.ybardockz.api.model.domain.RestauranteBasicoModel;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
 import br.com.ybardockz.api.openapi.model.RestauranteBasicoModelOpenApi;
@@ -39,9 +42,9 @@ public interface RestauranteControllerOpenApi {
 		
 	})
 	@Operation(summary = "Lista os restaurantes")
-	public ResponseEntity<List<RestauranteModel>> listar();
+	public ResponseEntity<CollectionModel<RestauranteBasicoModel>> listar();
 	
-	ResponseEntity<List<RestauranteModel>> listarApenasNome();
+	ResponseEntity<CollectionModel<RestauranteApenasNomeModel>> listarApenasNome();
 	
 	@Operation(summary = "Busca um restaurante")
 	@ApiResponses({
