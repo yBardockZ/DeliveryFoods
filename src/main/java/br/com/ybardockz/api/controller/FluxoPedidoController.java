@@ -1,11 +1,10 @@
 package br.com.ybardockz.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ybardockz.api.openapi.controller.FluxoPedidoControllerOpenApi;
@@ -19,21 +18,24 @@ public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 	private AlteracaoStatusPedidoService alteracaoStatusPedidoService;
 	
 	@PutMapping("/confirmar")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmar(@PathVariable String pedidoCodigo) {
+	public ResponseEntity<Void> confirmar(@PathVariable String pedidoCodigo) {
 		alteracaoStatusPedidoService.confirmar(pedidoCodigo);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/confirmar-entrega")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmarEntrega(@PathVariable String pedidoCodigo) {
+	public ResponseEntity<Void> confirmarEntrega(@PathVariable String pedidoCodigo) {
 		alteracaoStatusPedidoService.confirmarEntrega(pedidoCodigo);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/cancelar")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancelar(@PathVariable String pedidoCodigo) {
+	public ResponseEntity<Void> cancelar(@PathVariable String pedidoCodigo) {
 		alteracaoStatusPedidoService.cancelar(pedidoCodigo);
+		
+		return ResponseEntity.noContent().build();
 	}
 
 

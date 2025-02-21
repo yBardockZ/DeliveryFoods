@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import br.com.ybardockz.api.controller.CidadeController;
 import br.com.ybardockz.api.controller.CozinhaController;
 import br.com.ybardockz.api.controller.EstadoController;
+import br.com.ybardockz.api.controller.FluxoPedidoController;
 import br.com.ybardockz.api.controller.FormaPagamentoController;
 import br.com.ybardockz.api.controller.PedidoController;
 import br.com.ybardockz.api.controller.RestauranteController;
@@ -47,6 +48,21 @@ public class AlgaLinks {
 	public Link linkToPedidos() {
 		return linkToPedidos(IanaLinkRelations.SELF_VALUE);
 		
+	}
+	
+	public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).confirmar(codigoPedido))
+				.withRel(rel);
+	}
+	
+	public Link linkToEntregaPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).confirmarEntrega(codigoPedido))
+				.withRel(rel);
+	}
+	
+	public Link linkToCancelamentoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).cancelar(codigoPedido))
+				.withRel(rel);
 	}
 	
 	public Link linkToRestaurantes(Long restauranteId, String rel) {

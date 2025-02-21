@@ -1,5 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
@@ -23,7 +24,7 @@ public interface FluxoPedidoControllerOpenApi {
 	})
 	@Operation(summary = "Confirmar pedido")
 	@PutMapping("/pedido/{pedidoCodigo}/confirmar")
-	public void confirmar(String pedidoCodigo);
+	public ResponseEntity<Void> confirmar(String pedidoCodigo);
 	
 	@ApiResponses({
 		
@@ -35,7 +36,7 @@ public interface FluxoPedidoControllerOpenApi {
 	})
 	@Operation(summary = "Confirmar entrega")
 	@PutMapping("/pedido/{pedidoCodigo}/confirmar-entrega")
-	public void confirmarEntrega(String pedidoCodigo);
+	public ResponseEntity<Void> confirmarEntrega(String pedidoCodigo);
 	
 	@ApiResponses({
 		
@@ -47,6 +48,6 @@ public interface FluxoPedidoControllerOpenApi {
 	})
 	@Operation(summary = "Cancelar pedido")
 	@PutMapping("/pedido/{pedidoCodigo}/cancelar")
-	public void cancelar(String pedidoCodigo);
+	public ResponseEntity<Void> cancelar(String pedidoCodigo);
 	
 }
