@@ -140,43 +140,49 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	}
 	
 	@PutMapping(path = "/{restauranteId}/ativar")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void ativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
 		service.ativar(restauranteId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/ativacoes")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+	public ResponseEntity<Void> ativarMultiplos(@RequestBody List<Long> restauranteIds) {
 		service.ativar(restauranteIds);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping("/ativacoes")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void desativarMultiplos(@RequestBody List<Long> restauranteIds) {
+	public ResponseEntity<Void> desativarMultiplos(@RequestBody List<Long> restauranteIds) {
 		service.inativar(restauranteIds);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping(path = "/{restauranteId}/inativar")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void inativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
 		service.inativar(restauranteId);
 		
+		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{restauranteId}/abrir")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void abrir(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
 		service.abrir(restauranteId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/{restauranteId}/fechar")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void fechar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
 		service.fechar(restauranteId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping(path = "/{restauranteId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long restauranteId) {
 		service.remover(restauranteId);
 	}

@@ -73,6 +73,14 @@ public class Restaurante {
 	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private Set<Usuario> usuariosResponsaveis = new HashSet<>();
 	
+	public boolean podeAtivar() {
+		return this.ativo == false;
+	}
+	
+	public boolean podeAbrir() {
+		return this.aberto == false;
+	}
+	
 	public void ativar() {
 		ativo = true;
 	}

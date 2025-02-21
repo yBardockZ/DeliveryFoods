@@ -38,6 +38,22 @@ public class RestauranteModelAssembler extends
 		restauranteModel.add(algaLinks
 				.linkToResponsaveis(restaurante.getId(), "responsaveis"));
 		
+		if (restaurante.podeAtivar()) {
+			restauranteModel.add(algaLinks
+					.linkToAtivacaoRestaurante(restauranteModel.getId(), "ativar"));
+		} else {
+			restauranteModel.add(algaLinks
+					.linkToDesativacaoRestaurante(restauranteModel.getId(), "desativar"));
+		}
+		
+		if (restaurante.podeAbrir()) {
+			restauranteModel.add(algaLinks
+					.linkToAberturaRestaurante(restauranteModel.getId(), "abrir"));
+		} else {
+			restauranteModel.add(algaLinks
+					.linkToFechamentoRestaurante(restauranteModel.getId(), "fechar"));
+		}
+		
 		restauranteModel.getCozinha().add(algaLinks
 				.linkToCozinhas(restauranteModel.getCozinha().getId()));
 		

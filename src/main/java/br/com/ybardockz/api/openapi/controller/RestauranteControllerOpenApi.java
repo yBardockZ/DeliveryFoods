@@ -92,7 +92,7 @@ public interface RestauranteControllerOpenApi {
 		
 	})
 	@Operation(summary = "Ativa um restaurante")
-	void ativar(@Parameter(required = true) Long restauranteId);
+	ResponseEntity<Void> ativar(@Parameter(required = true) Long restauranteId);
 	
 	@ApiResponses({
 		
@@ -103,7 +103,7 @@ public interface RestauranteControllerOpenApi {
 		
 	})
 	@Operation(summary = "Ativa multitplos restaurante")
-	void ativarMultiplos(@Parameter(required = true) List<Long> restauranteIds);
+	ResponseEntity<Void> ativarMultiplos(@Parameter(required = true) List<Long> restauranteIds);
 	
 	@ApiResponses({
 		
@@ -114,7 +114,7 @@ public interface RestauranteControllerOpenApi {
 		
 	})
 	@Operation(summary = "Desativa multiplos restaurante")
-	void desativarMultiplos(@Parameter(required = true) List<Long> restauranteIds);
+	ResponseEntity<Void> desativarMultiplos(@Parameter(required = true) List<Long> restauranteIds);
 	
 	@ApiResponses({
 		
@@ -125,7 +125,7 @@ public interface RestauranteControllerOpenApi {
 		
 	})
 	@Operation(summary = "Desativa um restaurante")
-	void inativar(@Parameter(required = true) Long restauranteId);
+	ResponseEntity<Void> inativar(@Parameter(required = true) Long restauranteId);
 
 	@ApiResponses({
 		
@@ -136,7 +136,7 @@ public interface RestauranteControllerOpenApi {
 		
 	})
 	@Operation(summary = "Abre um restaurante")
-	void abrir(@Parameter(required = true) Long restauranteId);
+	ResponseEntity<Void> abrir(@Parameter(required = true) Long restauranteId);
 
 	@ApiResponses({
 		
@@ -147,7 +147,7 @@ public interface RestauranteControllerOpenApi {
 		
 	})
 	@Operation(summary = "Fecha um restaurante")
-		void fechar(@Parameter(required = true) Long restauranteId);	
+		ResponseEntity<Void> fechar(@Parameter(required = true) Long restauranteId);	
 	
 	@ApiResponses({
 		
