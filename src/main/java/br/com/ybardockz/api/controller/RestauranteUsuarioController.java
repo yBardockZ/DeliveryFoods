@@ -1,8 +1,5 @@
 package br.com.ybardockz.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.AlgaLinks;
 import br.com.ybardockz.api.model.assembler.UsuarioModelAssembler;
 import br.com.ybardockz.api.model.domain.UsuarioModel;
 import br.com.ybardockz.api.openapi.controller.RestauranteUsuarioControllerOpenApi;
@@ -35,6 +33,9 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 	@Autowired
 	private UsuarioModelAssembler usuarioModelAssembler;
 	
+	@Autowired
+	private AlgaLinks algaLinks;
+	
 	@GetMapping
 	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
@@ -42,8 +43,7 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 		
 		return usuarioModelAssembler.toCollectionModel(usuarios)
 				.removeLinks()
-				.add(linkTo(methodOn(RestauranteUsuarioController.class).listar(restauranteId))
-						.withSelfRel());
+				.add(algaLinks.linkToResponsaveis(restauranteId));
 	}
 	
 	@PutMapping("/{usuarioId}")

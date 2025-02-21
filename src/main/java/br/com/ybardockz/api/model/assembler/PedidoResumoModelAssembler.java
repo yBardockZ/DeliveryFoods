@@ -1,17 +1,13 @@
 package br.com.ybardockz.api.model.assembler;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import br.com.ybardockz.api.AlgaLinks;
 import br.com.ybardockz.api.controller.PedidoController;
-import br.com.ybardockz.api.controller.RestauranteController;
-import br.com.ybardockz.api.controller.UsuarioController;
 import br.com.ybardockz.api.model.domain.PedidoResumoModel;
 import br.com.ybardockz.domain.model.Pedido;
 
@@ -21,6 +17,9 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	private AlgaLinks algaLinks;
+	
 	public PedidoResumoModelAssembler() {
 		super(PedidoController.class, PedidoResumoModel.class);
 	}
@@ -29,13 +28,13 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
 		PedidoResumoModel pedidoResumoModel = createModelWithId(pedido.getCodigo(), pedido);
 		 modelMapper.map(pedido, pedidoResumoModel);
 		 
-		 pedidoResumoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+		 pedidoResumoModel.add(algaLinks.linkToPedidos("pedidos"));
 		 
-		 pedidoResumoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
-				 .buscarPorId(pedido.getRestaurante().getId())).withSelfRel());
+		 pedidoResumoModel.getRestaurante().add(algaLinks
+				 .linkToRestaurantes(pedidoResumoModel.getRestaurante().getId()));
 		 
-		 pedidoResumoModel.getCliente().add(linkTo(methodOn(UsuarioController.class)
-				 .buscarPorId(pedido.getCliente().getId())).withSelfRel());
+		 pedidoResumoModel.getCliente().add(algaLinks
+				 .linkToUsuarios(pedidoResumoModel.getCliente().getId()));
 		 
 		 return pedidoResumoModel;
 	}
@@ -43,7 +42,7 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
 	@Override
 	public CollectionModel<PedidoResumoModel> toCollectionModel(Iterable<? extends Pedido> entities) {
 		return super.toCollectionModel(entities)
-				.add(linkTo(PedidoController.class).withRel("pedidos"));
+				.add(algaLinks.linkToPedidos("pedidos"));
 	}
 	
 	/*

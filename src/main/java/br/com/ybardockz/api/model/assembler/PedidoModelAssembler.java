@@ -1,20 +1,12 @@
 package br.com.ybardockz.api.model.assembler;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import br.com.ybardockz.api.AlgaLinks;
-import br.com.ybardockz.api.controller.CidadeController;
-import br.com.ybardockz.api.controller.FormaPagamentoController;
 import br.com.ybardockz.api.controller.PedidoController;
-import br.com.ybardockz.api.controller.RestauranteController;
-import br.com.ybardockz.api.controller.RestauranteProdutoController;
-import br.com.ybardockz.api.controller.UsuarioController;
 import br.com.ybardockz.api.model.domain.PedidoModel;
 import br.com.ybardockz.domain.model.Pedido;
 
@@ -37,24 +29,21 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 		
 		pedidoModel.add(algaLinks.linkToPedidos());
 		
-		//pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+		pedidoModel.getRestaurante().add(algaLinks
+				.linkToRestaurantes(pedido.getRestaurante().getId()));
 		
-		pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
-				.buscarPorId(pedidoModel.getRestaurante().getId())).withSelfRel());
+		pedidoModel.getCliente().add(algaLinks
+				.linkToUsuarios(pedidoModel.getCliente().getId()));
 		
-		pedidoModel.getCliente().add(linkTo(methodOn(UsuarioController.class)
-				.buscarPorId(pedidoModel.getCliente().getId())).withSelfRel());
+		pedidoModel.getFormaPagamento().add(algaLinks
+				.linkToFormasPagamento(pedidoModel.getFormaPagamento().getId()));
 		
-		pedidoModel.getFormaPagamento().add(linkTo(methodOn(FormaPagamentoController.class)
-				.buscarPorId(pedidoModel.getFormaPagamento().getId(), null)).withSelfRel());
-		
-		pedidoModel.getEnderecoEntrega().getCidade().add(linkTo(methodOn(CidadeController.class)
-				.buscarPorId(pedidoModel.getEnderecoEntrega().getCidade().getId())).withSelfRel());
+		pedidoModel.getEnderecoEntrega().getCidade().add(algaLinks
+				.linkToCidades(pedidoModel.getEnderecoEntrega().getCidade().getId()));
 		
 		pedidoModel.getItens().forEach(itemPedido -> {
-			itemPedido.add(linkTo(methodOn(RestauranteProdutoController.class)
-					.buscarPorId(itemPedido.getProdutoId(), pedidoModel.getRestaurante().getId()))
-					.withRel("produto"));
+			itemPedido.add(algaLinks.linkToProdutos(itemPedido.getProdutoId(), pedido.getRestaurante().getId(),
+					 "produtos"));
 		});
 		
 		return pedidoModel;

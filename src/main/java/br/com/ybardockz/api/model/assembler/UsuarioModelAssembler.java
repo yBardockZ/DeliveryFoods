@@ -1,16 +1,13 @@
 package br.com.ybardockz.api.model.assembler;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import br.com.ybardockz.api.AlgaLinks;
 import br.com.ybardockz.api.controller.UsuarioController;
-import br.com.ybardockz.api.controller.UsuarioGrupoController;
 import br.com.ybardockz.api.model.domain.UsuarioModel;
 import br.com.ybardockz.domain.model.Usuario;
 
@@ -19,6 +16,9 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private AlgaLinks algaLinks;
 	
 	public UsuarioModelAssembler() {
 		super(UsuarioController.class, UsuarioModel.class);
@@ -29,9 +29,8 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
 		UsuarioModel usuarioModel = createModelWithId(usuario.getId(), usuario);
 		modelMapper.map(usuario, usuarioModel);
 		
-		usuarioModel.add(linkTo(UsuarioController.class).withRel("usuarios"));
-		usuarioModel.add(linkTo(methodOn(UsuarioGrupoController.class).listar(usuarioModel.getId()))
-				.withRel("grupos"));
+		usuarioModel.add(algaLinks.linkToUsuarios("usuarios"));
+		usuarioModel.add(algaLinks.linkToGrupos(usuarioModel.getId(), "grupos"));
 		
 		return usuarioModel;
 	}
@@ -40,7 +39,7 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
 	public CollectionModel<UsuarioModel> toCollectionModel(Iterable<? extends Usuario> entities) {
 		// TODO Auto-generated method stub
 		return super.toCollectionModel(entities)
-				.add(linkTo(UsuarioController.class).withSelfRel());
+				.add(algaLinks.linkToUsuarios());
 	}
 	
 	/*

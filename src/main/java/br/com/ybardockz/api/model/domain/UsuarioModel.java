@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-@Relation(itemRelation = "usuarios")
+@Relation(collectionRelation = "usuarios")
 @Getter
 @Setter
 public class UsuarioModel extends RepresentationModel<UsuarioModel> {
