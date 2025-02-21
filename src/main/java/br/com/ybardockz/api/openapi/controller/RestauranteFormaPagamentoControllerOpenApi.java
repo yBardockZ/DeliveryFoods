@@ -1,6 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.FormaPagamentoModel;
@@ -24,7 +24,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Lista as formas de pagamento do restaurante")
-	public List<FormaPagamentoModel> listar(@Parameter(required = true, example = "1") Long restauranteId);
+	public CollectionModel<FormaPagamentoModel> listar(@Parameter(required = true, example = "1") Long restauranteId);
 	
 	@ApiResponses({
 		

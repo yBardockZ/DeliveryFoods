@@ -1,7 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -25,7 +24,7 @@ public interface FormaPagamentoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Lista as formas de pagamento")
-	ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request);
+	ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request);
 
 	@ApiResponses({
 		
