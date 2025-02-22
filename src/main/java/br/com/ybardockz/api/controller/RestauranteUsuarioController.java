@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,21 +42,34 @@ public class RestauranteUsuarioController implements RestauranteUsuarioControlle
 		Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 		Collection<Usuario> usuarios = restaurante.getUsuariosResponsaveis();
 		
-		return usuarioModelAssembler.toCollectionModel(usuarios)
+		CollectionModel<UsuarioModel> usuariosModel = usuarioModelAssembler.toCollectionModel(usuarios)
 				.removeLinks()
-				.add(algaLinks.linkToResponsaveis(restauranteId));
+				.add(algaLinks.linkToResponsaveis(restauranteId))
+				.add(algaLinks.linkToResponsaveisAssociacao
+						(restauranteId, "associar"));
+		
+		usuariosModel.getContent().forEach(usuarioModel -> {
+			usuarioModel.add(algaLinks
+					.linkToResponsaveisDesassociacao(restauranteId, restauranteId, "desassociar"));
+		});
+		
+		return usuariosModel;
 	}
 	
 	@PutMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associar(@PathVariable Long usuarioId, @PathVariable Long restauranteId) {
+	public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long restauranteId) {
 		restauranteService.associarUsuario(restauranteId, usuarioId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void disassociar(@PathVariable Long usuarioId, @PathVariable Long restauranteId) {
+	public ResponseEntity<Void> disassociar(@PathVariable Long usuarioId, @PathVariable Long restauranteId) {
 		restauranteService.disassociarUsuario(restauranteId, usuarioId);
+		
+		return ResponseEntity.noContent().build();
 	}
 
 }

@@ -48,7 +48,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Associa forma de pagamento com um restaurante")
-	public void associar(@Parameter(required = true, example = "1") Long restauranteId, 
+	public ResponseEntity<Void> associar(@Parameter(required = true, example = "1") Long restauranteId, 
 			@Parameter(required = true) Long formaPagamentoId);
 
 }

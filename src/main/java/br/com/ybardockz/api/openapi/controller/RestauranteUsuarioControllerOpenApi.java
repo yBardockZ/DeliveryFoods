@@ -1,6 +1,7 @@
 package br.com.ybardockz.api.openapi.controller;
 
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.UsuarioModel;
@@ -35,7 +36,7 @@ public interface RestauranteUsuarioControllerOpenApi {
 		
 	})
 	@Operation(summary = "Associa um usuário a um restaurante")
-	void associar(@Parameter(required = true, example = "1") Long usuarioId, 
+	ResponseEntity<Void> associar(@Parameter(required = true, example = "1") Long usuarioId, 
 			@Parameter(required = true, example = "1") Long restauranteId);
 
 	@ApiResponses({
@@ -47,7 +48,7 @@ public interface RestauranteUsuarioControllerOpenApi {
 		
 	})
 	@Operation(summary = "Disassocia um usuário de um restaurante")
-	void disassociar(@Parameter(required = true, example = "1") Long usuarioId,
+	ResponseEntity<Void> disassociar(@Parameter(required = true, example = "1") Long usuarioId,
 			@Parameter(required = true, example = "1") Long restauranteId);
 	
 }
