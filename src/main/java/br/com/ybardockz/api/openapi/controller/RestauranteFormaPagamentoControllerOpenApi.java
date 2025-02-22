@@ -1,6 +1,7 @@
 package br.com.ybardockz.api.openapi.controller;
 
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.FormaPagamentoModel;
@@ -35,7 +36,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Dissasocia uma forma de pagamento de um restaurante")
-	public void dissasociar(@Parameter(required = true, example = "1") Long restauranteId, 
+	public ResponseEntity<Void> dissasociar(@Parameter(required = true, example = "1") Long restauranteId, 
 			@Parameter(required = true) Long formaPagamentoId);
 	
 	@ApiResponses({

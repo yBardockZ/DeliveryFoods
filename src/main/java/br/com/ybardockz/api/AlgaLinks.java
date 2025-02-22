@@ -168,6 +168,16 @@ public class AlgaLinks {
 				.withRel(rel);
 	}
 	
+	public Link linkToRestauranteFormaPagamento(Long restauranteId) {
+		return linkToRestauranteFormaPagamento(restauranteId, IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToRestauranteFormaPagamentoDesassociacao(Long restauranteId,
+				Long formaPagamentoId, String rel) {
+		return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+				.dissasociar(restauranteId, formaPagamentoId)).withRel(rel);
+	}
+	
 	public Link linkToCidades(Long cidadeId, String rel) {
 		return linkTo(methodOn(CidadeController.class)
 				.buscarPorId(cidadeId)).withRel(rel);
