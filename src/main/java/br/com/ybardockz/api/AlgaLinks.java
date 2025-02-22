@@ -20,6 +20,7 @@ import br.com.ybardockz.api.controller.PedidoController;
 import br.com.ybardockz.api.controller.RestauranteController;
 import br.com.ybardockz.api.controller.RestauranteFormaPagamentoController;
 import br.com.ybardockz.api.controller.RestauranteProdutoController;
+import br.com.ybardockz.api.controller.RestauranteProdutoFotoController;
 import br.com.ybardockz.api.controller.RestauranteUsuarioController;
 import br.com.ybardockz.api.controller.UsuarioController;
 import br.com.ybardockz.api.controller.UsuarioGrupoController;
@@ -260,6 +261,17 @@ public class AlgaLinks {
 	
 	public Link linkToCozinhas(Long cozinhaId) {
 		return linkToCozinhas(cozinhaId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToFotoProduto(Long restauranteId, 
+			Long produtoId, String rel) {
+		return linkTo(methodOn(RestauranteProdutoFotoController.class)
+				.buscar(restauranteId, produtoId)).withRel(rel);
+	}
+	
+	public Link linkToFotoProduto(Long restauranteId, 
+			Long produtoId) {
+		return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF_VALUE);
 	}
 
 }
