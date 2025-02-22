@@ -1,6 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.ProdutoModel;
@@ -25,7 +25,7 @@ public interface RestauranteProdutoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Lista os produtos de um resestaurante")
-	public List<ProdutoModel> listar(@Parameter(required = true, example = "1") Long restauranteId, 
+	public CollectionModel<ProdutoModel> listar(@Parameter(required = true, example = "1") Long restauranteId, 
 			Boolean incluirInativos);
 	
 	@ApiResponses({

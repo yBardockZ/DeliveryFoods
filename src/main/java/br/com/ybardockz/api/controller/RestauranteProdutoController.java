@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.AlgaLinks;
 import br.com.ybardockz.api.model.assembler.ProdutoInputDisassembler;
 import br.com.ybardockz.api.model.assembler.ProdutoModelAssembler;
 import br.com.ybardockz.api.model.domain.ProdutoModel;
@@ -45,8 +47,11 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	@Autowired
 	private ProdutoInputDisassembler produtoInputDisassembler;
 	
+	@Autowired
+	private AlgaLinks algaLinks;
+	
 	@GetMapping
-	public List<ProdutoModel> listar(@PathVariable Long restauranteId,
+	public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
 			@RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
 		restauranteService.buscarOuFalhar(restauranteId);
 		
@@ -60,7 +65,8 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		}
 		
 		return produtoModelAssembler
-				.toCollectionModel(produtos);
+				.toCollectionModel(produtos)
+				.add(algaLinks.linkToProdutos(restauranteId));
 	}
 	
 	@GetMapping("/{produtoId}")
