@@ -17,7 +17,9 @@ import br.com.ybardockz.api.controller.EstadoController;
 import br.com.ybardockz.api.controller.FluxoPedidoController;
 import br.com.ybardockz.api.controller.FormaPagamentoController;
 import br.com.ybardockz.api.controller.GrupoController;
+import br.com.ybardockz.api.controller.GrupoPermissaoController;
 import br.com.ybardockz.api.controller.PedidoController;
+import br.com.ybardockz.api.controller.PermissaoController;
 import br.com.ybardockz.api.controller.RestauranteController;
 import br.com.ybardockz.api.controller.RestauranteFormaPagamentoController;
 import br.com.ybardockz.api.controller.RestauranteProdutoController;
@@ -286,6 +288,57 @@ public class AlgaLinks {
 	public Link linkToFotoProduto(Long restauranteId, 
 			Long produtoId) {
 		return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToGrupoPermissao(Long grupoId, 
+			Long permissaoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class)
+				.buscarPorId(grupoId, permissaoId))
+				.withRel(rel);
+	}
+	
+	public Link linkToGrupoPermissao(Long grupoId, 
+			Long permissaoId) {
+		return linkToGrupoPermissao(grupoId, 
+				permissaoId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToGrupoPermissao(Long grupoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class)
+				.listar(grupoId))
+				.withRel(rel);
+	}
+	
+	public Link linkToGrupoPermissao(Long grupoId) {
+		return linkToGrupoPermissao(grupoId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToGrupoPermissaoAssociacao(Long grupoId,
+			Long permissaoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class)
+				.associar(grupoId, permissaoId)).withRel(rel);
+		
+	}
+	
+	public Link linkToGrupoPermissaoAssociacao(Long grupoId, String rel) {
+		return linkToGrupoPermissaoAssociacao(grupoId, 
+				null, rel);
+		
+	}
+	
+	public Link linkToGrupoPermissaoDisassociacao(Long grupoId,
+			Long permissaoId, String rel) {
+		return linkTo(methodOn(GrupoPermissaoController.class)
+				.disassociar(grupoId, permissaoId)).withRel(rel);
+		
+	}
+	
+	public Link linkToPermissoes(String rel) {
+		return linkTo(PermissaoController.class).withRel(rel);
+	}
+	
+	public Link linkToPermissoes() {
+		return linkToPermissoes(IanaLinkRelations.SELF_VALUE);
 	}
 
 }

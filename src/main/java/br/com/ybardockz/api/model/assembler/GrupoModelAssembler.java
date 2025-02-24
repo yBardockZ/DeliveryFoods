@@ -31,6 +31,9 @@ public class GrupoModelAssembler extends
 		
 		grupoModel.add(algaLinks.linkToGrupos("grupos"));
 		
+		grupoModel.add(algaLinks
+				.linkToGrupoPermissao(grupo.getId(), "permissoes"));
+		
 		return grupoModel;
 	}
 	

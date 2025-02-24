@@ -1,26 +1,43 @@
 package br.com.ybardockz.api.model.assembler;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import br.com.ybardockz.api.AlgaLinks;
+import br.com.ybardockz.api.controller.GrupoPermissaoController;
 import br.com.ybardockz.api.model.domain.PermissaoModel;
 import br.com.ybardockz.domain.model.Permissao;
 
 @Component
-public class PermissaoModelAssembler {
-	
+public class PermissaoModelAssembler extends 
+	RepresentationModelAssemblerSupport<Permissao, PermissaoModel> {
+
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	public PermissaoModel toModel(Permissao permissao) {
-		return modelMapper.map(permissao, PermissaoModel.class);
+	@Autowired
+	private AlgaLinks algaLinks;
+	
+	public PermissaoModelAssembler() {
+		super(GrupoPermissaoController.class, PermissaoModel.class);
 	}
 	
+	public PermissaoModel toModel(Permissao permissao) {
+		PermissaoModel permissaoModel = modelMapper.map(permissao, PermissaoModel.class);
+		
+		return permissaoModel;
+	}
+	
+	@Override
+	public CollectionModel<PermissaoModel> toCollectionModel(Iterable<? extends Permissao> entities) {
+		return super.toCollectionModel(entities)
+				.add(algaLinks.linkToPermissoes());
+	}
+	
+	/*
 	public List<PermissaoModel> toCollectionModel(Collection<Permissao> permissoes) {
 		List<PermissaoModel> permissoesModel = permissoes.stream()
 				.map((permissaoDomain) -> toModel(permissaoDomain))
@@ -28,5 +45,6 @@ public class PermissaoModelAssembler {
 		
 		return permissoesModel;
 	}
+	*/
 
 }

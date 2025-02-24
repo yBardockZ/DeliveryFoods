@@ -1,6 +1,7 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.PermissaoModel;
@@ -27,7 +28,7 @@ public interface GrupoPermissaoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Lista as permissões de um grupo")
-	public List<PermissaoModel> listar(@Parameter(required = true, example = "1") Long grupoId);
+	public CollectionModel<PermissaoModel> listar(@Parameter(required = true, example = "1") Long grupoId);
 	
 	@ApiResponses({
 		
@@ -56,7 +57,7 @@ public interface GrupoPermissaoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Associa uma permissão a um grupo")
-	public void associar(Long grupoId, Long permissaoId);
+	public ResponseEntity<Void> associar(Long grupoId, Long permissaoId);
 	
 	@ApiResponses({
 		
@@ -70,6 +71,6 @@ public interface GrupoPermissaoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Disassocia uma permissão de um grupo")
-	public void disassociar(Long grupoId, Long permissaoId);
+	public ResponseEntity<Void> disassociar(Long grupoId, Long permissaoId);
 
 }

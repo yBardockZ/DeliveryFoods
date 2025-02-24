@@ -3,16 +3,17 @@ package br.com.ybardockz.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.AlgaLinks;
 import br.com.ybardockz.api.model.assembler.PermissaoModelAssembler;
 import br.com.ybardockz.api.model.domain.PermissaoModel;
 import br.com.ybardockz.api.openapi.controller.GrupoPermissaoControllerOpenApi;
@@ -38,13 +39,28 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Autowired
 	private PermissaoModelAssembler permissaoModelAssembler;
 	
+	@Autowired
+	private AlgaLinks algaLinks;
+	
 	@GetMapping
-	public List<PermissaoModel> listar(@PathVariable Long grupoId) {
+	public CollectionModel<PermissaoModel> listar(@PathVariable Long grupoId) {
 		cadastroGrupoService.buscarOuFalhar(grupoId);
 		
 		List<Permissao> permissoes = permissaoRepository.findPermissoesByGrupoId(grupoId);
 		
-		return permissaoModelAssembler.toCollectionModel(permissoes);
+		CollectionModel<PermissaoModel> permissoesModel = permissaoModelAssembler
+				.toCollectionModel(permissoes)
+				.removeLinks()
+				.add(algaLinks.linkToGrupoPermissao(grupoId))
+				.add(algaLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+		
+		permissoesModel.forEach(permissaoModel -> {
+			permissaoModel.add(algaLinks
+					.linkToGrupoPermissaoDisassociacao(grupoId, 
+							permissaoModel.getId(), "desassociar"));
+		});
+		
+		return permissoesModel;
 	}
 	
 	@GetMapping("/{permissaoId}")
@@ -55,15 +71,17 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	}
 	
 	@PutMapping("/{permissaoId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+	public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		cadastroGrupoService.associar(grupoId, permissaoId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping("/{permissaoId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void disassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+	public ResponseEntity<Void> disassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		cadastroGrupoService.disassociar(grupoId, permissaoId);
+		
+		return ResponseEntity.noContent().build();
 	}
 
 }
