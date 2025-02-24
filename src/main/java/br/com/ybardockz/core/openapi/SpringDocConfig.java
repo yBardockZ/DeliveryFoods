@@ -1,6 +1,7 @@
 package br.com.ybardockz.core.openapi;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -28,6 +29,7 @@ public class SpringDocConfig {
 				.pathsToExclude("/teste/**")
 				.addOpenApiCustomizer(adicionarSchemasCustomizados())
 				.addOpenApiCustomizer(substituirPageablePorModeloPersonalizado())
+				.addOpenApiCustomizer(substituirLinksPorModeloPersonalizado())
 				.addOpenApiCustomizer(globalGetResponse())
 				.addOpenApiCustomizer(globalPostResponse())
 				.addOpenApiCustomizer(globalPutResponse())
@@ -195,5 +197,26 @@ public class SpringDocConfig {
 		};
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+    @Bean
+    public OpenApiCustomizer substituirLinksPorModeloPersonalizado() {
+        return openApi -> {
+            // Remover o schema "Links" gerado automaticamente
+            openApi.getComponents().getSchemas().remove("Links");
+            openApi.getComponents().getSchemas().remove("Link");
+
+            // Instanciando o schema "LinkModel" conforme sua estrutura desejada
+            openApi.getComponents().addSchemas("LinkModel", new Schema<>()
+                    .type("object")
+                    .addProperty("href", new Schema<>().type("string").example("http://localhost:8080/recurso"))
+                    .addProperty("templated", new Schema<>().type("boolean").example(false)));
+
+            // Instanciando o schema "LinksModelOpenApi" com a referência para "LinkModel"
+            openApi.getComponents().addSchemas("LinksModelOpenApi", new Schema<>()
+                    .type("object")
+                    .addProperty("ref", new Schema<>().$ref("#/components/schemas/LinkModel")));
+        };
+    }
 
 }
