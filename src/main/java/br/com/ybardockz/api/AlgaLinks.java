@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import br.com.ybardockz.api.controller.CidadeController;
 import br.com.ybardockz.api.controller.CozinhaController;
 import br.com.ybardockz.api.controller.EstadoController;
+import br.com.ybardockz.api.controller.EstatisticasController;
 import br.com.ybardockz.api.controller.FluxoPedidoController;
 import br.com.ybardockz.api.controller.FormaPagamentoController;
 import br.com.ybardockz.api.controller.GrupoController;
@@ -350,6 +351,25 @@ public class AlgaLinks {
 	
 	public Link linkToPermissoes() {
 		return linkToPermissoes(IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToEstatisticas(String rel) {
+		return linkTo(methodOn(EstatisticasController.class)
+				.estatisticas()).withRel(rel);
+	}
+	
+	public Link linkToEstatisticasVendasDiarias(String rel) {
+		String vendaDiariaUrl = linkTo(methodOn(EstatisticasController.class)
+				.consultarVendasDiarias(null, null)).toUri().toString();
+	
+		TemplateVariables templateVariables = new TemplateVariables(
+				new TemplateVariable("dataInicio", VariableType.REQUEST_PARAM),
+				new TemplateVariable("dataFim", VariableType.REQUEST_PARAM),
+				new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+				new TemplateVariable("timeOffSet", VariableType.REQUEST_PARAM)
+				);
+		
+		return Link.of(UriTemplate.of(vendaDiariaUrl, templateVariables), rel);
 	}
 
 }

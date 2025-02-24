@@ -3,6 +3,7 @@ package br.com.ybardockz.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.AlgaLinks;
 import br.com.ybardockz.api.openapi.controller.EstatisticasControllerOpenApi;
 import br.com.ybardockz.domain.filter.VendaDiariaFilter;
 import br.com.ybardockz.domain.model.dto.VendaDiaria;
@@ -26,6 +28,19 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 	
 	@Autowired
 	private VendaReportService vendaReportService;
+	
+	@Autowired
+	private AlgaLinks algaLinks;
+	
+	@GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE) 
+	public EstatisticaModel estatisticas() {
+		EstatisticaModel estatisticaModel = new EstatisticaModel();
+		
+		estatisticaModel.add(algaLinks.linkToEstatisticasVendasDiarias("vendas-diarias"));
+		
+		return estatisticaModel;
+		
+	}
 	
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter,
@@ -47,6 +62,10 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 				.body(bytes);
 				
 				
+	}
+	
+	public static class EstatisticaModel extends RepresentationModel<EstatisticaModel> {
+		
 	}
 
 }
