@@ -1,6 +1,7 @@
 package br.com.ybardockz.api.openapi.controller;
 
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.GrupoModel;
@@ -41,7 +42,7 @@ public interface UsuarioGrupoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Associa um grupo a um usuário")
-	public void associar(@Parameter(required = true, example = "1") Long usuarioId, 
+	public ResponseEntity<Void> associar(@Parameter(required = true, example = "1") Long usuarioId, 
 			@Parameter(required = true, example = "1") Long grupoId);
 	
 	@ApiResponses({
@@ -56,7 +57,7 @@ public interface UsuarioGrupoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Disassocia um grupo de um usuário")
-	public void disassociar(@Parameter(required = true, example = "1") Long usuarioId, 
+	public ResponseEntity<Void> disassociar(@Parameter(required = true, example = "1") Long usuarioId, 
 			@Parameter(required = true, example = "1") Long grupoId);
 	
 }
