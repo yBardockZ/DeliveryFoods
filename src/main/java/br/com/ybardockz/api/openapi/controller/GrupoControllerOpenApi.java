@@ -1,6 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.GrupoModel;
@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface GrupoControllerOpenApi {
 
 	@Operation(summary = "Lista os grupos")
-	public List<GrupoModel> listar();
+	public CollectionModel<GrupoModel> listar();
 	
 	@Operation(summary = "Busca um grupo")
 	@ApiResponses({

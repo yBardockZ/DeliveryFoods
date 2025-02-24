@@ -1,8 +1,7 @@
 package br.com.ybardockz.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,9 +41,11 @@ public class GrupoController implements GrupoControllerOpenApi {
 	private GrupoInputDisassembler grupoInputDisassembler;
 	
 	@GetMapping
-	public List<GrupoModel> listar() {
-		return grupoModelAssembler.toCollectionModel(grupoRepository.findAll());
+	public CollectionModel<GrupoModel> listar() {
+		CollectionModel<GrupoModel> gruposModel = grupoModelAssembler
+				.toCollectionModel(grupoRepository.findAll());
 		
+		return gruposModel;
 	}
 	
 	@GetMapping("/{grupoId}")

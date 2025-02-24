@@ -1,6 +1,6 @@
 package br.com.ybardockz.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.GrupoModel;
@@ -27,7 +27,7 @@ public interface UsuarioGrupoControllerOpenApi {
 		
 	})
 	@Operation(summary = "Lista os grupos de um usuário")
-	public List<GrupoModel> listar(@Parameter(required = true, example = "1") Long usuarioId);
+	public CollectionModel<GrupoModel> listar(@Parameter(required = true, example = "1") Long usuarioId);
 	
 	@ApiResponses({
 		

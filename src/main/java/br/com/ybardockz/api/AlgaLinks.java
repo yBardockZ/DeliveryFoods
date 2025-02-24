@@ -16,6 +16,7 @@ import br.com.ybardockz.api.controller.CozinhaController;
 import br.com.ybardockz.api.controller.EstadoController;
 import br.com.ybardockz.api.controller.FluxoPedidoController;
 import br.com.ybardockz.api.controller.FormaPagamentoController;
+import br.com.ybardockz.api.controller.GrupoController;
 import br.com.ybardockz.api.controller.PedidoController;
 import br.com.ybardockz.api.controller.RestauranteController;
 import br.com.ybardockz.api.controller.RestauranteFormaPagamentoController;
@@ -146,6 +147,19 @@ public class AlgaLinks {
 	
 	public Link linkToUsuarios() {
 		return linkToUsuarios(IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToUsuariosGrupos(Long usuarioId, String rel) {
+		return linkTo(methodOn(UsuarioGrupoController.class)
+				.listar(usuarioId)).withRel(rel);
+	}
+	
+	public Link linkToGrupos(String rel) {
+		return linkTo(GrupoController.class).withRel(rel);
+	}
+	
+	public Link linkToGrupos() {
+		return linkToGrupos(IanaLinkRelations.SELF_VALUE);
 	}
 	
 	public Link linkToGrupos(Long usuarioId, String rel) {

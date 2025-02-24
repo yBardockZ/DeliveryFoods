@@ -3,6 +3,7 @@ package br.com.ybardockz.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ybardockz.api.AlgaLinks;
 import br.com.ybardockz.api.model.assembler.GrupoModelAssembler;
 import br.com.ybardockz.api.model.domain.GrupoModel;
 import br.com.ybardockz.api.openapi.controller.UsuarioGrupoControllerOpenApi;
@@ -32,13 +34,18 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	
 	@Autowired
 	private GrupoModelAssembler grupoModelAssembler;
+	
+	@Autowired
+	private AlgaLinks algaLinks;
 
 	@GetMapping
-	public List<GrupoModel> listar(@PathVariable Long usuarioId) {
+	public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
 		cadastroUsuarioService.buscarOuFalhar(usuarioId);
 		List<Grupo> grupos = grupoRepository.findGrupoByUsuario(usuarioId);
 		
-		return grupoModelAssembler.toCollectionModel(grupos);
+		return grupoModelAssembler.toCollectionModel(grupos)
+				.removeLinks()
+				.add(algaLinks.linkToUsuariosGrupos(usuarioId, "grupos"));
 	}
 	
 	@PutMapping("/{grupoId}")
