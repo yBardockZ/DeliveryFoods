@@ -1,13 +1,17 @@
 package br.com.ybardockz.api.openapi.model;
 
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-@Schema(name = "PageModel")
 @Getter
 @Setter
-public class PageModelOpenApi {
+public class PagedModelOpenApi<T> {
+	
+	@Schema(description = "Lista de elementos")
+	private List<T> content;
 	
 	@Schema(description = "Quantidade de itens por página", example = "10")
 	private int size;
@@ -23,3 +27,4 @@ public class PageModelOpenApi {
 
 
 }
+
