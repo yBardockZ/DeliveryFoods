@@ -11,6 +11,7 @@ import br.com.ybardockz.api.model.domain.RestauranteBasicoModel;
 import br.com.ybardockz.api.model.domain.RestauranteModel;
 import br.com.ybardockz.api.model.input.RestauranteInput;
 import br.com.ybardockz.api.openapi.model.RestauranteBasicoModelOpenApi;
+import br.com.ybardockz.api.openapi.model.RestaurantesBasicoModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -38,7 +39,8 @@ public interface RestauranteControllerOpenApi {
 	@ApiResponses({
 		
 		@ApiResponse(responseCode = "200", description = "Consulta realizada",
-				content = @Content(schema = @Schema(implementation = RestauranteBasicoModelOpenApi.class)))
+				content = @Content(schema = 
+				@Schema(implementation = RestaurantesBasicoModelOpenApi.class)))
 		
 	})
 	@Operation(summary = "Lista os restaurantes")
