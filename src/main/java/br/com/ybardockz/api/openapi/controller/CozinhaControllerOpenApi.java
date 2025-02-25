@@ -50,6 +50,10 @@ public interface CozinhaControllerOpenApi {
 	PagedModel<CozinhaModel> listar(@Parameter(hidden = true) Pageable pageable);
 	
 	@ApiResponses({
+		@ApiResponse(responseCode = "200", 
+				description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = CozinhaModel.class))),
+		
 		@ApiResponse(responseCode = "400",
 					description = "ID inválido",
 					content = @Content(schema = @Schema(implementation = Problema.class))),

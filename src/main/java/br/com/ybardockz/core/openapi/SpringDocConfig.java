@@ -215,6 +215,12 @@ public class SpringDocConfig {
             openApi.getComponents().addSchemas("LinksModelOpenApi", new Schema<>()
                     .type("object")
                     .addProperty("ref", new Schema<>().$ref("#/components/schemas/LinkModel")));
+            
+            openApi.getComponents().addSchemas("Links", new Schema<>()
+                    .$ref("#/components/schemas/LinksModelOpenApi"));
+            
+            openApi.getComponents().addSchemas("Link", new Schema<>()
+                    .$ref("#/components/schemas/LinkModel"));
         };
     }
     
@@ -225,6 +231,7 @@ public class SpringDocConfig {
         return openApi -> {
             // Remover o schema CollectionModel<CidadeModel> (se já existir com outro nome)
             openApi.getComponents().getSchemas().remove("CollectionModelCidadeModel");
+            openApi.getComponents().getSchemas().remove("CollectionModelEstadoModel");
 
             // Criar o novo modelo personalizado "CidadesModelOpenApi"
             openApi.getComponents().addSchemas("CidadesModelOpenApi", new Schema<>()
@@ -240,6 +247,21 @@ public class SpringDocConfig {
             // Criar um alias "CollectionModelCidadeModel" que referencia "CidadesModelOpenApi"
             openApi.getComponents().addSchemas("CollectionModelCidadeModel", new Schema<>()
                     .$ref("#/components/schemas/CidadesModelOpenApi"));
+            
+            openApi.getComponents().addSchemas("EstadosModelOpenApi", new Schema<>()
+                    .type("object")
+                    .addProperty("_embedded", new Schema<>()
+                        .type("object")
+                        .addProperty("estados", new Schema<>()
+                            .type("array")
+                            .items(new Schema<>().$ref("#/components/schemas/EstadoModel"))))
+                    .addProperty("_links", new Schema<>()
+                        .$ref("#/components/schemas/LinksModelOpenApi")));
+
+            // Criar um alias "CollectionModelEstadoModel" que referencia "EstadosModelOpenApi"
+            openApi.getComponents().addSchemas("CollectionModelEstadoModel", new Schema<>()
+                    .$ref("#/components/schemas/EstadosModelOpenApi"));
+
         };
     }
 
