@@ -1,7 +1,6 @@
 package br.com.ybardockz.core.openapi;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -30,6 +29,7 @@ public class SpringDocConfig {
 				.addOpenApiCustomizer(adicionarSchemasCustomizados())
 				.addOpenApiCustomizer(substituirPageablePorModeloPersonalizado())
 				.addOpenApiCustomizer(substituirLinksPorModeloPersonalizado())
+				.addOpenApiCustomizer(substituirCollectionModelPorModeloPersonalizado())
 				.addOpenApiCustomizer(globalGetResponse())
 				.addOpenApiCustomizer(globalPostResponse())
 				.addOpenApiCustomizer(globalPutResponse())
@@ -197,10 +197,9 @@ public class SpringDocConfig {
 		};
 		
 	}
-	
-	@SuppressWarnings("unchecked")
+
     @Bean
-    public OpenApiCustomizer substituirLinksPorModeloPersonalizado() {
+    OpenApiCustomizer substituirLinksPorModeloPersonalizado() {
         return openApi -> {
             // Remover o schema "Links" gerado automaticamente
             openApi.getComponents().getSchemas().remove("Links");
@@ -216,6 +215,34 @@ public class SpringDocConfig {
             openApi.getComponents().addSchemas("LinksModelOpenApi", new Schema<>()
                     .type("object")
                     .addProperty("ref", new Schema<>().$ref("#/components/schemas/LinkModel")));
+            
+            openApi.getComponents().addSchemas("Links", new Schema<>()
+                    .$ref("#/components/schemas/LinksModelOpenApi"));
+        };
+    }
+    
+
+    @SuppressWarnings("unchecked")
+	@Bean
+    OpenApiCustomizer substituirCollectionModelPorModeloPersonalizado() {
+        return openApi -> {
+            // Remover o schema CollectionModel<CidadeModel> (se já existir com outro nome)
+            openApi.getComponents().getSchemas().remove("CollectionModelCidadeModel");
+
+            // Criar o novo modelo personalizado "CidadesModelOpenApi"
+            openApi.getComponents().addSchemas("CidadesModelOpenApi", new Schema<>()
+                    .type("object")
+                    .addProperty("_embedded", new Schema<>()
+                        .type("object")
+                        .addProperty("cidades", new Schema<>()
+                            .type("array")
+                            .items(new Schema<>().$ref("#/components/schemas/CidadeModel"))))
+                    .addProperty("_links", new Schema<>()
+                        .$ref("#/components/schemas/LinksModelOpenApi")));
+
+            // Criar um alias "CollectionModelCidadeModel" que referencia "CidadesModelOpenApi"
+            openApi.getComponents().addSchemas("CollectionModelCidadeModel", new Schema<>()
+                    .$ref("#/components/schemas/CidadesModelOpenApi"));
         };
     }
 

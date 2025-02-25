@@ -5,6 +5,7 @@ import org.springframework.hateoas.CollectionModel;
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.CidadeModel;
 import br.com.ybardockz.api.model.input.CidadeInput;
+import br.com.ybardockz.api.openapi.model.CidadesModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,7 +19,8 @@ public interface CidadeControllerOpenApi {
 	
 	@ApiResponses({
 		
-		@ApiResponse(responseCode = "200", description = "Consulta realizada")
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = CidadesModelOpenApi.class)))
 		
 	})
 	@Operation(summary = "Lista as cidades")
