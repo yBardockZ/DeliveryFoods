@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.ybardockz.api.model.domain.EnderecoModel;
-import br.com.ybardockz.api.model.input.ItemPedidoInput;
+import br.com.ybardockz.api.v1.model.domain.EnderecoModel;
+import br.com.ybardockz.api.v1.model.input.ItemPedidoInput;
 import br.com.ybardockz.domain.model.Endereco;
 import br.com.ybardockz.domain.model.ItemPedido;
 

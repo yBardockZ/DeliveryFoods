@@ -235,6 +235,7 @@ public class SpringDocConfig {
             openApi.getComponents().getSchemas().remove("CollectionModelProdutoModel");
             openApi.getComponents().getSchemas().remove("CollectionModelPermissaoModel");
             openApi.getComponents().getSchemas().remove("CollectionModelUsuarioModel");
+            openApi.getComponents().getSchemas().remove("CollectionModelFormaPagamento");
 
         };
     }
