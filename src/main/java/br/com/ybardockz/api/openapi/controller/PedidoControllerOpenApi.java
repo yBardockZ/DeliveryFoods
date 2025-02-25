@@ -7,7 +7,7 @@ import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.PedidoModel;
 import br.com.ybardockz.api.model.domain.PedidoResumoModel;
 import br.com.ybardockz.api.model.input.PedidoInput;
-import br.com.ybardockz.api.openapi.model.PedidoModelOpenApi;
+import br.com.ybardockz.api.openapi.model.PedidosResumoModelOpenApi;
 import br.com.ybardockz.domain.filter.PedidoFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -76,7 +76,7 @@ public interface PedidoControllerOpenApi {
 	@ApiResponses({
 		
 		@ApiResponse(responseCode = "200", description = "Consulta realizada",
-				content = @Content(schema = @Schema(implementation = PedidoModelOpenApi.class)))
+				content = @Content(schema = @Schema(implementation = PedidosResumoModelOpenApi.class)))
 		
 	})
 	@Operation(summary = "Pesquisa pedidos")

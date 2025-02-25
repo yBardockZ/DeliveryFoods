@@ -5,6 +5,7 @@ import org.springframework.hateoas.CollectionModel;
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.GrupoModel;
 import br.com.ybardockz.api.model.input.GrupoInput;
+import br.com.ybardockz.api.openapi.model.GruposModelOpenApi;
 import br.com.ybardockz.domain.model.Grupo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +18,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Grupos", description = "Gerencia os grupos")
 public interface GrupoControllerOpenApi {
 
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = GruposModelOpenApi.class)))
+	})
 	@Operation(summary = "Lista os grupos")
 	public CollectionModel<GrupoModel> listar();
 	

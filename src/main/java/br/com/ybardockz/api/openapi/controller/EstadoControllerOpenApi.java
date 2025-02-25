@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.EstadoModel;
 import br.com.ybardockz.api.model.input.EstadoInput;
+import br.com.ybardockz.api.openapi.model.EstadosModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,13 +18,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Estados", description = "Gerencia os estados")
 public interface EstadoControllerOpenApi {
 
+	@ApiResponses({
+		
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = EstadosModelOpenApi.class)))
+		
+	})
 	@Operation(summary = "Lista os estados")
 	ResponseEntity<CollectionModel<EstadoModel>> listar();
 	
 	@ApiResponses({
-		
-		@ApiResponse(responseCode = "200", description = "Consulta realizada"),
-		
 		@ApiResponse(responseCode = "404", description = "Estado não encontrado",
 				content = @Content(schema = @Schema(implementation = Problema.class))),
 		

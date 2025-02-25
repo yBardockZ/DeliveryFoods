@@ -4,18 +4,21 @@ import java.util.List;
 
 import org.springframework.hateoas.Links;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import br.com.ybardockz.api.model.domain.EstadoModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Schema(name = "EstadosModel")
-@Getter
-@Setter
+@Data
 public class EstadosModelOpenApi {
 	
+	@JsonProperty("_embedded")
 	private EstadosEmbeddedModelOpenApi _embedded;
+	
+	@JsonProperty("_links")
 	private Links _links;
 
 	@Schema(name = "EstadosEmbeddedModel")

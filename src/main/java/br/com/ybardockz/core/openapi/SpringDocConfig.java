@@ -232,49 +232,7 @@ public class SpringDocConfig {
             // Remover o schema CollectionModel<CidadeModel> (se já existir com outro nome)
             openApi.getComponents().getSchemas().remove("CollectionModelCidadeModel");
             openApi.getComponents().getSchemas().remove("CollectionModelEstadoModel");
-            openApi.getComponents().getSchemas().remove("CollectionModelGrupoModel");
-
-            // Criar o novo modelo personalizado "CidadesModelOpenApi"
-            openApi.getComponents().addSchemas("CidadesModelOpenApi", new Schema<>()
-                    .type("object")
-                    .addProperty("_embedded", new Schema<>()
-                        .type("object")
-                        .addProperty("cidades", new Schema<>()
-                            .type("array")
-                            .items(new Schema<>().$ref("#/components/schemas/CidadeModel"))))
-                    .addProperty("_links", new Schema<>()
-                        .$ref("#/components/schemas/LinksModelOpenApi")));
-
-            // Criar um alias "CollectionModelCidadeModel" que referencia "CidadesModelOpenApi"
-            openApi.getComponents().addSchemas("CollectionModelCidadeModel", new Schema<>()
-                    .$ref("#/components/schemas/CidadesModelOpenApi"));
-            
-            openApi.getComponents().addSchemas("EstadosModelOpenApi", new Schema<>()
-                    .type("object")
-                    .addProperty("_embedded", new Schema<>()
-                        .type("object")
-                        .addProperty("estados", new Schema<>()
-                            .type("array")
-                            .items(new Schema<>().$ref("#/components/schemas/EstadoModel"))))
-                    .addProperty("_links", new Schema<>()
-                        .$ref("#/components/schemas/LinksModelOpenApi")));
-
-            // Criar um alias "CollectionModelEstadoModel" que referencia "EstadosModelOpenApi"
-            openApi.getComponents().addSchemas("CollectionModelEstadoModel", new Schema<>()
-                    .$ref("#/components/schemas/EstadosModelOpenApi"));
-            
-            openApi.getComponents().addSchemas("GruposModel", new Schema<>()
-            		.type("object")
-            		.addProperty("_embedded", new Schema<>()
-            				.type("object")
-            				.addProperty("grupos", new Schema<>()
-            				.type("array")
-            				.items(new Schema<>().$ref("#/components/schemas/GrupoModel"))))
-            		.addProperty("_links", new Schema<>()
-            				.$ref("#/components/schemas/LinksModelOpenApi")));
-            
-            openApi.getComponents().addSchemas("CollectionModelGrupoModel", new Schema<>()
-            		.$ref("#/components/schemas/GruposModel"));
+            openApi.getComponents().getSchemas().remove("CollectionModelGrupoModel");  
 
         };
     }
