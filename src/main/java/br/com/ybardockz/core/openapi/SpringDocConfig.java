@@ -215,9 +215,6 @@ public class SpringDocConfig {
             openApi.getComponents().addSchemas("LinksModelOpenApi", new Schema<>()
                     .type("object")
                     .addProperty("ref", new Schema<>().$ref("#/components/schemas/LinkModel")));
-            
-            openApi.getComponents().addSchemas("Links", new Schema<>()
-                    .$ref("#/components/schemas/LinksModelOpenApi"));
         };
     }
     

@@ -22,8 +22,10 @@ public class CozinhaModelOpenApi {
 	@JsonProperty("_embedded")
 	private CozinhasEmbeddedModelOpenApi _embedded;
 	
+	@Schema(ref = "#/components/schemas/LinksModelOpenApi")
 	@JsonProperty("_links")
 	private Links _links;
+
 	private PageModelOpenApi page;
 	
 	@Schema(name = "CozinhasEmbeddedModel")
