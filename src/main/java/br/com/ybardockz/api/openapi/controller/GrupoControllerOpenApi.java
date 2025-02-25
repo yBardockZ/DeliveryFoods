@@ -22,6 +22,9 @@ public interface GrupoControllerOpenApi {
 	
 	@Operation(summary = "Busca um grupo")
 	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = GrupoModel.class))),
+		
 		@ApiResponse(responseCode = "404", description = "Grupo não encontrado",
 				content = @Content(schema = @Schema(implementation = Problema.class))),
 		

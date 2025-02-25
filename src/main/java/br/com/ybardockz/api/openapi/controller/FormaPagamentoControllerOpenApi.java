@@ -7,6 +7,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.FormaPagamentoModel;
 import br.com.ybardockz.api.model.input.FormaPagamentoInput;
+import br.com.ybardockz.api.openapi.model.FormasPagamentoModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,13 +21,16 @@ public interface FormaPagamentoControllerOpenApi {
 	
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "Consulta realizada",
-				content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class)))
+				content = @Content(schema = @Schema(implementation = FormasPagamentoModelOpenApi.class)))
 		
 	})
 	@Operation(summary = "Lista as formas de pagamento")
 	ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request);
 
 	@ApiResponses({
+		
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = FormaPagamentoModel.class))),
 		
 		@ApiResponse(responseCode = "404", description = "Forma de pagamento não encontrada",
 				content = @Content(schema = @Schema(implementation = Problema.class))),
