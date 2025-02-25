@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 import br.com.ybardockz.api.v1.model.domain.EnderecoModel;
 import br.com.ybardockz.api.v1.model.input.ItemPedidoInput;
+import br.com.ybardockz.api.v2.model.input.CidadeInputV2;
+import br.com.ybardockz.domain.model.Cidade;
 import br.com.ybardockz.domain.model.Endereco;
 import br.com.ybardockz.domain.model.ItemPedido;
 
@@ -13,8 +15,11 @@ import br.com.ybardockz.domain.model.ItemPedido;
 public class ModelMapperConfig {
 
     @Bean
-    public ModelMapper modelMapper() {
+    ModelMapper modelMapper() {
     	var modelMapper = new ModelMapper();
+    
+    	modelMapper.createTypeMap(CidadeInputV2.class, Cidade.class)
+    	.addMappings(mapping -> mapping.skip(Cidade::setId));
     	
     	var enderecoToEnderecoModelTypeMap = modelMapper.createTypeMap(Endereco.class,
     			EnderecoModel.class);
