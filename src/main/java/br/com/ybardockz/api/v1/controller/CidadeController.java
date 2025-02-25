@@ -3,6 +3,7 @@ package br.com.ybardockz.api.v1.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,6 @@ import br.com.ybardockz.api.v1.assembler.CidadeModelAssembler;
 import br.com.ybardockz.api.v1.model.domain.CidadeModel;
 import br.com.ybardockz.api.v1.model.input.CidadeInput;
 import br.com.ybardockz.api.v1.openapi.controller.CidadeControllerOpenApi;
-import br.com.ybardockz.core.web.AlgaMediaTypes;
 import br.com.ybardockz.domain.exception.EstadoNaoEncontradoException;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.Cidade;
@@ -28,8 +28,8 @@ import br.com.ybardockz.domain.service.CadastroCidadeService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/cidade",
-	produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/cidade",
+	produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
