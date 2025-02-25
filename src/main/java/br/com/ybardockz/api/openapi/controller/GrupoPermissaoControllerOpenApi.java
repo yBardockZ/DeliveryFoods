@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.PermissaoModel;
+import br.com.ybardockz.api.openapi.model.PermissoesModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,7 +19,8 @@ public interface GrupoPermissaoControllerOpenApi {
 
 	@ApiResponses({
 		
-		@ApiResponse(responseCode = "200", description = "Consulta realizada"),
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = PermissoesModelOpenApi.class))),
 		
 		@ApiResponse(responseCode = "404", description = "Grupo não encontrado",
 				content = @Content(schema = @Schema(implementation = Problema.class))),
