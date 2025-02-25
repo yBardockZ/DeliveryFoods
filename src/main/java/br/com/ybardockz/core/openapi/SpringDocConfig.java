@@ -225,14 +225,14 @@ public class SpringDocConfig {
     }
     
 
-    @SuppressWarnings("unchecked")
 	@Bean
     OpenApiCustomizer substituirCollectionModelPorModeloPersonalizado() {
         return openApi -> {
             // Remover o schema CollectionModel<CidadeModel> (se já existir com outro nome)
             openApi.getComponents().getSchemas().remove("CollectionModelCidadeModel");
             openApi.getComponents().getSchemas().remove("CollectionModelEstadoModel");
-            openApi.getComponents().getSchemas().remove("CollectionModelGrupoModel");  
+            openApi.getComponents().getSchemas().remove("CollectionModelGrupoModel");
+            openApi.getComponents().getSchemas().remove("CollectionModelProdutoModel");
 
         };
     }

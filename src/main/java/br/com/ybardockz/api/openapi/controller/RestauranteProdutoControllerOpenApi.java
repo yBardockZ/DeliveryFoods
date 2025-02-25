@@ -5,6 +5,7 @@ import org.springframework.hateoas.CollectionModel;
 import br.com.ybardockz.api.exceptionhandler.Problema;
 import br.com.ybardockz.api.model.domain.ProdutoModel;
 import br.com.ybardockz.api.model.input.ProdutoInput;
+import br.com.ybardockz.api.openapi.model.ProdutosModelOpenApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,13 +19,14 @@ public interface RestauranteProdutoControllerOpenApi {
 	
 	@ApiResponses({
 		
-		@ApiResponse(responseCode = "200", description = "Consulta realizada"),
+		@ApiResponse(responseCode = "200", description = "Consulta realizada",
+				content = @Content(schema = @Schema(implementation = ProdutosModelOpenApi.class))),
 		
 		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
 		content = @Content(schema = @Schema(implementation = Problema.class)))
 		
 	})
-	@Operation(summary = "Lista os produtos de um resestaurante")
+	@Operation(summary = "Lista os produtos de um restaurante")
 	public CollectionModel<ProdutoModel> listar(@Parameter(required = true, example = "1") Long restauranteId, 
 			Boolean incluirInativos);
 	
