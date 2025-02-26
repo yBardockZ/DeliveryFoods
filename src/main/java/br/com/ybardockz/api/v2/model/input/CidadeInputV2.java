@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+@Schema(name = "CidadeInput")
 @Getter
 @Setter
 public class CidadeInputV2 {

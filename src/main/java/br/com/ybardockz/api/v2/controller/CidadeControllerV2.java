@@ -19,6 +19,7 @@ import br.com.ybardockz.api.v2.assembler.CidadeInputDisassemblerV2;
 import br.com.ybardockz.api.v2.assembler.CidadeModelAssemblerV2;
 import br.com.ybardockz.api.v2.model.CidadeModelV2;
 import br.com.ybardockz.api.v2.model.input.CidadeInputV2;
+import br.com.ybardockz.api.v2.openapi.controller.CidadeControllerOpenApiV2;
 import br.com.ybardockz.domain.exception.EstadoNaoEncontradoException;
 import br.com.ybardockz.domain.exception.NegocioException;
 import br.com.ybardockz.domain.model.Cidade;
@@ -29,7 +30,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(path = "/v2/cidade",
 		produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerOpenApiV2 {
 
 	@Autowired
 	private CidadeRepository repository;

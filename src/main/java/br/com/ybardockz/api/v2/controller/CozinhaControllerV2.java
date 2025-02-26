@@ -26,6 +26,7 @@ import br.com.ybardockz.api.v2.assembler.CozinhaInputDisassemblerV2;
 import br.com.ybardockz.api.v2.assembler.CozinhaModelAssemblerV2;
 import br.com.ybardockz.api.v2.model.CozinhaModelV2;
 import br.com.ybardockz.api.v2.model.input.CozinhaInputV2;
+import br.com.ybardockz.api.v2.openapi.controller.CozinhaControllerOpenApiV2;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.repository.CozinhaRepository;
 import br.com.ybardockz.domain.service.CadastroCozinhaService;
@@ -33,7 +34,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cozinha", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerOpenApiV2 {
 	
 	@Autowired
 	private CozinhaRepository repository;
