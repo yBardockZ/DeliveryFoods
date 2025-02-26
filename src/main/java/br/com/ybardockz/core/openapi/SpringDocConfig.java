@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.ybardockz.api.exceptionhandler.Problema;
-import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
@@ -21,11 +20,12 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 public class SpringDocConfig {
 
 	@Bean
-	GroupedOpenApi apiGrupo1() {
+	GroupedOpenApi apiGrupoV1() {
 		return GroupedOpenApi.builder()
-				.group("publico")
+				.group("v1")
 				.packagesToScan("br.com.ybardockz.api")
-				.pathsToExclude("/teste/**")
+				.pathsToExclude("/teste/**", "/v2/**")
+				.addOpenApiCustomizer(openApi -> openApi.info(apiInfoV1()))
 				.addOpenApiCustomizer(adicionarSchemasCustomizados())
 				.addOpenApiCustomizer(substituirPageablePorModeloPersonalizado())
 				.addOpenApiCustomizer(substituirLinksPorModeloPersonalizado())
@@ -36,19 +36,39 @@ public class SpringDocConfig {
 				.addOpenApiCustomizer(globalDeleteResponse())
 				.build();
 	}
-
+	
 	@Bean
-	OpenAPI apiInfo() {
-		return new OpenAPI()
-				.info(new Info()
+	GroupedOpenApi apiGrupoV2() {
+		return GroupedOpenApi.builder()
+				.group("v2")
+				.packagesToScan("br.com.ybardockz.api")
+				.pathsToExclude("/v1/**", "/teste/**")
+				.addOpenApiCustomizer(openApi -> openApi.info(apiInfoV2()))
+				.build();
+	}
+
+	Info apiInfoV1() {
+		return new Info()
 						.title("Algafood API")
-						.description("Api aberta para clientes e restaurantes")
+						.description("Api v1 - aberta para clientes e restaurantes")
 						.version("1")
 						.contact(new Contact()
 								.email("thalles_leopoldino@outlook.com")
 								.name("Thalles")
-								.url("www.ybardockz.com")));
+								.url("www.ybardockz.com"));
 				
+				
+	}
+	
+	Info apiInfoV2() {
+		return new Info()
+						.title("Algafood API")
+						.description("Api v2 - aberta para clientes e restaurantes")
+						.version("2")
+						.contact(new Contact()
+								.email("thalles_leopoldino@outlook.com")
+								.name("Thalles")
+								.url("www.ybardockz.com"));
 				
 	}
 
