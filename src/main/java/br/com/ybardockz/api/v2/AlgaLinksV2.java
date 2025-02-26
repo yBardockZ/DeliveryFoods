@@ -8,6 +8,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 
 import br.com.ybardockz.api.v2.controller.CidadeControllerV2;
+import br.com.ybardockz.api.v2.controller.CozinhaControllerV2;
 
 @Component
 public class AlgaLinksV2 {
@@ -27,6 +28,14 @@ public class AlgaLinksV2 {
 	
 	public Link linkToCidades(Long cidadeId) {
 		return linkToCidades(cidadeId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToCozinhas(String rel) {
+		return linkTo(CozinhaControllerV2.class).withRel(rel);
+	}
+	
+	public Link linkToCozinhas() {
+		return linkToCozinhas(IanaLinkRelations.SELF_VALUE);
 	}
 	
 }
