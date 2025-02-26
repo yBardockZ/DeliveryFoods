@@ -34,7 +34,9 @@ import br.com.ybardockz.core.validation.ValidacaoException;
 import br.com.ybardockz.domain.exception.EntidadeEmUsoException;
 import br.com.ybardockz.domain.exception.EntidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
@@ -113,6 +115,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleInternalError(Exception ex, WebRequest request) {
+		log.error(ex.getMessage());
 		
 		ex.printStackTrace();
 		
