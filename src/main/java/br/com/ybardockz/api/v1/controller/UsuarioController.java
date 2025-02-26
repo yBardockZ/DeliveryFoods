@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping(path = "/usuario", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/usuario", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioController implements UsuarioControllerOpenApi {
 	
 	@Autowired

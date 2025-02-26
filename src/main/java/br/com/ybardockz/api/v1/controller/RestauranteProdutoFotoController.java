@@ -34,7 +34,7 @@ import br.com.ybardockz.domain.service.FotoStorageService.FotoRecuperada;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/restaurante/{restauranteId}/produto/{produtoId}/foto",
+@RequestMapping(path = "/v1/restaurante/{restauranteId}/produto/{produtoId}/foto",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 	

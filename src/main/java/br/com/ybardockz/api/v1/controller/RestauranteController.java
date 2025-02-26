@@ -36,7 +36,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/restaurante",
+@RequestMapping(path = "/v1/restaurante",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteController implements RestauranteControllerOpenApi {
 	

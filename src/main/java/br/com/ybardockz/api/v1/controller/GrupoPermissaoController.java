@@ -23,7 +23,7 @@ import br.com.ybardockz.domain.service.CadastroGrupoService;
 import br.com.ybardockz.domain.service.CadastroPermissaoService;
 
 @RestController
-@RequestMapping(path = "/grupo/{grupoId}/permissao",
+@RequestMapping(path = "/v1/grupo/{grupoId}/permissao",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi {
 	

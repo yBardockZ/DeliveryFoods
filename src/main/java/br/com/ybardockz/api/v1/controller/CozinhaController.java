@@ -33,7 +33,7 @@ import br.com.ybardockz.domain.service.CadastroCozinhaService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/cozinha", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/cozinha", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CozinhaController implements CozinhaControllerOpenApi {
 	
 	@Autowired

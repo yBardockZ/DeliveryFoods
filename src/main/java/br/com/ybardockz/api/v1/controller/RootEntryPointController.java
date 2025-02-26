@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(hidden = true)
 @RestController
-@RequestMapping("/")
+@RequestMapping("/v1")
 public class RootEntryPointController {
 	
 	@Autowired

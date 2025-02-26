@@ -25,7 +25,7 @@ import br.com.ybardockz.domain.service.CadastroGrupoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/grupo", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/grupo", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GrupoController implements GrupoControllerOpenApi {
 	
 	@Autowired

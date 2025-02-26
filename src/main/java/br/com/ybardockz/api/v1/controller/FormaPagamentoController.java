@@ -33,7 +33,7 @@ import br.com.ybardockz.domain.service.CadastroFormaPagamentoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "forma-pagamento", 
+@RequestMapping(path = "/v1/forma-pagamento", 
 produces = MediaType.APPLICATION_JSON_VALUE)
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 	

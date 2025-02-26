@@ -11,7 +11,7 @@ import br.com.ybardockz.api.v1.openapi.controller.FluxoPedidoControllerOpenApi;
 import br.com.ybardockz.domain.service.AlteracaoStatusPedidoService;
 
 @RestController
-@RequestMapping("/pedido/{pedidoCodigo}")
+@RequestMapping("/v1/pedido/{pedidoCodigo}")
 public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 	
 	@Autowired

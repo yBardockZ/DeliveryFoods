@@ -26,7 +26,7 @@ import br.com.ybardockz.domain.service.CadastroEstadoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/estado",
+@RequestMapping(path = "/v1/estado",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class EstadoController implements EstadoControllerOpenApi {
 	

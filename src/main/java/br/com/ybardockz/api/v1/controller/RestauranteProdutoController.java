@@ -28,7 +28,7 @@ import br.com.ybardockz.domain.service.CadastroRestauranteService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/restaurante/{restauranteId}/produto",
+@RequestMapping(path = "/v1/restaurante/{restauranteId}/produto",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 	

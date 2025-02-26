@@ -21,7 +21,7 @@ import br.com.ybardockz.domain.model.Restaurante;
 import br.com.ybardockz.domain.service.CadastroRestauranteService;
 
 @RestController
-@RequestMapping(path = "/restaurante/{restauranteId}/forma-pagamento",
+@RequestMapping(path = "/v1/restaurante/{restauranteId}/forma-pagamento",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteFormaPagamentoController implements RestauranteFormaPagamentoControllerOpenApi {
 	

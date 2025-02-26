@@ -37,7 +37,7 @@ import br.com.ybardockz.infraestructure.repository.spec.PedidoSpecs;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/pedido",
+@RequestMapping(path = "/v1/pedido",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class PedidoController implements PedidoControllerOpenApi {
 	

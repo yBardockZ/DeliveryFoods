@@ -14,7 +14,7 @@ import br.com.ybardockz.domain.repository.PermissaoRepository;
 
 
 @RestController
-@RequestMapping(path = "/permissao", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/permissao", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PermissaoController implements PermissaoControllerOpenApi {
 	
 	@Autowired

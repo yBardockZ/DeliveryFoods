@@ -20,7 +20,7 @@ import br.com.ybardockz.domain.service.VendaQueryService;
 import br.com.ybardockz.domain.service.VendaReportService;
 
 @RestController
-@RequestMapping("/estatistica")
+@RequestMapping("/v1/estatistica")
 public class EstatisticasController implements EstatisticasControllerOpenApi {
 	
 	@Autowired

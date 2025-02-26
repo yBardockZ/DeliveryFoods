@@ -24,7 +24,7 @@ import br.com.ybardockz.domain.model.Usuario;
 import br.com.ybardockz.domain.service.CadastroRestauranteService;
 
 @RestController
-@RequestMapping(path = "/restaurante/{restauranteId}/responsaveis",
+@RequestMapping(path = "/v1/restaurante/{restauranteId}/responsaveis",
 		produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteUsuarioController implements RestauranteUsuarioControllerOpenApi {
 	
