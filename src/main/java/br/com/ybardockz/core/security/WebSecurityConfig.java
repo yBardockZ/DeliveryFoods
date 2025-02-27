@@ -2,6 +2,7 @@ package br.com.ybardockz.core.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,39 +25,14 @@ public class WebSecurityConfig {
 			
 			.authorizeHttpRequests(authorize -> 
 				authorize
-					.requestMatchers("/v1/cozinha/**").permitAll()
 					.anyRequest().authenticated()
 					)
-			.sessionManagement(session -> 
-				session
-					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-					)
-			.csrf(crsf -> crsf.disable());
+			.oauth2ResourceServer(resource -> 
+					resource.opaqueToken(Customizer.withDefaults())
+					);
 		
 		return http.build();
 		
-	}
-	
-	@Bean
-	UserDetailsService userDetailsService() {
-		UserDetails thiago = User.builder()
-				.username("thalles")
-				.password(passwordEncoder().encode("123"))
-				.roles("ADMIN")
-				.build();
-		
-		UserDetails carlos = User.builder()
-				.username("carlos")
-				.password(passwordEncoder().encode("123"))
-				.roles("ADMIN")
-				.build();
-				
-		return new InMemoryUserDetailsManager(thiago, carlos);
-	}
-	
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 	
 }
