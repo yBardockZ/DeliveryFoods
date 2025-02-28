@@ -20,6 +20,7 @@ public class WebSecurityConfig {
 				authorize
 					.anyRequest().authenticated()
 					)
+			.cors(cors -> cors.disable())
 			.oauth2ResourceServer(resource -> 
 					resource.opaqueToken(Customizer.withDefaults())
 					);
