@@ -1,12 +1,15 @@
 package br.com.ybardockz.core.security;
 
-import javax.crypto.spec.SecretKeySpec;
+import java.security.KeyFactory;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,7 +32,10 @@ public class WebSecurityConfig {
 					)
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.oauth2ResourceServer(resource -> 
-					resource.jwt(Customizer.withDefaults())
+					resource.jwt(jwt -> jwt.decoder(jwtDecoder()))
+					)
+			.sessionManagement(session -> 
+				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					);
 		
 		return http.build();
@@ -51,10 +57,21 @@ public class WebSecurityConfig {
 	
 	@Bean
 	JwtDecoder jwtDecoder() {
-		var secretKey = new SecretKeySpec("supkdfjauqifhjdkfgioiweqasdfgmnc".getBytes(),
-				"HmacSHA256");
+		try {
+			String publicKeyPEM = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi8kTT8AxZtD6h3rsSi6loQAitJ27krwS6XSjDcplTzro6jgxcS2bNvyRIa/syZNhQ1mAsn7mDQXmlyhVefXwHLGv6U505M5Xd/pj94QIaJMebpNSN0ay3Lb8Q/NZVtMRoZ8FArOnMIPOF48eNrHk7SznStLHxOwgKtXJ5PJoWBQF+JnjYcWTvUZGk6RPWi6BmBEJqMVQZ7+0w6ixFS+l7I3mazLq50msKPqkqVD12Sw2wycJemyIewIme1u7Y8zq/dvlxY0RKCh/UQ1Y2BM5qCzHxYs12VrnbbOHEaSOIpyMr9ZESfjOjjRFDJaPx+YXI+LZ8mxlQiTKjhgaWpu0AQIDAQAB";
+			
+			byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyPEM);
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
 		
-		return NimbusJwtDecoder.withSecretKey(secretKey).build();
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec); 
+			
+			return NimbusJwtDecoder.withPublicKey(publicKey).build();
+			
+		} catch (Exception e) {
+			throw new RuntimeException("Erro ao carregar a chave pública", e);
+		}
+		
 	}
 	
 	
