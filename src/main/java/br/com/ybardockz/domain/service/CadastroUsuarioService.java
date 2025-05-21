@@ -3,6 +3,7 @@ package br.com.ybardockz.domain.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.ybardockz.domain.exception.NegocioException;
@@ -21,6 +22,9 @@ public class CadastroUsuarioService {
 	@Autowired
 	private CadastroGrupoService grupoService;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
 		
@@ -33,6 +37,8 @@ public class CadastroUsuarioService {
 					+ usuario.getEmail());
 		}
 		
+		usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+		
 		return usuarioRepository.save(usuario);
 	}
 	
@@ -44,14 +50,11 @@ public class CadastroUsuarioService {
 	public void trocarSenha(Long usuarioId, String senhaAtual, String senhaNova) {
 		Usuario usuarioAtual = buscarOuFalhar(usuarioId);
 		
-		if (!usuarioAtual.senhaCoincideCom(senhaAtual)) {
+		if (!passwordEncoder.matches(senhaAtual, usuarioAtual.getSenha())) {
 			throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
 		}
 		
-		usuarioAtual.atualizarSenha(senhaNova);
-		
-		salvar(usuarioAtual);
-		
+		usuarioAtual.atualizarSenha(passwordEncoder.encode(senhaNova));
 	}
 	
 	@Transactional
