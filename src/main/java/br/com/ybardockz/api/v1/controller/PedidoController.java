@@ -26,8 +26,9 @@ import br.com.ybardockz.api.v1.model.input.PedidoInput;
 import br.com.ybardockz.api.v1.openapi.controller.PedidoControllerOpenApi;
 import br.com.ybardockz.core.data.PageWrapper;
 import br.com.ybardockz.core.data.PageableTranslator;
+import br.com.ybardockz.core.security.AlgaSecurity;
+import br.com.ybardockz.domain.exception.EntidadeNaoEncontradaException;
 import br.com.ybardockz.domain.exception.NegocioException;
-import br.com.ybardockz.domain.exception.ProdutoNaoEncontradoException;
 import br.com.ybardockz.domain.filter.PedidoFilter;
 import br.com.ybardockz.domain.model.Pedido;
 import br.com.ybardockz.domain.model.Usuario;
@@ -59,6 +60,9 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity;
+	
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
 		Pageable pageableTraduzido = traduzirPageable(pageable);
@@ -87,12 +91,12 @@ public class PedidoController implements PedidoControllerOpenApi {
 		try {
 		Pedido pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 		pedido.setCliente(new Usuario());
-		pedido.getCliente().setId(1L);
+		pedido.getCliente().setId(algaSecurity.getUsuarioId());
 		
 		pedido = pedidoService.emitir(pedido);
 		
 		return pedidoModelAssembler.toModel(pedido);
-		} catch (ProdutoNaoEncontradoException e) {
+		} catch (EntidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
