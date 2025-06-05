@@ -4,14 +4,25 @@ import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -28,11 +39,18 @@ public class WebSecurityConfig {
 			
 			.authorizeHttpRequests(authorize -> 
 				authorize
-					.anyRequest().authenticated()
+					.requestMatchers(HttpMethod.POST, "/v1/cozinha/**").hasAuthority("EDITAR_COZINHAS")
+					.requestMatchers(HttpMethod.PUT, "/v1/cozinha/**").hasAuthority("EDITAR_COZINHAS")
+					.requestMatchers(HttpMethod.GET, "v1/cozinha/**").authenticated()
+					.anyRequest().denyAll()
 					)
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.oauth2ResourceServer(resource -> 
-					resource.jwt(jwt -> jwt.decoder(jwtDecoder()))
+					resource
+						.jwt(jwt -> jwt
+								.decoder(jwtDecoder())
+								.jwtAuthenticationConverter(jwtAuthenticationConverter())
+							)
 					)
 			.sessionManagement(session -> 
 				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -40,6 +58,29 @@ public class WebSecurityConfig {
 		
 		return http.build();
 		
+	}
+	
+	private Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
+		JwtAuthenticationConverter jwtConverter = 
+				new JwtAuthenticationConverter();
+		
+		jwtConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter());
+		
+		return jwtConverter;
+	}
+	
+	private Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
+		return jwt -> {
+			List<String> authorities = jwt.getClaimAsStringList("authorities");
+				
+				if (authorities == null) {
+					return Collections.emptyList();
+				}
+					
+				return authorities.stream()
+				.map(authority -> new SimpleGrantedAuthority(authority))
+				.collect(Collectors.toList());
+		};
 	}
 	
 	@Bean
