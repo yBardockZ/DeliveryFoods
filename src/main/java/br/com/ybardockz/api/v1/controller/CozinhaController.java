@@ -28,6 +28,7 @@ import br.com.ybardockz.api.v1.assembler.CozinhaModelAssembler;
 import br.com.ybardockz.api.v1.model.domain.CozinhaModel;
 import br.com.ybardockz.api.v1.model.input.CozinhaInput;
 import br.com.ybardockz.api.v1.openapi.controller.CozinhaControllerOpenApi;
+import br.com.ybardockz.core.security.CheckSecurity;
 import br.com.ybardockz.domain.model.Cozinha;
 import br.com.ybardockz.domain.repository.CozinhaRepository;
 import br.com.ybardockz.domain.service.CadastroCozinhaService;
@@ -54,6 +55,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@GetMapping
 	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Cozinha> cozinhasPage = repository.findAll(pageable);
 		
@@ -64,14 +66,14 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	}
 	
 	@GetMapping(path = "/{id}")
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	public CozinhaModel buscar(@PathVariable Long id) {
 		return cozinhaModelAssembler.toModel(service.buscarOuFalhar(id));
 		
 	}
 	
 	@PostMapping
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	public ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 		Cozinha cozinhaSalva = service.salvar(cozinhaInputDisassembler.toDomainObject(cozinhaInput));
 		
@@ -83,7 +85,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	}
 	
 	@PutMapping(path = "/{id}")
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	public CozinhaModel atualizar(@RequestBody @Valid CozinhaInput cozinhaInput, 
 			@PathVariable Long id) {
 		Cozinha cozinhaAtual = service.buscarOuFalhar(id);
@@ -96,7 +98,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	
 	@DeleteMapping(path = "/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	public void remover(@PathVariable Long id) {
 		service.remover(id);
 	}
