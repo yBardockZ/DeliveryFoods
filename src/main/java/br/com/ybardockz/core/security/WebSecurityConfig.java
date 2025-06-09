@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -30,6 +30,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
 	@Bean
@@ -39,10 +40,7 @@ public class WebSecurityConfig {
 			
 			.authorizeHttpRequests(authorize -> 
 				authorize
-					.requestMatchers(HttpMethod.POST, "/v1/cozinha/**").hasAuthority("EDITAR_COZINHAS")
-					.requestMatchers(HttpMethod.PUT, "/v1/cozinha/**").hasAuthority("EDITAR_COZINHAS")
-					.requestMatchers(HttpMethod.GET, "v1/cozinha/**").authenticated()
-					.anyRequest().denyAll()
+					.anyRequest().authenticated()
 					)
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.oauth2ResourceServer(resource -> 
