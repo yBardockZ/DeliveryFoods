@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -74,10 +75,17 @@ public class WebSecurityConfig {
 				if (authorities == null) {
 					return Collections.emptyList();
 				}
-					
-				return authorities.stream()
+				
+				JwtGrantedAuthoritiesConverter scopesAuthoritiesConverter = 
+						new JwtGrantedAuthoritiesConverter();
+				
+				Collection<GrantedAuthority> scopesAuthorities = scopesAuthoritiesConverter.convert(jwt);
+				
+				scopesAuthorities.addAll(authorities.stream()
 				.map(authority -> new SimpleGrantedAuthority(authority))
-				.collect(Collectors.toList());
+				.collect(Collectors.toList()));
+				
+				return scopesAuthorities;
 		};
 	}
 	
